@@ -8,14 +8,16 @@ The app runs in the cloud on **Render**.
 
 - **Give Feedback**: the student picks a course, gives a 1–5 star rating and writes a comment.
   The AI returns the sentiment (positive / neutral / negative), the topics, a one-line summary and an improvement suggestion.
-- **Dashboard**: totals, average rating, a sentiment bar, a filter by course, and an **AI summary** of all feedback
-  (overall opinion, strengths, things to improve).
+  **AI moderation**: offensive comments are rejected and not saved.
+- **Dashboard**: statistics, a sentiment chart, average rating per course, top topics,
+  an **AI summary** (overall opinion, strengths, things to improve) and all comments with search and filters.
+- **How it works**: architecture diagram, request flow and tech stack.
 
 ## Tech stack
 
 | Part     | Technology                                 |
 |----------|--------------------------------------------|
-| Frontend | HTML, Tailwind CSS, Font Awesome (via CDN) |
+| Frontend | HTML, Tailwind CSS, Font Awesome, Chart.js (via CDN) |
 | Backend  | Node.js + Express                          |
 | AI       | OpenAI API (`gpt-4o-mini` by default)      |
 | Storage  | JSON file (`data/feedback.json`)           |
@@ -31,7 +33,7 @@ Browser ──HTTP──> Node.js + Express (Render) ──API key──> OpenAI
 
 1. The browser sends the feedback to `POST /api/feedback`.
 2. The server sends the comment to OpenAI and asks for a JSON answer.
-3. The server saves the feedback together with the AI result and returns it.
+3. Offensive comments are rejected; otherwise the server saves the feedback together with the AI result and returns it.
 4. The dashboard loads everything with `GET /api/feedback` and asks for a summary with `POST /api/summary`.
 
 The OpenAI key stays on the server and is never sent to the browser.
@@ -66,8 +68,8 @@ Optional: set `OPENAI_MODEL` to use a different OpenAI model.
 
 ```
 server.js              Express server + OpenAI calls
-public/index.html      Give Feedback page
-public/dashboard.html  Dashboard page
+public/index.html      The three pages (Give Feedback, Dashboard, How it works)
+public/app.js          Frontend logic: form, charts, filters, AI summary
 data/seed.json         Example feedback loaded on first start
 render.yaml            Render deployment settings
 ```

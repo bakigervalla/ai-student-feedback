@@ -36,7 +36,8 @@ Reply with JSON only, in this shape:
 {"sentiment": "positive" | "neutral" | "negative",
  "topics": [up to 3 short topics, e.g. "Lectures", "Exams", "Labs", "Materials", "Pace", "Professor"],
  "summary": "one short sentence for the professor",
- "suggestion": "one short, practical improvement for the professor"}`;
+ "suggestion": "one short, practical improvement for the professor",
+ "toxic": true if the comment contains insults or offensive language, otherwise false}`;
 
 const SUMMARY_PROMPT = `You receive a list of student feedback comments about university courses.
 Reply with JSON only, in this shape:
@@ -61,6 +62,9 @@ app.post("/api/feedback", async (req, res) => {
   try {
     const text = comment.trim().slice(0, 1000);
     const ai = await askOpenAI(ANALYZE_PROMPT, `Course: ${course}\nRating: ${rating}/5\nComment: ${text}`);
+    if (ai.toxic) {
+      return res.status(422).json({ error: "Your comment contains offensive language. Please rephrase it respectfully." });
+    }
     const item = {
       id: Date.now(),
       course,
