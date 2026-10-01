@@ -8,13 +8,15 @@ The app runs in the cloud on **Render**.
 
 A **Student / Professor** switch in the header changes the view.
 
-- **Student › Give Feedback**: pick a course, rate it with 1–5 stars and write a comment.
+- **Student › Give Feedback**: pick a course from colour-coded badges, rate it with 1–5 stars,
+  choose quick-feedback badges (*What went well* / *What could be better*) and optionally add a comment.
   The AI returns the sentiment with a score, the topics, a tone check, a summary for the professor and a suggested improvement.
   **AI moderation**: offensive comments are rejected and not saved.
 - **Professor › Dashboard**: total feedback, average rating, % positive, comments that need attention,
-  sentiment overview, sentiment per course, top topics, latest feedback, and a **Generate AI report** button
-  (overall opinion, strengths, things to improve). A course filter narrows everything to one course.
-- **Professor › Feedback**: all comments in a table with search and filters; click a row for the full AI analysis.
+  sentiment overview, sentiment per course, top topics, most picked badges, latest feedback, and a **Generate AI report** button
+  (overall opinion, strengths, things to improve). Clickable course badges narrow everything to one course.
+- **Professor › Feedback**: all comments in a table with search and course / sentiment badge filters;
+  click a row for the full AI analysis.
 - **How it works**: architecture diagram, request flow and tech stack.
 - The status bar shows whether the server is online and whether the OpenAI key is set.
 

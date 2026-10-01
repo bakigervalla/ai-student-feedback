@@ -4,6 +4,10 @@
     "course": "Grid & Cloud Computing",
     "rating": 5,
     "comment": "The labs with Docker and AWS were really practical and fun. The professor explains cloud concepts very clearly.",
+    "tags": [
+      "Practical labs",
+      "Clear explanations"
+    ],
     "name": "Arta H.",
     "date": "2026-09-29T10:15:00.000Z",
     "ai": {
@@ -23,6 +27,10 @@
     "course": "Grid & Cloud Computing",
     "rating": 2,
     "comment": "Lectures are too fast and the grid computing part was confusing. We need more time for the assignments.",
+    "tags": [
+      "Too fast",
+      "Unclear assignments"
+    ],
     "name": "Anonymous",
     "date": "2026-09-28T14:40:00.000Z",
     "ai": {
@@ -42,6 +50,10 @@
     "course": "Machine Learning",
     "rating": 5,
     "comment": "Amazing course! The professor is patient and the Python notebooks are excellent learning resources.",
+    "tags": [
+      "Helpful professor",
+      "Great examples"
+    ],
     "name": "Ermal S.",
     "date": "2026-09-27T09:05:00.000Z",
     "ai": {
@@ -60,6 +72,10 @@
     "course": "Machine Learning",
     "rating": 2,
     "comment": "Too much math in the lectures and not enough practical examples. The homework deadlines were stressful.",
+    "tags": [
+      "Too much workload",
+      "Too fast"
+    ],
     "name": "Anonymous",
     "date": "2026-09-26T16:20:00.000Z",
     "ai": {
@@ -79,6 +95,9 @@
     "course": "Distributed Systems",
     "rating": 3,
     "comment": "Useful topics like consensus and replication, but the assignments are very difficult without more examples.",
+    "tags": [
+      "Unclear assignments"
+    ],
     "name": "Rina P.",
     "date": "2026-09-25T11:30:00.000Z",
     "ai": {
@@ -97,6 +116,9 @@
     "course": "Distributed Systems",
     "rating": 1,
     "comment": "Exam questions were unfair and nothing like the exercises. Very poor communication about grading.",
+    "tags": [
+      "Hard exams"
+    ],
     "name": "Anonymous",
     "date": "2026-09-24T13:10:00.000Z",
     "ai": {
@@ -115,6 +137,10 @@
     "course": "Web Engineering",
     "rating": 5,
     "comment": "Best course this semester! Modern frameworks, clear lectures and a really useful final project.",
+    "tags": [
+      "Useful project",
+      "Clear explanations"
+    ],
     "name": "Elira R.",
     "date": "2026-09-23T08:45:00.000Z",
     "ai": {
@@ -133,6 +159,10 @@
     "course": "Databases II",
     "rating": 3,
     "comment": "Okay course. SQL labs are useful but the theory lectures are a bit slow.",
+    "tags": [
+      "Practical labs",
+      "Boring lectures"
+    ],
     "name": "Mimoza A.",
     "date": "2026-09-22T15:00:00.000Z",
     "ai": {
@@ -152,6 +182,10 @@
     "course": "Grid & Cloud Computing",
     "rating": 4,
     "comment": "Interesting topics and a helpful professor who always responds to emails. The exam was fair.",
+    "tags": [
+      "Helpful professor",
+      "Fair grading"
+    ],
     "name": "Blerta M.",
     "date": "2026-09-21T10:00:00.000Z",
     "ai": {
@@ -170,6 +204,9 @@
     "course": "Grid & Cloud Computing",
     "rating": 3,
     "comment": "Content is good but the materials are a bit outdated, some AWS screenshots no longer match the console.",
+    "tags": [
+      "Outdated materials"
+    ],
     "name": "Anonymous",
     "date": "2026-09-20T10:00:00.000Z",
     "ai": {
@@ -188,6 +225,10 @@
     "course": "Machine Learning",
     "rating": 4,
     "comment": "Very interesting, I enjoyed the project on image classification. Grading was clear and fair.",
+    "tags": [
+      "Useful project",
+      "Fair grading"
+    ],
     "name": "Lea T.",
     "date": "2026-09-19T10:00:00.000Z",
     "ai": {
@@ -206,6 +247,9 @@
     "course": "Machine Learning",
     "rating": 3,
     "comment": "Good content, but the pace is uneven. Some weeks are slow, others very rushed before the exam.",
+    "tags": [
+      "Too fast"
+    ],
     "name": "Gent B.",
     "date": "2026-09-18T10:00:00.000Z",
     "ai": {
@@ -224,6 +268,10 @@
     "course": "Distributed Systems",
     "rating": 4,
     "comment": "The professor is helpful in office hours. The Raft lab was hard but I learned a lot.",
+    "tags": [
+      "Helpful professor",
+      "Practical labs"
+    ],
     "name": "Valon D.",
     "date": "2026-09-17T10:00:00.000Z",
     "ai": {
@@ -242,6 +290,10 @@
     "course": "Distributed Systems",
     "rating": 2,
     "comment": "The lectures are boring and the slides are hard to follow. Labs were not well organized.",
+    "tags": [
+      "Boring lectures",
+      "Outdated materials"
+    ],
     "name": "Anonymous",
     "date": "2026-09-16T10:00:00.000Z",
     "ai": {
@@ -261,6 +313,9 @@
     "course": "Web Engineering",
     "rating": 4,
     "comment": "Practical and well organized. I would like more feedback on our assignments.",
+    "tags": [
+      "Practical labs"
+    ],
     "name": "Besnik L.",
     "date": "2026-09-15T10:00:00.000Z",
     "ai": {
@@ -278,6 +333,10 @@
     "course": "Databases II",
     "rating": 2,
     "comment": "Assignments take too much time and the deadlines overlap with other courses. Materials are unclear.",
+    "tags": [
+      "Too much workload",
+      "Unclear assignments"
+    ],
     "name": "Anonymous",
     "date": "2026-09-14T10:00:00.000Z",
     "ai": {

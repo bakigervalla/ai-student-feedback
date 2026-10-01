@@ -1,7 +1,20 @@
 const SENT = {
-  positive: { label: "Positive", color: "#16a34a", pill: "bg-green-100 text-green-700", icon: "fa-face-smile" },
-  neutral: { label: "Neutral", color: "#d97706", pill: "bg-amber-100 text-amber-700", icon: "fa-face-meh" },
-  negative: { label: "Negative", color: "#dc2626", pill: "bg-red-100 text-red-700", icon: "fa-face-frown" },
+  positive: { label: "Positive", color: "#16a34a", pill: "bg-green-100 text-green-700", on: "bg-green-600 border-green-600 text-white", icon: "fa-face-smile" },
+  neutral: { label: "Neutral", color: "#d97706", pill: "bg-amber-100 text-amber-700", on: "bg-amber-500 border-amber-500 text-white", icon: "fa-face-meh" },
+  negative: { label: "Negative", color: "#dc2626", pill: "bg-red-100 text-red-700", on: "bg-red-600 border-red-600 text-white", icon: "fa-face-frown" },
+};
+const COURSES = [
+  { name: "Grid & Cloud Computing", icon: "fa-cloud", on: "bg-teal-600 border-teal-600 text-white", off: "bg-teal-50 border-teal-200 text-teal-700 hover:bg-teal-100", dot: "#0d9488" },
+  { name: "Machine Learning", icon: "fa-brain", on: "bg-violet-600 border-violet-600 text-white", off: "bg-violet-50 border-violet-200 text-violet-700 hover:bg-violet-100", dot: "#7c3aed" },
+  { name: "Distributed Systems", icon: "fa-network-wired", on: "bg-blue-600 border-blue-600 text-white", off: "bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100", dot: "#2563eb" },
+  { name: "Web Engineering", icon: "fa-code", on: "bg-pink-600 border-pink-600 text-white", off: "bg-pink-50 border-pink-200 text-pink-700 hover:bg-pink-100", dot: "#db2777" },
+  { name: "Databases II", icon: "fa-database", on: "bg-orange-600 border-orange-600 text-white", off: "bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100", dot: "#ea580c" },
+];
+const TAGS = {
+  good: [["Clear explanations", "fa-lightbulb"], ["Practical labs", "fa-flask"], ["Helpful professor", "fa-hand-holding-heart"],
+    ["Great examples", "fa-star"], ["Fair grading", "fa-scale-balanced"], ["Useful project", "fa-diagram-project"]],
+  bad: [["Too fast", "fa-gauge-high"], ["Outdated materials", "fa-box-archive"], ["Too much workload", "fa-weight-hanging"],
+    ["Hard exams", "fa-file-circle-exclamation"], ["Unclear assignments", "fa-circle-question"], ["Boring lectures", "fa-face-meh-blank"]],
 };
 const TABS = {
   professor: [["dashboard", "fa-chart-pie", "Dashboard"], ["list", "fa-comments", "Feedback"], ["about", "fa-cloud", "How it works"]],
@@ -10,13 +23,14 @@ const TABS = {
 const RATING_LABELS = ["Click to rate", "Very poor", "Poor", "Okay", "Good", "Excellent"];
 const COLORS = ["#0d9488", "#7c3aed", "#2563eb", "#db2777", "#ea580c", "#0891b2", "#65a30d", "#4f46e5"];
 const EXAMPLES = [
-  { course: "Grid & Cloud Computing", rating: 4, comment: "The labs with Docker were really practical and the professor explains clearly. But the slides are outdated and the last deadline was too short." },
-  { course: "Machine Learning", rating: 2, comment: "Lectures are too fast and confusing. We need more examples before the exam, and the materials are hard to follow." },
-  { course: "Web Engineering", rating: 5, comment: "Excellent course! Interesting topics, a helpful professor and a very useful final project." },
+  { course: "Grid & Cloud Computing", rating: 4, tags: ["Practical labs", "Clear explanations", "Outdated materials"], comment: "The Docker labs were great, but some slides still show the old AWS console." },
+  { course: "Machine Learning", rating: 2, tags: ["Too fast", "Too much workload", "Hard exams"], comment: "We need more examples before the exam." },
+  { course: "Web Engineering", rating: 5, tags: ["Useful project", "Helpful professor", "Great examples"], comment: "" },
 ];
 
 const $ = (id) => document.getElementById(id);
 const state = { role: "professor", page: "dashboard", course: "", q: "", listCourse: "", listSentiment: "" };
+const form = { course: COURSES[0].name, tags: new Set() };
 let feedback = [];
 let rating = 0;
 let exampleIndex = 0;
@@ -33,12 +47,39 @@ const average = (list) => (list.length ? list.reduce((a, f) => a + f.rating, 0) 
 const shortDate = (d) => new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
 const initials = (n) => n.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 const colorFor = (n) => COLORS[[...n].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];
-const courses = () => [...new Set(feedback.map((f) => f.course))].sort();
+const courseInfo = (name) => COURSES.find((c) => c.name === name) || { name, icon: "fa-book", on: "bg-slate-700 border-slate-700 text-white", off: "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100", dot: "#64748b" };
+const courses = () => COURSES.map((c) => c.name).filter((n) => feedback.some((f) => f.course === n))
+  .concat([...new Set(feedback.map((f) => f.course))].filter((n) => !COURSES.some((c) => c.name === n)));
+const tagInfo = (tag) => {
+  const good = TAGS.good.find(([t]) => t === tag);
+  const bad = TAGS.bad.find(([t]) => t === tag);
+  return { icon: (good || bad || [, "fa-tag"])[1], good: Boolean(good) };
+};
 
 function avatar(f, size = "w-7 h-7") {
   const anon = f.name === "Anonymous";
   return `<span class="${size} shrink-0 rounded-full grid place-items-center text-white text-[10px] font-bold" style="background:${anon ? "#94a3b8" : colorFor(f.name)}">${anon ? "?" : escapeHtml(initials(f.name))}</span>`;
 }
+
+function courseBadge(name, selected, attrs, extra = "") {
+  const c = courseInfo(name);
+  return `<button type="button" ${attrs} aria-pressed="${selected}"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? `${c.on} shadow-sm` : c.off}">
+    <i class="fa-solid ${selected ? "fa-check" : c.icon}"></i>${escapeHtml(name)}${extra}</button>`;
+}
+
+function allBadge(selected, attrs, label = "All courses", extra = "") {
+  return `<button type="button" ${attrs} aria-pressed="${selected}"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? "bg-slate-800 border-slate-800 text-white" : "bg-white border-slate-300 text-slate-600 hover:bg-slate-50"}">
+    <i class="fa-solid fa-layer-group"></i>${label}${extra}</button>`;
+}
+
+function tagChip(tag, extra = "") {
+  const t = tagInfo(tag);
+  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${t.good ? "bg-green-50 text-green-700 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}"><i class="fa-solid ${t.icon} text-[10px]"></i>${escapeHtml(tag)}${extra}</span>`;
+}
+
+const count = (n) => `<span class="opacity-70 font-bold">${n}</span>`;
 
 function toast(message) {
   const el = $("toast");
@@ -83,6 +124,7 @@ function render() {
   document.querySelectorAll("[data-page]").forEach((el) => el.classList.toggle("hidden", el.dataset.page !== state.page));
   if (state.page === "dashboard") renderDashboard();
   if (state.page === "list") renderList();
+  if (state.page === "submit") renderFormBadges();
 }
 
 function go(page) {
@@ -93,19 +135,20 @@ function go(page) {
 
 function renderDashboard() {
   const list = feedback.filter((f) => !state.course || f.course === state.course);
-  const count = (s) => list.filter((f) => f.ai.sentiment === s).length;
+  const n = (s) => list.filter((f) => f.ai.sentiment === s).length;
   const avg = average(list);
 
-  $("courseFilter").innerHTML = `<option value="">All courses</option>` +
-    courses().map((c) => `<option ${c === state.course ? "selected" : ""}>${escapeHtml(c)}</option>`).join("");
+  $("courseFilter").innerHTML = allBadge(!state.course, `data-filter=""`, "All courses", count(feedback.length)) +
+    courses().map((c) => courseBadge(c, state.course === c, `data-filter="${escapeHtml(c)}"`, count(feedback.filter((f) => f.course === c).length))).join("");
+  document.querySelectorAll("[data-filter]").forEach((b) => (b.onclick = () => setCourse(b.dataset.filter)));
   $("courseCount").textContent = state.course || `${courses().length} courses`;
 
   $("kpiTotal").textContent = list.length;
   $("kpiWeek").textContent = `+${list.filter((f) => Date.now() - new Date(f.date) < 7 * 864e5).length} in the last 7 days`;
   $("kpiAvg").textContent = avg.toFixed(1);
   $("kpiStars").innerHTML = stars(Math.round(avg));
-  $("kpiPositive").textContent = `${list.length ? Math.round((count("positive") / list.length) * 100) : 0}%`;
-  $("kpiNegative").textContent = count("negative");
+  $("kpiPositive").textContent = `${list.length ? Math.round((n("positive") / list.length) * 100) : 0}%`;
+  $("kpiNegative").textContent = n("negative");
 
   if (!$("report").dataset.filled) {
     $("report").innerHTML = `<p class="font-bold text-violet-600 text-[10px] uppercase tracking-wide mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>AI summary · ${escapeHtml(state.course || "all courses")}</p>
@@ -117,16 +160,16 @@ function renderDashboard() {
     return { c, items, avg: average(items) };
   }).sort((a, b) => b.avg - a.avg);
   $("byCourse").innerHTML = ranked.map(({ c, items, avg: a }) => `
-    <button data-course="${escapeHtml(c)}" class="w-full grid grid-cols-[150px_1fr_70px] items-center gap-2.5 py-1.5 px-1 rounded text-left hover:bg-slate-50 ${state.course === c ? "bg-teal-50" : ""}">
-      <span class="font-semibold truncate">${escapeHtml(c)}</span>
+    <button data-course="${escapeHtml(c)}" class="w-full grid grid-cols-[190px_1fr_70px] items-center gap-2.5 py-1.5 px-1 rounded text-left hover:bg-slate-50 ${state.course === c ? "bg-teal-50" : ""}">
+      <span class="font-semibold truncate flex items-center gap-2"><span class="w-2 h-2 rounded-full shrink-0" style="background:${courseInfo(c).dot}"></span>${escapeHtml(c)}</span>
       <span class="flex h-2 rounded bg-slate-100 overflow-hidden">${Object.keys(SENT).map((s) => `<span style="width:${(items.filter((f) => f.ai.sentiment === s).length / items.length) * 100}%;background:${SENT[s].color}"></span>`).join("")}</span>
       <span class="text-right text-[11px]">${stars(Math.round(a))}</span>
     </button>`).join("");
   document.querySelectorAll("[data-course]").forEach((b) => (b.onclick = () => setCourse(state.course === b.dataset.course ? "" : b.dataset.course)));
 
-  $("donut").innerHTML = donut(Object.keys(SENT).map((s) => ({ v: count(s), c: SENT[s].color })), list.length) +
+  $("donut").innerHTML = donut(Object.keys(SENT).map((s) => ({ v: n(s), c: SENT[s].color })), list.length) +
     `<div class="flex-1 text-[11.5px]">${Object.keys(SENT).map((s) => `
-      <div class="flex items-center gap-2 py-1 text-slate-600"><span class="w-2.5 h-2.5 rounded-sm" style="background:${SENT[s].color}"></span><i class="fa-regular ${SENT[s].icon}"></i>${SENT[s].label}<b class="ml-auto text-slate-800">${count(s)}</b></div>`).join("")}</div>`;
+      <div class="flex items-center gap-2 py-1 text-slate-600"><span class="w-2.5 h-2.5 rounded-sm" style="background:${SENT[s].color}"></span><i class="fa-regular ${SENT[s].icon}"></i>${SENT[s].label}<b class="ml-auto text-slate-800">${n(s)}</b></div>`).join("")}</div>`;
 
   const topics = {};
   list.forEach((f) => f.ai.topics.forEach((t) => {
@@ -142,6 +185,11 @@ function renderDashboard() {
       <span class="h-[7px] rounded bg-slate-100 overflow-hidden"><span class="block h-full rounded ${v.neg > v.pos ? "bg-red-500" : "bg-teal-500"}" style="width:${(v.n / top[0][1].n) * 100}%"></span></span>
       <b class="text-right">${v.n}</b>
     </div>`).join("") || `<p class="text-slate-400">No topics yet.</p>`;
+
+  const tagCounts = {};
+  list.forEach((f) => (f.tags || []).forEach((t) => (tagCounts[t] = (tagCounts[t] || 0) + 1)));
+  $("tagStats").innerHTML = Object.entries(tagCounts).sort((a, b) => b[1] - a[1])
+    .map(([t, c]) => tagChip(t, ` <b class="ml-0.5">${c}</b>`)).join("") || `<p class="text-slate-400">No badges picked yet.</p>`;
 
   $("latest").innerHTML = list.slice(0, 5).map(feedItem).join("") || `<p class="text-slate-400 py-6 text-center">No feedback yet.</p>`;
   bindOpen();
@@ -161,19 +209,22 @@ function donut(segments, total, size = 120) {
     <text x="50%" y="63%" text-anchor="middle" font-size="9.5" fill="#64748b">responses</text></svg>`;
 }
 
-function ring(score, color, label, size = 72) {
+function ring(score, color, icon, size = 72) {
   const r = size / 2 - 6, C = 2 * Math.PI * r, pct = Math.round(((score + 1) / 2) * 100);
   return `<div class="relative shrink-0" style="width:${size}px;height:${size}px">
     <svg width="${size}" height="${size}"><circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="#f1f5f9" stroke-width="7"/>
     <circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(C * pct) / 100} ${C}" transform="rotate(-90 ${size / 2} ${size / 2})"/></svg>
-    <span class="absolute inset-0 grid place-items-center text-xl" style="color:${color}"><i class="fa-regular ${label}"></i></span></div>`;
+    <span class="absolute inset-0 grid place-items-center text-xl" style="color:${color}"><i class="fa-regular ${icon}"></i></span></div>`;
 }
 
 function feedItem(f) {
   return `<div data-open="${f.id}" class="flex gap-2.5 py-2.5 border-b border-slate-100 last:border-0 cursor-pointer group">
     ${avatar(f)}
-    <div class="min-w-0"><p class="text-[12.5px] leading-snug text-slate-700 group-hover:text-teal-700">${escapeHtml(f.comment)}</p>
-    <p class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-1.5">${stars(f.rating)} ${pill(f.ai.sentiment)} <span>${escapeHtml(f.course)} · ${escapeHtml(f.name)} · ${shortDate(f.date)}</span></p></div>
+    <div class="min-w-0">
+      ${f.comment ? `<p class="text-[12.5px] leading-snug text-slate-700 group-hover:text-teal-700">${escapeHtml(f.comment)}</p>` : ""}
+      ${f.tags?.length ? `<p class="flex flex-wrap gap-1 mt-1">${f.tags.map((t) => tagChip(t)).join("")}</p>` : ""}
+      <p class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-1.5">${stars(f.rating)} ${pill(f.ai.sentiment)} <span>${escapeHtml(f.course)} · ${escapeHtml(f.name)} · ${shortDate(f.date)}</span></p>
+    </div>
   </div>`;
 }
 
@@ -207,25 +258,33 @@ async function generateReport() {
 
 function renderList() {
   const q = state.q.trim().toLowerCase();
-  const list = feedback.filter((f) =>
-    (!state.listCourse || f.course === state.listCourse) &&
+  const base = feedback.filter((f) => !state.listCourse || f.course === state.listCourse);
+  const list = base.filter((f) =>
     (!state.listSentiment || f.ai.sentiment === state.listSentiment) &&
-    (!q || `${f.comment} ${f.course} ${f.ai.topics.join(" ")}`.toLowerCase().includes(q)));
+    (!q || `${f.comment} ${f.course} ${f.ai.topics.join(" ")} ${(f.tags || []).join(" ")}`.toLowerCase().includes(q)));
 
   $("search").value = state.q;
-  $("listCourse").innerHTML = `<option value="">All courses</option>` +
-    courses().map((c) => `<option ${c === state.listCourse ? "selected" : ""}>${escapeHtml(c)}</option>`).join("");
-  $("listSentiment").value = state.listSentiment;
+  $("listCourse").innerHTML = allBadge(!state.listCourse, `data-list-course=""`) +
+    courses().map((c) => courseBadge(c, state.listCourse === c, `data-list-course="${escapeHtml(c)}"`)).join("");
+  $("listSentiment").innerHTML = [["", "All", "bg-slate-800 border-slate-800 text-white", "fa-layer-group"],
+    ...Object.entries(SENT).map(([k, s]) => [k, s.label, s.on, s.icon])].map(([k, label, on, icon]) => {
+    const selected = state.listSentiment === k;
+    return `<button type="button" data-list-sentiment="${k}" aria-pressed="${selected}"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? on : "bg-white border-slate-300 text-slate-600 hover:bg-slate-50"}">
+      <i class="${k ? "fa-regular" : "fa-solid"} ${icon}"></i>${label} ${count(base.filter((f) => !k || f.ai.sentiment === k).length)}</button>`;
+  }).join("");
+  document.querySelectorAll("[data-list-course]").forEach((b) => (b.onclick = () => { state.listCourse = b.dataset.listCourse; renderList(); }));
+  document.querySelectorAll("[data-list-sentiment]").forEach((b) => (b.onclick = () => { state.listSentiment = b.dataset.listSentiment; renderList(); }));
   $("listMeta").textContent = `${list.length} of ${feedback.length} comments · sentiment & topics detected by AI`;
 
   $("rows").innerHTML = list.map((f) => `
     <tr data-open="${f.id}" class="border-t border-slate-100 cursor-pointer hover:bg-teal-50">
       <td class="px-3 py-2"><span class="flex items-center gap-2 font-semibold">${avatar(f, "w-6 h-6")}${escapeHtml(f.name)}</span></td>
-      <td class="px-3 py-2 whitespace-nowrap">${escapeHtml(f.course)}</td>
+      <td class="px-3 py-2 whitespace-nowrap"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background:${courseInfo(f.course).dot}"></span>${escapeHtml(f.course)}</span></td>
       <td class="px-3 py-2">${stars(f.rating)}</td>
-      <td class="px-3 py-2 max-w-[340px] truncate text-slate-600">${escapeHtml(f.comment)}</td>
+      <td class="px-3 py-2 max-w-[320px]"><p class="truncate text-slate-600">${escapeHtml(f.comment) || '<span class="text-slate-400 italic">Badges only</span>'}</p></td>
+      <td class="px-3 py-2"><span class="flex flex-wrap gap-1">${(f.tags || []).slice(0, 2).map((t) => tagChip(t)).join("")}</span></td>
       <td class="px-3 py-2">${pill(f.ai.sentiment)}</td>
-      <td class="px-3 py-2">${f.ai.topics.slice(0, 2).map((t) => `<span class="inline-block px-2 py-0.5 mr-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">${escapeHtml(t)}</span>`).join("")}</td>
       <td class="px-3 py-2 whitespace-nowrap text-slate-500">${shortDate(f.date)}</td>
     </tr>`).join("") || `<tr><td colspan="7" class="text-center text-slate-500 py-10">No feedback matches your filters.</td></tr>`;
   bindOpen();
@@ -235,7 +294,7 @@ function bindOpen() {
   document.querySelectorAll("[data-open]").forEach((el) => (el.onclick = () => openDrawer(Number(el.dataset.open))));
 }
 
-function analysisHtml(ai) {
+function analysisHtml(ai, tags = []) {
   const s = SENT[ai.sentiment] || SENT.neutral;
   const score = Number(ai.score) || 0;
   return `
@@ -247,7 +306,9 @@ function analysisHtml(ai) {
         <span class="text-slate-500">Tone check</span><span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700"><i class="fa-solid fa-check"></i> Respectful</span></span>
       </div>
     </div>
-    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3 mb-1.5">Detected topics</h4>
+    ${tags.length ? `<h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3 mb-1.5">Badges picked by the student</h4>
+    <div class="flex flex-wrap gap-1.5">${tags.map((t) => tagChip(t)).join("")}</div>` : ""}
+    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3 mb-1.5">Topics detected by AI</h4>
     <div class="flex flex-wrap gap-1.5">${ai.topics.map((t) => `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-700">${escapeHtml(t)}</span>`).join("")}</div>
     <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3.5 mb-1.5">Summary for the professor</h4>
     <div class="rounded-lg border border-slate-200 bg-gradient-to-br from-violet-50 to-teal-50 p-3 text-[12.5px] leading-relaxed text-slate-700">${escapeHtml(ai.summary)}</div>
@@ -266,9 +327,9 @@ function openDrawer(id) {
     </div>
     <div class="p-4 overflow-auto flex-1">
       ${stars(f.rating)}
-      <blockquote class="my-3 text-[13.5px] leading-relaxed bg-slate-50 border-l-3 border-teal-500 px-3.5 py-3 rounded-r-md">“${escapeHtml(f.comment)}”</blockquote>
+      ${f.comment ? `<blockquote class="my-3 text-[13.5px] leading-relaxed bg-slate-50 border-l-3 border-teal-500 px-3.5 py-3 rounded-r-md">“${escapeHtml(f.comment)}”</blockquote>` : ""}
       <h3 class="font-extrabold text-[15px] mt-4 mb-3"><i class="fa-solid fa-wand-magic-sparkles text-violet-600 mr-1"></i> AI analysis</h3>
-      ${analysisHtml(f.ai)}
+      ${analysisHtml(f.ai, f.tags || [])}
     </div>`;
   $("drawer").classList.remove("translate-x-full");
   $("scrim").classList.remove("hidden");
@@ -278,6 +339,30 @@ function openDrawer(id) {
 function closeDrawer() {
   $("drawer").classList.add("translate-x-full");
   $("scrim").classList.add("hidden");
+}
+
+function renderFormBadges() {
+  $("courseBadges").innerHTML = COURSES.map((c) =>
+    courseBadge(c.name, form.course === c.name, `role="radio" aria-checked="${form.course === c.name}" data-pick-course="${escapeHtml(c.name)}"`)).join("");
+  document.querySelectorAll("[data-pick-course]").forEach((b) => (b.onclick = () => { form.course = b.dataset.pickCourse; renderFormBadges(); }));
+
+  const tagButton = ([tag, icon], good) => {
+    const on = form.tags.has(tag);
+    const style = on
+      ? (good ? "bg-green-600 border-green-600 text-white shadow-sm" : "bg-red-600 border-red-600 text-white shadow-sm")
+      : (good ? "bg-white border-green-200 text-green-700 hover:bg-green-50" : "bg-white border-red-200 text-red-700 hover:bg-red-50");
+    return `<button type="button" data-tag="${escapeHtml(tag)}" aria-pressed="${on}"
+      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition active:scale-95 ${style}">
+      <i class="fa-solid ${on ? "fa-check" : icon}"></i>${escapeHtml(tag)}</button>`;
+  };
+  $("goodTags").innerHTML = TAGS.good.map((t) => tagButton(t, true)).join("");
+  $("badTags").innerHTML = TAGS.bad.map((t) => tagButton(t, false)).join("");
+  document.querySelectorAll("[data-tag]").forEach((b) => (b.onclick = () => {
+    form.tags.has(b.dataset.tag) ? form.tags.delete(b.dataset.tag) : form.tags.add(b.dataset.tag);
+    formError("");
+    renderFormBadges();
+  }));
+  $("tagCount").textContent = form.tags.size ? `${form.tags.size} selected` : "Pick all that apply";
 }
 
 function setRating(value) {
@@ -290,7 +375,7 @@ function showAnalysisPlaceholder() {
   $("analysis").innerHTML = `
     <div class="border-[1.5px] border-dashed border-slate-300 rounded-lg px-4 py-8 text-center text-slate-500 leading-relaxed">
       <i class="fa-solid fa-robot text-3xl text-slate-400 mb-2"></i><br>
-      Rate the course, write a comment and click <b>Submit & analyse with AI</b>.<br>
+      Pick a course, rate it, choose a few badges and click <b>Submit & analyse with AI</b>.<br>
       <span class="text-[11.5px]">The AI detects the sentiment, finds the topics, checks the tone and writes a summary for the professor.</span>
     </div>`;
 }
@@ -302,23 +387,26 @@ function formError(message) {
 
 async function submitFeedback(e) {
   e.preventDefault();
+  const comment = $("comment").value.trim();
   if (!rating) return formError("Choose a rating from 1 to 5 stars.");
-  if ($("comment").value.trim().length < 5) return formError("Write a few words about the course.");
+  if (!form.tags.size && comment.length < 5) return formError("Pick at least one badge or write a few words.");
   formError("");
 
   const btn = $("submitBtn");
   btn.disabled = true;
   $("analysis").innerHTML = `<div class="flex items-center justify-center gap-2.5 text-violet-600 font-semibold py-10"><span class="dots"><span></span><span></span><span></span></span> AI is reading your feedback…</div>`;
   try {
-    const item = await api("/api/feedback", { ...Object.fromEntries(new FormData($("form"))), rating });
+    const item = await api("/api/feedback", { course: form.course, rating, tags: [...form.tags], comment, name: $("form").name.value });
     feedback.unshift(item);
-    $("analysis").innerHTML = analysisHtml(item.ai) + `
+    $("analysis").innerHTML = analysisHtml(item.ai, item.tags) + `
       <div class="mt-3.5 rounded-lg bg-green-50 border border-green-200 p-3.5 text-[12.5px]">
         <b class="text-green-700"><i class="fa-solid fa-circle-check mr-1"></i>Feedback submitted!</b>
         Thank you. Your feedback for ${escapeHtml(item.course)} was saved and will be shown to the professor.
       </div>`;
     $("form").reset();
+    form.tags.clear();
     setRating(0);
+    renderFormBadges();
     $("counter").textContent = "0/1000";
     toast("Feedback submitted · analysed by AI");
   } catch (err) {
@@ -334,10 +422,12 @@ async function submitFeedback(e) {
 
 function fillExample() {
   const ex = EXAMPLES[exampleIndex++ % EXAMPLES.length];
-  $("form").course.value = ex.course;
+  form.course = ex.course;
+  form.tags = new Set(ex.tags);
   $("comment").value = ex.comment;
   $("counter").textContent = `${ex.comment.length}/1000`;
   setRating(ex.rating);
+  renderFormBadges();
   formError("");
 }
 
@@ -371,11 +461,8 @@ $("globalSearch").onkeydown = (e) => {
   e.target.blur();
   go("list");
 };
-$("courseFilter").onchange = (e) => setCourse(e.target.value);
 $("reportBtn").onclick = generateReport;
 $("search").oninput = (e) => { state.q = e.target.value; renderList(); $("search").focus(); };
-$("listCourse").onchange = (e) => { state.listCourse = e.target.value; renderList(); };
-$("listSentiment").onchange = (e) => { state.listSentiment = e.target.value; renderList(); };
 document.querySelectorAll("#stars button").forEach((b) => (b.onclick = () => { setRating(Number(b.dataset.value)); formError(""); }));
 $("comment").oninput = (e) => ($("counter").textContent = `${e.target.value.length}/1000`);
 $("form").onsubmit = submitFeedback;

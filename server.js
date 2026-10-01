@@ -59,14 +59,16 @@ app.get("/api/feedback", (req, res) => {
 });
 
 app.post("/api/feedback", async (req, res) => {
-  const { course, rating, comment, name } = req.body;
-  if (!course || !comment?.trim() || !(rating >= 1 && rating <= 5)) {
-    return res.status(400).json({ error: "Course, rating (1-5) and comment are required." });
+  const { course, rating, comment = "", name } = req.body;
+  const tags = Array.isArray(req.body.tags) ? req.body.tags.map(String).slice(0, 12) : [];
+  if (!course || !(rating >= 1 && rating <= 5) || (!comment.trim() && !tags.length)) {
+    return res.status(400).json({ error: "Choose a course, a rating (1-5) and at least one badge or a comment." });
   }
 
   try {
     const text = comment.trim().slice(0, 1000);
-    const ai = await askOpenAI(ANALYZE_PROMPT, `Course: ${course}\nRating: ${rating}/5\nComment: ${text}`);
+    const ai = await askOpenAI(ANALYZE_PROMPT,
+      `Course: ${course}\nRating: ${rating}/5\nSelected badges: ${tags.join(", ") || "none"}\nComment: ${text || "(no comment)"}`);
     if (ai.toxic) {
       return res.status(422).json({ error: "Your comment contains offensive language. Please rephrase it respectfully." });
     }
@@ -75,6 +77,7 @@ app.post("/api/feedback", async (req, res) => {
       course,
       rating: Number(rating),
       comment: text,
+      tags,
       name: name?.trim() || "Anonymous",
       date: new Date().toISOString(),
       ai,
@@ -95,7 +98,7 @@ app.post("/api/summary", async (req, res) => {
   if (!list.length) return res.status(400).json({ error: "There is no feedback to summarise yet." });
 
   try {
-    const lines = list.map((f) => `- [${f.course}, ${f.rating}/5] ${f.comment}`).join("\n");
+    const lines = list.map((f) => `- [${f.course}, ${f.rating}/5] ${(f.tags || []).join(", ")} ${f.comment}`).join("\n");
     res.json(await askOpenAI(SUMMARY_PROMPT, lines));
   } catch (err) {
     console.error(err);
