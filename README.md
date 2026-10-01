@@ -74,7 +74,7 @@ Optional: set `OPENAI_MODEL` to use a different OpenAI model.
 
 ```
 server.js              Express server + OpenAI calls
-public/index.html      The three pages (dashboard, feedback list, feedback form, how it works)
+public/index.html      The four pages (dashboard, feedback list, feedback form, how it works)
 public/app.js          Frontend logic: dashboard, table, form, AI report
 data/seed.json         Example feedback loaded on first start
 render.yaml            Render deployment settings
