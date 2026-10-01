@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "course": "Grid & Cloud Computing",
+    "rating": 5,
+    "comment": "The labs with Docker and AWS were really practical and fun. The professor explains cloud concepts very clearly.",
+    "name": "Arta H.",
+    "date": "2026-09-29T10:15:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "topics": ["Labs", "Professor", "Cloud"],
+      "summary": "The student enjoyed the practical Docker and AWS labs and found the explanations clear.",
+      "suggestion": "Keep the hands-on labs and add one more real deployment exercise."
+    }
+  },
+  {
+    "id": 2,
+    "course": "Grid & Cloud Computing",
+    "rating": 2,
+    "comment": "Lectures are too fast and the grid computing part was confusing. We need more time for the assignments.",
+    "name": "Anonymous",
+    "date": "2026-09-28T14:40:00.000Z",
+    "ai": {
+      "sentiment": "negative",
+      "topics": ["Pace", "Lectures", "Assignments"],
+      "summary": "The student finds the lectures too fast and the grid computing topic confusing.",
+      "suggestion": "Slow down on grid computing and give more time for assignments."
+    }
+  },
+  {
+    "id": 3,
+    "course": "Machine Learning",
+    "rating": 5,
+    "comment": "Amazing course! The professor is patient and the Python notebooks are excellent learning resources.",
+    "name": "Ermal S.",
+    "date": "2026-09-27T09:05:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "topics": ["Professor", "Materials"],
+      "summary": "The student praises the patient professor and the Python notebooks.",
+      "suggestion": "Share the notebooks as a template for future cohorts."
+    }
+  },
+  {
+    "id": 4,
+    "course": "Machine Learning",
+    "rating": 2,
+    "comment": "Too much math in the lectures and not enough practical examples. The homework deadlines were stressful.",
+    "name": "Anonymous",
+    "date": "2026-09-26T16:20:00.000Z",
+    "ai": {
+      "sentiment": "negative",
+      "topics": ["Lectures", "Assignments", "Pace"],
+      "summary": "The student wants fewer math-heavy lectures and more practical examples.",
+      "suggestion": "Pair each theory section with a short coding example."
+    }
+  },
+  {
+    "id": 5,
+    "course": "Distributed Systems",
+    "rating": 3,
+    "comment": "Useful topics like consensus and replication, but the assignments are very difficult without more examples.",
+    "name": "Rina P.",
+    "date": "2026-09-25T11:30:00.000Z",
+    "ai": {
+      "sentiment": "neutral",
+      "topics": ["Assignments", "Materials"],
+      "summary": "The topics are useful, but the assignments are hard without examples.",
+      "suggestion": "Add a worked example before each assignment."
+    }
+  },
+  {
+    "id": 6,
+    "course": "Distributed Systems",
+    "rating": 1,
+    "comment": "Exam questions were unfair and nothing like the exercises. Very poor communication about grading.",
+    "name": "Anonymous",
+    "date": "2026-09-24T13:10:00.000Z",
+    "ai": {
+      "sentiment": "negative",
+      "topics": ["Exams", "Grading"],
+      "summary": "The student felt the exam did not match the exercises and grading was unclear.",
+      "suggestion": "Publish a sample exam and a clear grading rubric."
+    }
+  },
+  {
+    "id": 7,
+    "course": "Web Engineering",
+    "rating": 5,
+    "comment": "Best course this semester! Modern frameworks, clear lectures and a really useful final project.",
+    "name": "Elira R.",
+    "date": "2026-09-23T08:45:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "topics": ["Lectures", "Project"],
+      "summary": "The student loved the modern content, clear lectures and final project.",
+      "suggestion": "Keep the final project format and invite an industry guest."
+    }
+  },
+  {
+    "id": 8,
+    "course": "Databases II",
+    "rating": 3,
+    "comment": "Okay course. SQL labs are useful but the theory lectures are a bit slow.",
+    "name": "Mimoza A.",
+    "date": "2026-09-22T15:00:00.000Z",
+    "ai": {
+      "sentiment": "neutral",
+      "topics": ["Labs", "Lectures", "Pace"],
+      "summary": "The SQL labs are useful, but the theory lectures feel slow.",
+      "suggestion": "Shorten the theory parts and add more live SQL demos."
+    }
+  }
+]

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · AI Student Feedback</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <nav class="bg-slate-900 text-white">
+    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center gap-6">
+      <a href="/" class="flex items-center gap-2 font-bold text-lg">
+        <i class="fa-solid fa-graduation-cap text-teal-400"></i> AI Student Feedback
+      </a>
+      <div class="ml-auto flex gap-1 text-sm">
+        <a href="/" class="px-3 py-2 rounded-md hover:bg-white/10"><i class="fa-solid fa-pen-to-square mr-1"></i> Give Feedback</a>
+        <a href="/dashboard.html" class="px-3 py-2 rounded-md bg-teal-600"><i class="fa-solid fa-chart-pie mr-1"></i> Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-6">
+
+    <div class="flex flex-wrap items-center gap-3">
+      <div>
+        <h1 class="text-xl font-bold">Feedback dashboard</h1>
+        <p class="text-sm text-slate-500">All student feedback, analysed by AI.</p>
+      </div>
+      <select id="course" class="ml-auto bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm">
+        <option value="">All courses</option>
+      </select>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl border border-slate-200 p-4">
+        <p class="text-sm text-slate-500"><i class="fa-solid fa-comments mr-1"></i> Feedback</p>
+        <p id="total" class="text-3xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-4">
+        <p class="text-sm text-slate-500"><i class="fa-solid fa-star mr-1"></i> Avg. rating</p>
+        <p id="avg" class="text-3xl font-bold mt-1 text-amber-500">0</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-4">
+        <p class="text-sm text-slate-500"><i class="fa-solid fa-face-smile mr-1"></i> Positive</p>
+        <p id="positive" class="text-3xl font-bold mt-1 text-green-600">0</p>
+      </div>
+      <div class="bg-white rounded-xl border border-slate-200 p-4">
+        <p class="text-sm text-slate-500"><i class="fa-solid fa-face-frown mr-1"></i> Negative</p>
+        <p id="negative" class="text-3xl font-bold mt-1 text-red-600">0</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl border border-slate-200 p-5">
+      <p class="text-sm font-semibold mb-2">Sentiment</p>
+      <div id="bar" class="flex h-3 rounded-full overflow-hidden bg-slate-100"></div>
+      <div class="flex gap-4 text-xs text-slate-500 mt-2">
+        <span><i class="fa-solid fa-circle text-green-500"></i> Positive</span>
+        <span><i class="fa-solid fa-circle text-amber-500"></i> Neutral</span>
+        <span><i class="fa-solid fa-circle text-red-500"></i> Negative</span>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-br from-violet-50 to-teal-50 rounded-xl border border-slate-200 p-5">
+      <div class="flex items-center gap-3">
+        <p class="font-semibold"><i class="fa-solid fa-wand-magic-sparkles text-violet-600 mr-1"></i> AI summary</p>
+        <button id="summaryBtn" class="ml-auto bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg px-4 py-2 disabled:opacity-50">
+          Generate summary
+        </button>
+      </div>
+      <div id="summary" class="text-sm text-slate-600 mt-3">Click “Generate summary” and AI will summarise the feedback below.</div>
+    </div>
+
+    <div id="list" class="space-y-3"></div>
+  </main>
+
+  <script>
+    const SENTIMENT = {
+      positive: { icon: "fa-face-smile", css: "bg-green-100 text-green-700", bar: "bg-green-500" },
+      neutral: { icon: "fa-face-meh", css: "bg-amber-100 text-amber-700", bar: "bg-amber-500" },
+      negative: { icon: "fa-face-frown", css: "bg-red-100 text-red-700", bar: "bg-red-500" },
+    };
+    const courseSelect = document.getElementById("course");
+    const summaryBtn = document.getElementById("summaryBtn");
+    const summaryBox = document.getElementById("summary");
+    let feedback = [];
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function stars(n) {
+      return [1, 2, 3, 4, 5].map((i) => `<i class="fa-solid fa-star ${i <= n ? "text-amber-400" : "text-slate-200"}"></i>`).join("");
+    }
+
+    function render() {
+      const list = feedback.filter((f) => !courseSelect.value || f.course === courseSelect.value);
+      const count = (s) => list.filter((f) => f.ai.sentiment === s).length;
+      const avg = list.length ? list.reduce((sum, f) => sum + f.rating, 0) / list.length : 0;
+
+      document.getElementById("total").textContent = list.length;
+      document.getElementById("avg").textContent = avg.toFixed(1);
+      document.getElementById("positive").textContent = count("positive");
+      document.getElementById("negative").textContent = count("negative");
+      document.getElementById("bar").innerHTML = ["positive", "neutral", "negative"]
+        .map((s) => `<div class="${SENTIMENT[s].bar}" style="width:${list.length ? (count(s) / list.length) * 100 : 0}%"></div>`).join("");
+
+      document.getElementById("list").innerHTML = list.map((f) => {
+        const s = SENTIMENT[f.ai.sentiment] || SENTIMENT.neutral;
+        return `
+        <div class="bg-white rounded-xl border border-slate-200 p-4">
+          <div class="flex flex-wrap items-center gap-2 text-sm mb-2">
+            <span class="font-semibold">${escapeHtml(f.course)}</span>
+            <span>${stars(f.rating)}</span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-semibold capitalize ${s.css}"><i class="fa-solid ${s.icon} mr-1"></i>${escapeHtml(f.ai.sentiment)}</span>
+            <span class="ml-auto text-xs text-slate-400">${escapeHtml(f.name)} · ${new Date(f.date).toLocaleDateString()}</span>
+          </div>
+          <p class="text-slate-700">${escapeHtml(f.comment)}</p>
+          <p class="text-sm text-violet-700 mt-2"><i class="fa-solid fa-lightbulb mr-1"></i> ${escapeHtml(f.ai.suggestion)}</p>
+        </div>`;
+      }).join("") || '<p class="text-center text-slate-400 py-10">No feedback yet.</p>';
+    }
+
+    async function load() {
+      feedback = await (await fetch("/api/feedback")).json();
+      const courses = [...new Set(feedback.map((f) => f.course))];
+      courseSelect.innerHTML = '<option value="">All courses</option>' +
+        courses.map((c) => `<option>${escapeHtml(c)}</option>`).join("");
+      render();
+    }
+
+    courseSelect.onchange = render;
+
+    summaryBtn.onclick = async () => {
+      summaryBtn.disabled = true;
+      summaryBox.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> AI is reading the feedback…';
+      try {
+        const res = await fetch("/api/summary", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ course: courseSelect.value }),
+        });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error);
+        summaryBox.innerHTML = `
+          <p class="mb-3">${escapeHtml(body.summary)}</p>
+          <div class="grid md:grid-cols-2 gap-4">
+            <div><p class="font-semibold text-green-700 mb-1"><i class="fa-solid fa-thumbs-up mr-1"></i> Strengths</p>
+              <ul class="list-disc ml-5">${body.strengths.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul></div>
+            <div><p class="font-semibold text-red-700 mb-1"><i class="fa-solid fa-screwdriver-wrench mr-1"></i> To improve</p>
+              <ul class="list-disc ml-5">${body.improvements.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ul></div>
+          </div>`;
+      } catch (err) {
+        summaryBox.innerHTML = `<span class="text-red-600">${escapeHtml(err.message)}</span>`;
+      } finally {
+        summaryBtn.disabled = false;
+      }
+    };
+
+    load();
+  </script>
+</body>
+</html>

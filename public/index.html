@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Give Feedback · AI Student Feedback</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen">
+
+  <nav class="bg-slate-900 text-white">
+    <div class="max-w-5xl mx-auto px-4 h-14 flex items-center gap-6">
+      <a href="/" class="flex items-center gap-2 font-bold text-lg">
+        <i class="fa-solid fa-graduation-cap text-teal-400"></i> AI Student Feedback
+      </a>
+      <div class="ml-auto flex gap-1 text-sm">
+        <a href="/" class="px-3 py-2 rounded-md bg-teal-600"><i class="fa-solid fa-pen-to-square mr-1"></i> Give Feedback</a>
+        <a href="/dashboard.html" class="px-3 py-2 rounded-md hover:bg-white/10"><i class="fa-solid fa-chart-pie mr-1"></i> Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 grid md:grid-cols-2 gap-6 items-start">
+
+    <form id="form" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-5">
+      <div>
+        <h1 class="text-xl font-bold">Give course feedback</h1>
+        <p class="text-sm text-slate-500">AI reads your comment and creates a short summary for the professor.</p>
+      </div>
+
+      <label class="block">
+        <span class="text-sm font-semibold">Course</span>
+        <select name="course" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-teal-500">
+          <option>Grid & Cloud Computing</option>
+          <option>Machine Learning</option>
+          <option>Distributed Systems</option>
+          <option>Web Engineering</option>
+          <option>Databases II</option>
+        </select>
+      </label>
+
+      <div>
+        <span class="text-sm font-semibold">Rating</span>
+        <div id="stars" class="mt-1 flex gap-1 text-2xl text-slate-300">
+          <button type="button" data-value="1"><i class="fa-solid fa-star"></i></button>
+          <button type="button" data-value="2"><i class="fa-solid fa-star"></i></button>
+          <button type="button" data-value="3"><i class="fa-solid fa-star"></i></button>
+          <button type="button" data-value="4"><i class="fa-solid fa-star"></i></button>
+          <button type="button" data-value="5"><i class="fa-solid fa-star"></i></button>
+        </div>
+      </div>
+
+      <label class="block">
+        <span class="text-sm font-semibold">Your feedback</span>
+        <textarea name="comment" rows="5" maxlength="1000" required
+          placeholder="What went well? What could be better?"
+          class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-teal-500"></textarea>
+      </label>
+
+      <label class="block">
+        <span class="text-sm font-semibold">Name <span class="font-normal text-slate-400">(optional)</span></span>
+        <input name="name" placeholder="Leave empty to stay anonymous"
+          class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-teal-500">
+      </label>
+
+      <button id="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg py-2.5 disabled:opacity-50">
+        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Submit & analyse with AI
+      </button>
+      <p id="error" class="hidden text-sm text-red-600"></p>
+    </form>
+
+    <section id="result" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+      <div class="text-center text-slate-400 py-10">
+        <i class="fa-solid fa-robot text-4xl mb-3"></i>
+        <p>Submit your feedback to see the AI analysis here.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const SENTIMENT = {
+      positive: { icon: "fa-face-smile", css: "bg-green-100 text-green-700" },
+      neutral: { icon: "fa-face-meh", css: "bg-amber-100 text-amber-700" },
+      negative: { icon: "fa-face-frown", css: "bg-red-100 text-red-700" },
+    };
+    const form = document.getElementById("form");
+    const result = document.getElementById("result");
+    const errorBox = document.getElementById("error");
+    const submitBtn = document.getElementById("submit");
+    let rating = 0;
+
+    document.querySelectorAll("#stars button").forEach((btn) => {
+      btn.onclick = () => {
+        rating = Number(btn.dataset.value);
+        document.querySelectorAll("#stars button").forEach((b) =>
+          b.classList.toggle("text-amber-400", Number(b.dataset.value) <= rating));
+      };
+    });
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function showResult(item) {
+      const s = SENTIMENT[item.ai.sentiment] || SENTIMENT.neutral;
+      result.innerHTML = `
+        <h2 class="text-lg font-bold mb-4"><i class="fa-solid fa-wand-magic-sparkles text-violet-600 mr-1"></i> AI analysis</h2>
+        <div class="flex items-center gap-3 mb-5">
+          <span class="px-3 py-1 rounded-full text-sm font-semibold capitalize ${s.css}">
+            <i class="fa-solid ${s.icon} mr-1"></i> ${escapeHtml(item.ai.sentiment)}
+          </span>
+          ${item.ai.topics.map((t) => `<span class="px-2 py-1 rounded-full text-xs bg-teal-50 text-teal-700">${escapeHtml(t)}</span>`).join("")}
+        </div>
+        <p class="text-xs uppercase font-semibold text-slate-500 mb-1">Summary for the professor</p>
+        <p class="mb-4">${escapeHtml(item.ai.summary)}</p>
+        <p class="text-xs uppercase font-semibold text-slate-500 mb-1">Suggested improvement</p>
+        <p class="mb-5">${escapeHtml(item.ai.suggestion)}</p>
+        <div class="rounded-lg bg-green-50 text-green-700 text-sm p-3">
+          <i class="fa-solid fa-circle-check mr-1"></i> Thank you! Your feedback was saved.
+        </div>`;
+    }
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      errorBox.classList.add("hidden");
+      if (!rating) {
+        errorBox.textContent = "Please choose a rating.";
+        return errorBox.classList.remove("hidden");
+      }
+
+      const data = Object.fromEntries(new FormData(form));
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> AI is analysing…';
+      try {
+        const res = await fetch("/api/feedback", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...data, rating }),
+        });
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error);
+        showResult(body);
+        form.reset();
+        rating = 0;
+        document.querySelectorAll("#stars button").forEach((b) => b.classList.remove("text-amber-400"));
+      } catch (err) {
+        errorBox.textContent = err.message;
+        errorBox.classList.remove("hidden");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Submit & analyse with AI';
+      }
+    };
+  </script>
+</body>
+</html>
