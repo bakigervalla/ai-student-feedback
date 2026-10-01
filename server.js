@@ -37,6 +37,7 @@ Reply with JSON only, in this shape:
  "topics": [up to 3 short topics, e.g. "Lectures", "Exams", "Labs", "Materials", "Pace", "Professor"],
  "summary": "one short sentence for the professor",
  "suggestion": "one short, practical improvement for the professor",
+ "highlights": [up to 4 objects {"text": a short phrase copied exactly from the comment, "type": "praise" | "concern"}],
  "toxic": true if the comment contains insults or offensive language, otherwise false}`;
 
 const SUMMARY_PROMPT = `You receive a list of student feedback comments about university courses.

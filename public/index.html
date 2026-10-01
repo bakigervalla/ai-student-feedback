@@ -4,226 +4,271 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI Student Feedback</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Caveat:wght@600;700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme static {
+      --color-paper: #f4f6fb;
+      --color-ink: #1d2b4f;
+      --color-ink-soft: #56617c;
+      --color-rule: #d8e2f1;
+      --color-margin: #f2a5a8;
+      --color-pen: #d62839;
+      --color-praise: #b6efc6;
+      --color-praise-ink: #166534;
+      --color-mixed: #ffe57a;
+      --color-mixed-ink: #7c4a03;
+      --color-concern: #ffc3d2;
+      --color-concern-ink: #9f1239;
+      --color-note: #fff3b0;
+      --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+      --font-sans: "Atkinson Hyperlegible", system-ui, sans-serif;
+      --font-pen: "Caveat", cursive;
+    }
+  </style>
+  <style>
+    body { background: var(--color-paper); color: var(--color-ink); }
+    :focus-visible { outline: 3px solid var(--color-ink); outline-offset: 3px; border-radius: 6px; }
+
+    .sheet { position: relative; background: #fff; }
+    @media (min-width: 640px) {
+      .sheet::before { content: ""; position: absolute; top: 0; bottom: 0; left: 2.6rem; width: 2px; background: var(--color-margin); }
+    }
+    .ruled {
+      line-height: 2rem;
+      background-image: linear-gradient(to bottom, transparent calc(2rem - 1px), var(--color-rule) calc(2rem - 1px));
+      background-size: 100% 2rem;
+      background-attachment: local;
+    }
+    .ruled:focus { outline: none; background-color: #fbfcff; }
+
+    .hl {
+      color: inherit; padding: 0 .2em; margin: 0 -.05em; border-radius: .45em .25em .5em .3em;
+      background-repeat: no-repeat; background-size: 100% 100%;
+      -webkit-box-decoration-break: clone; box-decoration-break: clone;
+    }
+    .hl-praise { background-image: linear-gradient(100deg, transparent .15em, var(--color-praise) .3em, var(--color-praise) calc(100% - .3em), transparent); }
+    .hl-concern { background-image: linear-gradient(100deg, transparent .15em, var(--color-concern) .3em, var(--color-concern) calc(100% - .3em), transparent); }
+    .hl-mixed { background-image: linear-gradient(100deg, transparent .15em, var(--color-mixed) .3em, var(--color-mixed) calc(100% - .3em), transparent); }
+    .sweep .hl { animation: sweep .55s ease-out both; }
+    .sweep .hl:nth-of-type(2) { animation-delay: .3s; }
+    .sweep .hl:nth-of-type(3) { animation-delay: .6s; }
+    .sweep .hl:nth-of-type(4) { animation-delay: .9s; }
+    @keyframes sweep { from { background-size: 0% 100%; } }
+
+    .pen-circle { position: absolute; left: 50%; top: 50%; width: 4.4rem; height: 3.5rem; transform: translate(-50%, -50%) rotate(-5deg); pointer-events: none; overflow: visible; }
+    .pen-circle path { fill: none; stroke: var(--color-pen); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 330; }
+    .pen-circle.small { width: 3.2rem; height: 2.6rem; }
+    .draw path { animation: draw .45s ease-out both; }
+    @keyframes draw { from { stroke-dashoffset: 330; } }
+
+    .nav-link[aria-current="page"] {
+      color: var(--color-ink);
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5 Q 14 1 27 4 T 52 4 T 76 4 T 98 3' fill='none' stroke='%23d62839' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat bottom / 100% 8px;
+    }
+    .note { background: var(--color-note); box-shadow: 0 1px 0 rgba(29, 43, 79, .06), 0 14px 28px -16px rgba(29, 43, 79, .45); }
+    .note.tilt { transform: rotate(-.7deg); }
+    .stamp { display: inline-block; border: 3px solid currentColor; border-radius: 10px; padding: 0 .6rem; transform: rotate(-7deg); font-family: var(--font-display); font-weight: 800; letter-spacing: .02em; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen">
+<body class="font-sans min-h-screen antialiased">
 
-  <nav class="bg-slate-900 text-white sticky top-0 z-10">
-    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center gap-4">
-      <a href="#feedback" class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
-        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-400 to-violet-600 grid place-items-center">
-          <i class="fa-solid fa-graduation-cap text-sm"></i>
-        </span>
-        <span class="hidden sm:inline">AI Student Feedback</span>
+  <header class="sticky top-0 z-20 bg-paper/90 backdrop-blur border-b border-rule">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-4">
+      <a href="#feedback" class="flex items-center gap-2 font-display font-extrabold text-lg sm:text-xl tracking-tight whitespace-nowrap">
+        <i class="fa-solid fa-check text-pen text-xl -rotate-6"></i> AI Student Feedback
       </a>
-      <div class="ml-auto flex gap-1 text-sm">
-        <a href="#feedback" data-nav="feedback" class="px-3 py-2 rounded-md"><i class="fa-solid fa-pen-to-square sm:mr-1"></i><span class="hidden sm:inline"> Give Feedback</span></a>
-        <a href="#dashboard" data-nav="dashboard" class="px-3 py-2 rounded-md"><i class="fa-solid fa-chart-pie sm:mr-1"></i><span class="hidden sm:inline"> Dashboard</span></a>
-        <a href="#about" data-nav="about" class="px-3 py-2 rounded-md"><i class="fa-solid fa-cloud sm:mr-1"></i><span class="hidden sm:inline"> How it works</span></a>
-      </div>
+      <nav class="ml-auto flex gap-1 sm:gap-4 font-display font-bold text-ink-soft">
+        <a href="#feedback" data-nav="feedback" aria-label="Give feedback" class="nav-link px-2 py-2 hover:text-ink"><span class="sm:hidden"><i class="fa-solid fa-pen"></i></span><span class="hidden sm:inline">Give feedback</span></a>
+        <a href="#dashboard" data-nav="dashboard" aria-label="Report cards" class="nav-link px-2 py-2 hover:text-ink"><span class="sm:hidden"><i class="fa-solid fa-table-list"></i></span><span class="hidden sm:inline">Report cards</span></a>
+        <a href="#about" data-nav="about" aria-label="How it works" class="nav-link px-2 py-2 hover:text-ink"><span class="sm:hidden"><i class="fa-solid fa-diagram-project"></i></span><span class="hidden sm:inline">How it works</span></a>
+      </nav>
     </div>
-  </nav>
+  </header>
 
-  <main data-page="feedback" class="max-w-6xl mx-auto px-4 py-8 grid md:grid-cols-2 gap-6 items-start">
-    <form id="form" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-5">
-      <div class="flex items-start gap-3">
-        <div>
-          <h1 class="text-xl font-bold">Give course feedback</h1>
-          <p class="text-sm text-slate-500">Your comment is analysed by AI and summarised for the professor.</p>
-        </div>
-        <button type="button" id="exampleBtn" class="ml-auto shrink-0 text-xs text-teal-700 border border-teal-200 bg-teal-50 hover:bg-teal-100 rounded-full px-3 py-1">
-          <i class="fa-solid fa-dice mr-1"></i> Try an example
-        </button>
-      </div>
+  <main data-page="feedback" class="max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+    <div class="max-w-2xl mb-10">
+      <h1 class="font-display text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.02]">How was the course?</h1>
+      <p class="mt-4 text-lg text-ink-soft max-w-xl">Grade the course the way it grades you. AI reads your comment and turns it into a short, clear note for the professor.</p>
+    </div>
 
-      <label class="block">
-        <span class="text-sm font-semibold">Course</span>
-        <select name="course" class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-teal-500">
-          <option>Grid & Cloud Computing</option>
-          <option>Machine Learning</option>
-          <option>Distributed Systems</option>
-          <option>Web Engineering</option>
-          <option>Databases II</option>
-        </select>
-      </label>
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <form id="form" novalidate class="sheet lg:col-span-7 rounded-md border border-rule shadow-[0_24px_48px_-32px_rgba(29,43,79,.45)] p-6 sm:p-10 sm:pl-16 space-y-9">
+        <label class="block">
+          <span class="font-display font-bold text-lg">Course</span>
+          <select name="course" class="mt-2 w-full bg-transparent border-0 border-b-2 border-rule focus:border-ink py-2 text-lg cursor-pointer">
+            <option>Grid & Cloud Computing</option>
+            <option>Machine Learning</option>
+            <option>Distributed Systems</option>
+            <option>Web Engineering</option>
+            <option>Databases II</option>
+          </select>
+        </label>
 
-      <div>
-        <span class="text-sm font-semibold">Rating</span>
-        <div class="flex items-center gap-3 mt-1">
-          <div id="stars" class="flex gap-1 text-2xl text-slate-300">
-            <button type="button" data-value="1" class="hover:scale-110 transition"><i class="fa-solid fa-star"></i></button>
-            <button type="button" data-value="2" class="hover:scale-110 transition"><i class="fa-solid fa-star"></i></button>
-            <button type="button" data-value="3" class="hover:scale-110 transition"><i class="fa-solid fa-star"></i></button>
-            <button type="button" data-value="4" class="hover:scale-110 transition"><i class="fa-solid fa-star"></i></button>
-            <button type="button" data-value="5" class="hover:scale-110 transition"><i class="fa-solid fa-star"></i></button>
+        <fieldset>
+          <legend class="font-display font-bold text-lg">Your grade</legend>
+          <div id="grades" role="radiogroup" aria-label="Your grade" class="mt-3 grid grid-cols-5 gap-1 sm:gap-3">
+            <button type="button" role="radio" aria-checked="false" data-value="1" class="grade relative rounded-xl py-3 hover:bg-paper"><span class="block font-display text-3xl sm:text-4xl font-bold">1</span><span class="block text-xs sm:text-sm text-ink-soft">Poor</span></button>
+            <button type="button" role="radio" aria-checked="false" data-value="2" class="grade relative rounded-xl py-3 hover:bg-paper"><span class="block font-display text-3xl sm:text-4xl font-bold">2</span><span class="block text-xs sm:text-sm text-ink-soft">Weak</span></button>
+            <button type="button" role="radio" aria-checked="false" data-value="3" class="grade relative rounded-xl py-3 hover:bg-paper"><span class="block font-display text-3xl sm:text-4xl font-bold">3</span><span class="block text-xs sm:text-sm text-ink-soft">Okay</span></button>
+            <button type="button" role="radio" aria-checked="false" data-value="4" class="grade relative rounded-xl py-3 hover:bg-paper"><span class="block font-display text-3xl sm:text-4xl font-bold">4</span><span class="block text-xs sm:text-sm text-ink-soft">Good</span></button>
+            <button type="button" role="radio" aria-checked="false" data-value="5" class="grade relative rounded-xl py-3 hover:bg-paper"><span class="block font-display text-3xl sm:text-4xl font-bold">5</span><span class="block text-xs sm:text-sm text-ink-soft">Great</span></button>
           </div>
-          <span id="ratingLabel" class="text-sm text-slate-500">Click to rate</span>
-        </div>
-      </div>
+        </fieldset>
 
-      <label class="block">
-        <span class="text-sm font-semibold">Your feedback</span>
-        <textarea name="comment" id="comment" rows="5" maxlength="1000" required
-          placeholder="What went well? What could be better? (lectures, labs, exams, materials, pace…)"
-          class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-teal-500"></textarea>
-        <span class="flex justify-between text-xs text-slate-400 mt-1">
-          <span><i class="fa-solid fa-shield-halved mr-1"></i> AI blocks offensive comments</span>
-          <span id="counter">0 / 1000</span>
-        </span>
-      </label>
+        <label class="block">
+          <span class="font-display font-bold text-lg">What should the professor know?</span>
+          <textarea id="comment" name="comment" rows="6" maxlength="1000"
+            placeholder="What helped you learn? What got in the way?"
+            class="ruled mt-2 w-full resize-y bg-transparent border-0 text-lg placeholder:text-ink-soft/60"></textarea>
+          <span class="flex justify-between gap-4 text-sm text-ink-soft mt-2">
+            <span>Offensive comments are sent back, not saved.</span>
+            <span id="counter" class="tabular-nums">0/1000</span>
+          </span>
+        </label>
 
-      <label class="block">
-        <span class="text-sm font-semibold">Name <span class="font-normal text-slate-400">(optional)</span></span>
-        <input name="name" placeholder="Leave empty to stay anonymous"
-          class="mt-1 w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-teal-500">
-      </label>
+        <label class="block">
+          <span class="font-display font-bold text-lg">Your name</span>
+          <span class="text-sm text-ink-soft">optional</span>
+          <input name="name" placeholder="Leave empty to stay anonymous"
+            class="mt-2 w-full bg-transparent border-0 border-b-2 border-rule focus:border-ink py-2 text-lg placeholder:text-ink-soft/60">
+        </label>
 
-      <button id="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg py-2.5 disabled:opacity-50">
-        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Submit & analyse with AI
-      </button>
-    </form>
-
-    <section id="result" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6"></section>
-  </main>
-
-  <main data-page="dashboard" class="hidden max-w-6xl mx-auto px-4 py-8 space-y-6">
-    <div class="flex flex-wrap items-center gap-3">
-      <div>
-        <h1 class="text-xl font-bold">Feedback dashboard</h1>
-        <p class="text-sm text-slate-500">All student feedback, analysed by AI.</p>
-      </div>
-      <select id="courseFilter" class="ml-auto bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm"></select>
-    </div>
-
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="bg-slate-800 text-white rounded-xl p-4">
-        <p class="text-sm text-slate-300"><i class="fa-solid fa-comments mr-1"></i> Total feedback</p>
-        <p id="kpiTotal" class="text-3xl font-bold mt-1">0</p>
-      </div>
-      <div class="bg-white rounded-xl border border-slate-200 p-4">
-        <p class="text-sm text-slate-500"><i class="fa-solid fa-star mr-1"></i> Average rating</p>
-        <p class="mt-1"><span id="kpiAvg" class="text-3xl font-bold text-amber-500">0</span><span class="text-slate-400"> / 5</span></p>
-      </div>
-      <div class="bg-white rounded-xl border border-slate-200 p-4">
-        <p class="text-sm text-slate-500"><i class="fa-solid fa-face-smile mr-1"></i> Positive</p>
-        <p id="kpiPositive" class="text-3xl font-bold mt-1 text-green-600">0%</p>
-      </div>
-      <div class="bg-white rounded-xl border border-slate-200 p-4">
-        <p class="text-sm text-slate-500"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Needs attention</p>
-        <p id="kpiNegative" class="text-3xl font-bold mt-1 text-red-600">0</p>
-      </div>
-    </div>
-
-    <div class="grid lg:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl border border-slate-200 p-5">
-        <p class="font-semibold mb-3">Sentiment</p>
-        <div class="h-56"><canvas id="sentimentChart"></canvas></div>
-      </div>
-      <div class="bg-white rounded-xl border border-slate-200 p-5 lg:col-span-2">
-        <p class="font-semibold mb-3">Average rating per course</p>
-        <div class="h-56"><canvas id="courseChart"></canvas></div>
-      </div>
-    </div>
-
-    <div class="grid lg:grid-cols-3 gap-6">
-      <div class="bg-white rounded-xl border border-slate-200 p-5">
-        <p class="font-semibold mb-1">Top topics</p>
-        <p class="text-xs text-slate-500 mb-3">What students talk about most</p>
-        <div id="topics" class="flex flex-wrap gap-2"></div>
-      </div>
-      <div class="bg-gradient-to-br from-violet-50 to-teal-50 rounded-xl border border-slate-200 p-5 lg:col-span-2">
-        <div class="flex items-center gap-3">
-          <p class="font-semibold"><i class="fa-solid fa-wand-magic-sparkles text-violet-600 mr-1"></i> AI summary</p>
-          <button id="summaryBtn" class="ml-auto bg-violet-600 hover:bg-violet-700 text-white text-sm font-semibold rounded-lg px-4 py-2 disabled:opacity-50">
-            Generate summary
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <button id="submit" class="bg-ink text-white font-display font-bold text-lg rounded-full px-8 py-3.5 hover:bg-ink/90 active:translate-y-px disabled:opacity-60 disabled:cursor-wait">
+            Hand in feedback
+          </button>
+          <button type="button" id="exampleBtn" class="text-ink-soft underline decoration-dotted underline-offset-4 hover:text-ink">
+            Fill in an example
           </button>
         </div>
-        <div id="summary" class="text-sm text-slate-600 mt-3">AI reads all comments for the selected course and writes a short report.</div>
-      </div>
-    </div>
+        <p id="formError" role="alert" class="hidden text-pen font-bold"></p>
+      </form>
 
-    <div>
-      <div class="flex flex-wrap items-center gap-3 mb-3">
-        <p class="font-semibold">All comments <span id="listCount" class="text-slate-400 font-normal"></span></p>
-        <div class="ml-auto flex flex-wrap gap-2">
-          <input id="search" placeholder="Search…" class="bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm w-44">
-          <select id="sentimentFilter" class="bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm">
-            <option value="">All sentiments</option>
-            <option value="positive">Positive</option>
-            <option value="neutral">Neutral</option>
-            <option value="negative">Negative</option>
-          </select>
-        </div>
-      </div>
-      <div id="list" class="space-y-3"></div>
+      <aside id="result" aria-live="polite" class="lg:col-span-5 lg:sticky lg:top-28"></aside>
     </div>
   </main>
 
-  <main data-page="about" class="hidden max-w-6xl mx-auto px-4 py-8 space-y-6">
-    <div>
-      <h1 class="text-xl font-bold">How it works</h1>
-      <p class="text-sm text-slate-500">Architecture and cloud deployment of the application.</p>
+  <main data-page="dashboard" class="hidden max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-14">
+    <section>
+      <h1 id="headline" class="font-display text-[1.7rem] sm:text-[2.6rem] font-extrabold tracking-tight leading-[1.1] max-w-4xl"></h1>
+      <dl id="stats" class="mt-8 flex flex-wrap gap-y-6"></dl>
+      <div class="mt-8 max-w-4xl">
+        <div id="moodBar" class="flex h-3.5 rounded-full overflow-hidden bg-rule"></div>
+        <div id="moodLegend" class="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-ink-soft"></div>
+      </div>
+    </section>
+
+    <section class="grid lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-7">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-2">
+          <h2 class="font-display text-2xl font-bold">Report cards</h2>
+          <p class="text-ink-soft text-sm">Pick a course to see only its feedback.</p>
+        </div>
+        <ul id="cards" class="border-t-2 border-ink"></ul>
+      </div>
+      <div class="lg:col-span-5 space-y-10">
+        <div class="note tilt rounded-sm p-6 sm:p-7">
+          <div class="flex items-center gap-3">
+            <h2 class="font-display text-xl font-bold">Professor's briefing</h2>
+            <button id="briefBtn" class="ml-auto bg-ink text-white font-display font-bold text-sm rounded-full px-4 py-2 hover:bg-ink/90 disabled:opacity-60 disabled:cursor-wait">Write briefing</button>
+          </div>
+          <div id="brief" class="mt-3 leading-relaxed"></div>
+        </div>
+        <div>
+          <h2 class="font-display text-xl font-bold mb-3">What students mention</h2>
+          <p id="topics" class="text-lg leading-[2.6]"></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="flex flex-wrap items-center gap-3 mb-5">
+        <h2 class="font-display text-2xl font-bold">Comments</h2>
+        <span id="courseChip"></span>
+        <div class="w-full sm:w-auto sm:ml-auto flex flex-wrap gap-2">
+          <div id="moodTabs" role="group" aria-label="Filter by tone" class="inline-flex rounded-full border border-rule bg-white p-1"></div>
+          <label class="relative flex-1 sm:flex-none">
+            <span class="sr-only">Search comments</span>
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-soft text-sm"></i>
+            <input id="search" type="search" placeholder="Search comments" class="w-full sm:w-56 bg-white border border-rule rounded-full pl-9 pr-4 py-2">
+          </label>
+        </div>
+      </div>
+      <div id="list" class="grid gap-4"></div>
+    </section>
+  </main>
+
+  <main data-page="about" class="hidden max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 space-y-12">
+    <div class="max-w-2xl">
+      <h1 class="font-display text-4xl sm:text-5xl font-extrabold tracking-tight leading-[1.05]">How it works</h1>
+      <p class="mt-4 text-lg text-ink-soft">One small Node.js server in the cloud, one call to OpenAI per comment.</p>
     </div>
 
-    <div class="bg-white rounded-xl border border-slate-200 p-6 overflow-x-auto">
-      <div class="flex items-stretch gap-3 min-w-[760px] text-center text-sm">
-        <div class="flex-1 border border-slate-200 rounded-xl p-4">
-          <i class="fa-solid fa-laptop text-3xl text-slate-500"></i>
-          <p class="font-semibold mt-2">Browser</p>
-          <p class="text-xs text-slate-500 mt-1">HTML + Tailwind CSS + JavaScript</p>
+    <div class="sheet rounded-md border border-rule p-6 sm:p-10 sm:pl-16 overflow-x-auto">
+      <div class="flex items-stretch gap-4 min-w-[760px] text-center">
+        <div class="flex-1 rounded-xl border-2 border-ink p-5">
+          <i class="fa-solid fa-laptop text-3xl"></i>
+          <p class="font-display font-bold mt-3">Browser</p>
+          <p class="text-sm text-ink-soft mt-1">The pages you are looking at</p>
         </div>
-        <div class="flex flex-col justify-center items-center gap-1 text-teal-600"><i class="fa-solid fa-arrow-right-arrow-left text-xl"></i><span class="text-[10px] text-slate-400">HTTPS / JSON</span></div>
-        <div class="flex-[2] border-2 border-dashed border-teal-400 bg-teal-50/50 rounded-xl p-4 relative">
-          <span class="absolute -top-3 left-4 bg-teal-600 text-white text-xs font-semibold px-3 py-0.5 rounded-full"><i class="fa-solid fa-cloud mr-1"></i> Render (PaaS)</span>
-          <div class="flex gap-3 h-full">
-            <div class="flex-1 bg-white border border-slate-200 rounded-xl p-4">
-              <i class="fa-brands fa-node-js text-3xl text-green-600"></i>
-              <p class="font-semibold mt-2">Node.js + Express</p>
-              <p class="text-xs text-slate-500 mt-1 font-mono">POST /api/feedback<br>GET /api/feedback<br>POST /api/summary</p>
+        <div class="flex flex-col justify-center items-center gap-1 text-pen"><i class="fa-solid fa-arrow-right-arrow-left text-xl"></i><span class="font-pen text-lg">JSON</span></div>
+        <div class="flex-[2.2] rounded-xl border-2 border-dashed border-ink/50 p-5 pt-7 relative">
+          <span class="absolute -top-3.5 left-5 bg-white px-2 font-display font-bold"><i class="fa-solid fa-cloud mr-1"></i> Render cloud</span>
+          <div class="flex gap-4 h-full">
+            <div class="flex-1 rounded-xl border-2 border-ink p-5 bg-white">
+              <i class="fa-brands fa-node-js text-3xl"></i>
+              <p class="font-display font-bold mt-3">Node.js server</p>
+              <p class="text-sm text-ink-soft mt-1">Receives feedback and asks the AI</p>
             </div>
-            <div class="flex flex-col justify-center items-center gap-1 text-teal-600"><i class="fa-solid fa-arrows-up-down text-xl rotate-90"></i></div>
-            <div class="flex-1 bg-white border border-slate-200 rounded-xl p-4">
-              <i class="fa-solid fa-database text-3xl text-orange-500"></i>
-              <p class="font-semibold mt-2">Storage</p>
-              <p class="text-xs text-slate-500 mt-1">feedback.json</p>
+            <div class="flex flex-col justify-center items-center gap-1 text-pen"><i class="fa-solid fa-arrow-right-arrow-left text-xl"></i><span class="font-pen text-lg">save</span></div>
+            <div class="flex-1 rounded-xl border-2 border-ink p-5 bg-white">
+              <i class="fa-solid fa-box-archive text-3xl"></i>
+              <p class="font-display font-bold mt-3">Storage</p>
+              <p class="text-sm text-ink-soft mt-1">All feedback with its AI notes</p>
             </div>
           </div>
         </div>
-        <div class="flex flex-col justify-center items-center gap-1 text-teal-600"><i class="fa-solid fa-arrow-right-arrow-left text-xl"></i><span class="text-[10px] text-slate-400">API key</span></div>
-        <div class="flex-1 border border-slate-200 rounded-xl p-4">
-          <i class="fa-solid fa-brain text-3xl text-violet-600"></i>
-          <p class="font-semibold mt-2">OpenAI API</p>
-          <p class="text-xs text-slate-500 mt-1">Sentiment, topics, moderation, summaries</p>
+        <div class="flex flex-col justify-center items-center gap-1 text-pen"><i class="fa-solid fa-arrow-right-arrow-left text-xl"></i><span class="font-pen text-lg">API key</span></div>
+        <div class="flex-1 rounded-xl border-2 border-ink p-5">
+          <i class="fa-solid fa-brain text-3xl"></i>
+          <p class="font-display font-bold mt-3">OpenAI</p>
+          <p class="text-sm text-ink-soft mt-1">Reads, highlights and summarises</p>
         </div>
       </div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="bg-white rounded-xl border border-slate-200 p-6">
-        <p class="font-semibold mb-3"><i class="fa-solid fa-route text-teal-600 mr-1"></i> What happens when a student submits</p>
-        <ol class="space-y-3 text-sm">
-          <li class="flex gap-3"><span class="w-6 h-6 shrink-0 rounded-full bg-teal-100 text-teal-700 font-bold grid place-items-center text-xs">1</span>The browser sends the rating and comment to the server.</li>
-          <li class="flex gap-3"><span class="w-6 h-6 shrink-0 rounded-full bg-teal-100 text-teal-700 font-bold grid place-items-center text-xs">2</span>The server asks OpenAI to analyse the comment and return JSON.</li>
-          <li class="flex gap-3"><span class="w-6 h-6 shrink-0 rounded-full bg-teal-100 text-teal-700 font-bold grid place-items-center text-xs">3</span>Offensive comments are rejected; the others are saved with the AI result.</li>
-          <li class="flex gap-3"><span class="w-6 h-6 shrink-0 rounded-full bg-teal-100 text-teal-700 font-bold grid place-items-center text-xs">4</span>The dashboard shows statistics, charts and an AI summary for the professor.</li>
+    <div class="grid md:grid-cols-2 gap-10">
+      <div>
+        <h2 class="font-display text-2xl font-bold mb-4">When a student hands in feedback</h2>
+        <ol class="space-y-4 text-lg">
+          <li class="flex gap-4"><span class="font-pen text-3xl text-pen leading-none w-6">1</span>The browser sends the course, grade and comment to the server.</li>
+          <li class="flex gap-4"><span class="font-pen text-3xl text-pen leading-none w-6">2</span>The server asks OpenAI for the tone, topics, highlights and a suggestion.</li>
+          <li class="flex gap-4"><span class="font-pen text-3xl text-pen leading-none w-6">3</span>Offensive comments are sent back. All others are saved with the AI note.</li>
+          <li class="flex gap-4"><span class="font-pen text-3xl text-pen leading-none w-6">4</span>The professor opens the report cards and asks the AI for a briefing.</li>
         </ol>
       </div>
-      <div class="bg-white rounded-xl border border-slate-200 p-6">
-        <p class="font-semibold mb-3"><i class="fa-solid fa-layer-group text-teal-600 mr-1"></i> Tech stack</p>
-        <ul class="space-y-2 text-sm">
-          <li><i class="fa-brands fa-html5 text-orange-500 w-5"></i> <b>Frontend:</b> HTML, Tailwind CSS, Font Awesome, Chart.js</li>
-          <li><i class="fa-brands fa-node-js text-green-600 w-5"></i> <b>Backend:</b> Node.js + Express</li>
-          <li><i class="fa-solid fa-brain text-violet-600 w-5"></i> <b>AI:</b> OpenAI API (gpt-4o-mini)</li>
-          <li><i class="fa-solid fa-cloud text-teal-600 w-5"></i> <b>Cloud:</b> Render (PaaS), deployed from GitHub</li>
-          <li><i class="fa-solid fa-key text-amber-500 w-5"></i> <b>Security:</b> the API key is an environment variable on Render, never in the browser</li>
-        </ul>
+      <div>
+        <h2 class="font-display text-2xl font-bold mb-4">Built with</h2>
+        <dl class="grid grid-cols-[8rem_1fr] gap-y-3 text-lg border-t-2 border-ink pt-4">
+          <dt class="font-bold">Pages</dt><dd>HTML, Tailwind CSS, Font Awesome</dd>
+          <dt class="font-bold">Server</dt><dd>Node.js with Express</dd>
+          <dt class="font-bold">AI</dt><dd>OpenAI API (gpt-4o-mini)</dd>
+          <dt class="font-bold">Cloud</dt><dd>Render, deployed from GitHub</dd>
+          <dt class="font-bold">Secrets</dt><dd>The OpenAI key lives in Render's settings, never in the browser</dd>
+        </dl>
       </div>
     </div>
   </main>
 
-  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-semibold px-4 py-2.5 rounded-lg shadow-lg opacity-0 transition pointer-events-none"></div>
+  <div id="toast" role="status" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-ink text-white font-bold px-5 py-3 rounded-full shadow-lg opacity-0 transition pointer-events-none"></div>
 
   <script src="app.js"></script>
 </body>

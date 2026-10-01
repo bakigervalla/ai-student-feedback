@@ -6,18 +6,19 @@ The app runs in the cloud on **Render**.
 
 ## Features
 
-- **Give Feedback**: the student picks a course, gives a 1–5 star rating and writes a comment.
-  The AI returns the sentiment (positive / neutral / negative), the topics, a one-line summary and an improvement suggestion.
+- **Give Feedback**: the student picks a course, gives a grade from 1 to 5 and writes a comment.
+  The AI returns the tone (praise / mixed / concern), the topics, a one-line summary, an improvement suggestion,
+  and highlights the exact phrases the student praised (green) or criticised (pink).
   **AI moderation**: offensive comments are rejected and not saved.
-- **Dashboard**: statistics, a sentiment chart, average rating per course, top topics,
-  an **AI summary** (overall opinion, strengths, things to improve) and all comments with search and filters.
+- **Report cards** (dashboard): statistics, a report card per course with its average grade, highlighted topics,
+  a **professor's briefing** written by AI (what to keep, what to change) and all comments with search and filters.
 - **How it works**: architecture diagram, request flow and tech stack.
 
 ## Tech stack
 
 | Part     | Technology                                 |
 |----------|--------------------------------------------|
-| Frontend | HTML, Tailwind CSS, Font Awesome, Chart.js (via CDN) |
+| Frontend | HTML, Tailwind CSS, Font Awesome, Google Fonts (via CDN) |
 | Backend  | Node.js + Express                          |
 | AI       | OpenAI API (`gpt-4o-mini` by default)      |
 | Storage  | JSON file (`data/feedback.json`)           |
@@ -68,8 +69,8 @@ Optional: set `OPENAI_MODEL` to use a different OpenAI model.
 
 ```
 server.js              Express server + OpenAI calls
-public/index.html      The three pages (Give Feedback, Dashboard, How it works)
-public/app.js          Frontend logic: form, charts, filters, AI summary
+public/index.html      The three pages (Give feedback, Report cards, How it works)
+public/app.js          Frontend logic: form, report cards, filters, AI briefing
 data/seed.json         Example feedback loaded on first start
 render.yaml            Render deployment settings
 ```

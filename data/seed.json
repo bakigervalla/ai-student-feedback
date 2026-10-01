@@ -8,9 +8,23 @@
     "date": "2026-09-29T10:15:00.000Z",
     "ai": {
       "sentiment": "positive",
-      "topics": ["Labs", "Professor", "Cloud"],
+      "topics": [
+        "Labs",
+        "Professor",
+        "Cloud"
+      ],
       "summary": "The student enjoyed the practical Docker and AWS labs and found the explanations clear.",
-      "suggestion": "Keep the hands-on labs and add one more real deployment exercise."
+      "suggestion": "Keep the hands-on labs and add one more real deployment exercise.",
+      "highlights": [
+        {
+          "text": "really practical and fun",
+          "type": "praise"
+        },
+        {
+          "text": "explains cloud concepts very clearly",
+          "type": "praise"
+        }
+      ]
     }
   },
   {
@@ -22,9 +36,27 @@
     "date": "2026-09-28T14:40:00.000Z",
     "ai": {
       "sentiment": "negative",
-      "topics": ["Pace", "Lectures", "Assignments"],
+      "topics": [
+        "Pace",
+        "Lectures",
+        "Assignments"
+      ],
       "summary": "The student finds the lectures too fast and the grid computing topic confusing.",
-      "suggestion": "Slow down on grid computing and give more time for assignments."
+      "suggestion": "Slow down on grid computing and give more time for assignments.",
+      "highlights": [
+        {
+          "text": "Lectures are too fast",
+          "type": "concern"
+        },
+        {
+          "text": "was confusing",
+          "type": "concern"
+        },
+        {
+          "text": "more time for the assignments",
+          "type": "concern"
+        }
+      ]
     }
   },
   {
@@ -36,9 +68,22 @@
     "date": "2026-09-27T09:05:00.000Z",
     "ai": {
       "sentiment": "positive",
-      "topics": ["Professor", "Materials"],
+      "topics": [
+        "Professor",
+        "Materials"
+      ],
       "summary": "The student praises the patient professor and the Python notebooks.",
-      "suggestion": "Share the notebooks as a template for future cohorts."
+      "suggestion": "Share the notebooks as a template for future cohorts.",
+      "highlights": [
+        {
+          "text": "The professor is patient",
+          "type": "praise"
+        },
+        {
+          "text": "excellent learning resources",
+          "type": "praise"
+        }
+      ]
     }
   },
   {
@@ -50,9 +95,27 @@
     "date": "2026-09-26T16:20:00.000Z",
     "ai": {
       "sentiment": "negative",
-      "topics": ["Lectures", "Assignments", "Pace"],
+      "topics": [
+        "Lectures",
+        "Assignments",
+        "Pace"
+      ],
       "summary": "The student wants fewer math-heavy lectures and more practical examples.",
-      "suggestion": "Pair each theory section with a short coding example."
+      "suggestion": "Pair each theory section with a short coding example.",
+      "highlights": [
+        {
+          "text": "Too much math in the lectures",
+          "type": "concern"
+        },
+        {
+          "text": "not enough practical examples",
+          "type": "concern"
+        },
+        {
+          "text": "deadlines were stressful",
+          "type": "concern"
+        }
+      ]
     }
   },
   {
@@ -64,9 +127,22 @@
     "date": "2026-09-25T11:30:00.000Z",
     "ai": {
       "sentiment": "neutral",
-      "topics": ["Assignments", "Materials"],
+      "topics": [
+        "Assignments",
+        "Materials"
+      ],
       "summary": "The topics are useful, but the assignments are hard without examples.",
-      "suggestion": "Add a worked example before each assignment."
+      "suggestion": "Add a worked example before each assignment.",
+      "highlights": [
+        {
+          "text": "Useful topics",
+          "type": "praise"
+        },
+        {
+          "text": "assignments are very difficult",
+          "type": "concern"
+        }
+      ]
     }
   },
   {
@@ -78,9 +154,22 @@
     "date": "2026-09-24T13:10:00.000Z",
     "ai": {
       "sentiment": "negative",
-      "topics": ["Exams", "Grading"],
+      "topics": [
+        "Exams",
+        "Grading"
+      ],
       "summary": "The student felt the exam did not match the exercises and grading was unclear.",
-      "suggestion": "Publish a sample exam and a clear grading rubric."
+      "suggestion": "Publish a sample exam and a clear grading rubric.",
+      "highlights": [
+        {
+          "text": "Exam questions were unfair",
+          "type": "concern"
+        },
+        {
+          "text": "Very poor communication about grading",
+          "type": "concern"
+        }
+      ]
     }
   },
   {
@@ -92,9 +181,26 @@
     "date": "2026-09-23T08:45:00.000Z",
     "ai": {
       "sentiment": "positive",
-      "topics": ["Lectures", "Project"],
+      "topics": [
+        "Lectures",
+        "Project"
+      ],
       "summary": "The student loved the modern content, clear lectures and final project.",
-      "suggestion": "Keep the final project format and invite an industry guest."
+      "suggestion": "Keep the final project format and invite an industry guest.",
+      "highlights": [
+        {
+          "text": "Best course this semester",
+          "type": "praise"
+        },
+        {
+          "text": "clear lectures",
+          "type": "praise"
+        },
+        {
+          "text": "really useful final project",
+          "type": "praise"
+        }
+      ]
     }
   },
   {
@@ -106,9 +212,23 @@
     "date": "2026-09-22T15:00:00.000Z",
     "ai": {
       "sentiment": "neutral",
-      "topics": ["Labs", "Lectures", "Pace"],
+      "topics": [
+        "Labs",
+        "Lectures",
+        "Pace"
+      ],
       "summary": "The SQL labs are useful, but the theory lectures feel slow.",
-      "suggestion": "Shorten the theory parts and add more live SQL demos."
+      "suggestion": "Shorten the theory parts and add more live SQL demos.",
+      "highlights": [
+        {
+          "text": "SQL labs are useful",
+          "type": "praise"
+        },
+        {
+          "text": "theory lectures are a bit slow",
+          "type": "concern"
+        }
+      ]
     }
   }
 ]
