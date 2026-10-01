@@ -6,19 +6,23 @@ The app runs in the cloud on **Render**.
 
 ## Features
 
-- **Give Feedback**: the student picks a course, gives a grade from 1 to 5 and writes a comment.
-  The AI returns the tone (praise / mixed / concern), the topics, a one-line summary, an improvement suggestion,
-  and highlights the exact phrases the student praised (green) or criticised (pink).
+A **Student / Professor** switch in the header changes the view.
+
+- **Student › Give Feedback**: pick a course, rate it with 1–5 stars and write a comment.
+  The AI returns the sentiment with a score, the topics, a tone check, a summary for the professor and a suggested improvement.
   **AI moderation**: offensive comments are rejected and not saved.
-- **Report cards** (dashboard): statistics, a report card per course with its average grade, highlighted topics,
-  a **professor's briefing** written by AI (what to keep, what to change) and all comments with search and filters.
+- **Professor › Dashboard**: total feedback, average rating, % positive, comments that need attention,
+  sentiment overview, sentiment per course, top topics, latest feedback, and a **Generate AI report** button
+  (overall opinion, strengths, things to improve). A course filter narrows everything to one course.
+- **Professor › Feedback**: all comments in a table with search and filters; click a row for the full AI analysis.
 - **How it works**: architecture diagram, request flow and tech stack.
+- The status bar shows whether the server is online and whether the OpenAI key is set.
 
 ## Tech stack
 
 | Part     | Technology                                 |
 |----------|--------------------------------------------|
-| Frontend | HTML, Tailwind CSS, Font Awesome, Google Fonts (via CDN) |
+| Frontend | HTML, Tailwind CSS, Font Awesome, vanilla JavaScript (via CDN) |
 | Backend  | Node.js + Express                          |
 | AI       | OpenAI API (`gpt-4o-mini` by default)      |
 | Storage  | JSON file (`data/feedback.json`)           |
@@ -36,6 +40,7 @@ Browser ──HTTP──> Node.js + Express (Render) ──API key──> OpenAI
 2. The server sends the comment to OpenAI and asks for a JSON answer.
 3. Offensive comments are rejected; otherwise the server saves the feedback together with the AI result and returns it.
 4. The dashboard loads everything with `GET /api/feedback` and asks for a summary with `POST /api/summary`.
+   `GET /api/status` tells the page whether the OpenAI key is configured.
 
 The OpenAI key stays on the server and is never sent to the browser.
 
@@ -69,8 +74,8 @@ Optional: set `OPENAI_MODEL` to use a different OpenAI model.
 
 ```
 server.js              Express server + OpenAI calls
-public/index.html      The three pages (Give feedback, Report cards, How it works)
-public/app.js          Frontend logic: form, report cards, filters, AI briefing
+public/index.html      The three pages (dashboard, feedback list, feedback form, how it works)
+public/app.js          Frontend logic: dashboard, table, form, AI report
 data/seed.json         Example feedback loaded on first start
 render.yaml            Render deployment settings
 ```

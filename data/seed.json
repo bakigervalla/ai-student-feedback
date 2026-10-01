@@ -8,23 +8,14 @@
     "date": "2026-09-29T10:15:00.000Z",
     "ai": {
       "sentiment": "positive",
+      "score": 0.9,
       "topics": [
         "Labs",
         "Professor",
         "Cloud"
       ],
       "summary": "The student enjoyed the practical Docker and AWS labs and found the explanations clear.",
-      "suggestion": "Keep the hands-on labs and add one more real deployment exercise.",
-      "highlights": [
-        {
-          "text": "really practical and fun",
-          "type": "praise"
-        },
-        {
-          "text": "explains cloud concepts very clearly",
-          "type": "praise"
-        }
-      ]
+      "suggestion": "Keep the hands-on labs and add one more real deployment exercise."
     }
   },
   {
@@ -36,27 +27,14 @@
     "date": "2026-09-28T14:40:00.000Z",
     "ai": {
       "sentiment": "negative",
+      "score": -0.7,
       "topics": [
         "Pace",
         "Lectures",
         "Assignments"
       ],
       "summary": "The student finds the lectures too fast and the grid computing topic confusing.",
-      "suggestion": "Slow down on grid computing and give more time for assignments.",
-      "highlights": [
-        {
-          "text": "Lectures are too fast",
-          "type": "concern"
-        },
-        {
-          "text": "was confusing",
-          "type": "concern"
-        },
-        {
-          "text": "more time for the assignments",
-          "type": "concern"
-        }
-      ]
+      "suggestion": "Slow down on grid computing and give more time for assignments."
     }
   },
   {
@@ -68,22 +46,13 @@
     "date": "2026-09-27T09:05:00.000Z",
     "ai": {
       "sentiment": "positive",
+      "score": 0.95,
       "topics": [
         "Professor",
         "Materials"
       ],
       "summary": "The student praises the patient professor and the Python notebooks.",
-      "suggestion": "Share the notebooks as a template for future cohorts.",
-      "highlights": [
-        {
-          "text": "The professor is patient",
-          "type": "praise"
-        },
-        {
-          "text": "excellent learning resources",
-          "type": "praise"
-        }
-      ]
+      "suggestion": "Share the notebooks as a template for future cohorts."
     }
   },
   {
@@ -95,27 +64,14 @@
     "date": "2026-09-26T16:20:00.000Z",
     "ai": {
       "sentiment": "negative",
+      "score": -0.6,
       "topics": [
         "Lectures",
         "Assignments",
         "Pace"
       ],
       "summary": "The student wants fewer math-heavy lectures and more practical examples.",
-      "suggestion": "Pair each theory section with a short coding example.",
-      "highlights": [
-        {
-          "text": "Too much math in the lectures",
-          "type": "concern"
-        },
-        {
-          "text": "not enough practical examples",
-          "type": "concern"
-        },
-        {
-          "text": "deadlines were stressful",
-          "type": "concern"
-        }
-      ]
+      "suggestion": "Pair each theory section with a short coding example."
     }
   },
   {
@@ -127,22 +83,13 @@
     "date": "2026-09-25T11:30:00.000Z",
     "ai": {
       "sentiment": "neutral",
+      "score": -0.1,
       "topics": [
         "Assignments",
         "Materials"
       ],
       "summary": "The topics are useful, but the assignments are hard without examples.",
-      "suggestion": "Add a worked example before each assignment.",
-      "highlights": [
-        {
-          "text": "Useful topics",
-          "type": "praise"
-        },
-        {
-          "text": "assignments are very difficult",
-          "type": "concern"
-        }
-      ]
+      "suggestion": "Add a worked example before each assignment."
     }
   },
   {
@@ -154,22 +101,13 @@
     "date": "2026-09-24T13:10:00.000Z",
     "ai": {
       "sentiment": "negative",
+      "score": -0.9,
       "topics": [
         "Exams",
         "Grading"
       ],
       "summary": "The student felt the exam did not match the exercises and grading was unclear.",
-      "suggestion": "Publish a sample exam and a clear grading rubric.",
-      "highlights": [
-        {
-          "text": "Exam questions were unfair",
-          "type": "concern"
-        },
-        {
-          "text": "Very poor communication about grading",
-          "type": "concern"
-        }
-      ]
+      "suggestion": "Publish a sample exam and a clear grading rubric."
     }
   },
   {
@@ -181,26 +119,13 @@
     "date": "2026-09-23T08:45:00.000Z",
     "ai": {
       "sentiment": "positive",
+      "score": 0.95,
       "topics": [
         "Lectures",
         "Project"
       ],
       "summary": "The student loved the modern content, clear lectures and final project.",
-      "suggestion": "Keep the final project format and invite an industry guest.",
-      "highlights": [
-        {
-          "text": "Best course this semester",
-          "type": "praise"
-        },
-        {
-          "text": "clear lectures",
-          "type": "praise"
-        },
-        {
-          "text": "really useful final project",
-          "type": "praise"
-        }
-      ]
+      "suggestion": "Keep the final project format and invite an industry guest."
     }
   },
   {
@@ -212,23 +137,159 @@
     "date": "2026-09-22T15:00:00.000Z",
     "ai": {
       "sentiment": "neutral",
+      "score": 0.05,
       "topics": [
         "Labs",
         "Lectures",
         "Pace"
       ],
       "summary": "The SQL labs are useful, but the theory lectures feel slow.",
-      "suggestion": "Shorten the theory parts and add more live SQL demos.",
-      "highlights": [
-        {
-          "text": "SQL labs are useful",
-          "type": "praise"
-        },
-        {
-          "text": "theory lectures are a bit slow",
-          "type": "concern"
-        }
-      ]
+      "suggestion": "Shorten the theory parts and add more live SQL demos."
+    }
+  },
+  {
+    "id": 9,
+    "course": "Grid & Cloud Computing",
+    "rating": 4,
+    "comment": "Interesting topics and a helpful professor who always responds to emails. The exam was fair.",
+    "name": "Blerta M.",
+    "date": "2026-09-21T10:00:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "score": 0.75,
+      "topics": [
+        "Professor",
+        "Exams"
+      ],
+      "summary": "The student values the responsive professor and the fair exam.",
+      "suggestion": "Keep the same exam format and response time."
+    }
+  },
+  {
+    "id": 10,
+    "course": "Grid & Cloud Computing",
+    "rating": 3,
+    "comment": "Content is good but the materials are a bit outdated, some AWS screenshots no longer match the console.",
+    "name": "Anonymous",
+    "date": "2026-09-20T10:00:00.000Z",
+    "ai": {
+      "sentiment": "neutral",
+      "score": -0.15,
+      "topics": [
+        "Materials",
+        "Cloud"
+      ],
+      "summary": "The content is good, but some AWS materials are outdated.",
+      "suggestion": "Update the AWS screenshots to match the current console."
+    }
+  },
+  {
+    "id": 11,
+    "course": "Machine Learning",
+    "rating": 4,
+    "comment": "Very interesting, I enjoyed the project on image classification. Grading was clear and fair.",
+    "name": "Lea T.",
+    "date": "2026-09-19T10:00:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "score": 0.8,
+      "topics": [
+        "Project",
+        "Grading"
+      ],
+      "summary": "The student enjoyed the image classification project and found grading fair.",
+      "suggestion": "Offer a second project option for students who finish early."
+    }
+  },
+  {
+    "id": 12,
+    "course": "Machine Learning",
+    "rating": 3,
+    "comment": "Good content, but the pace is uneven. Some weeks are slow, others very rushed before the exam.",
+    "name": "Gent B.",
+    "date": "2026-09-18T10:00:00.000Z",
+    "ai": {
+      "sentiment": "neutral",
+      "score": -0.2,
+      "topics": [
+        "Pace",
+        "Exams"
+      ],
+      "summary": "The content is good, but the pace is uneven before the exam.",
+      "suggestion": "Spread the difficult topics more evenly across the semester."
+    }
+  },
+  {
+    "id": 13,
+    "course": "Distributed Systems",
+    "rating": 4,
+    "comment": "The professor is helpful in office hours. The Raft lab was hard but I learned a lot.",
+    "name": "Valon D.",
+    "date": "2026-09-17T10:00:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "score": 0.6,
+      "topics": [
+        "Professor",
+        "Labs"
+      ],
+      "summary": "The student found office hours helpful and learned a lot in the Raft lab.",
+      "suggestion": "Add a short guide before the Raft lab to lower the entry barrier."
+    }
+  },
+  {
+    "id": 14,
+    "course": "Distributed Systems",
+    "rating": 2,
+    "comment": "The lectures are boring and the slides are hard to follow. Labs were not well organized.",
+    "name": "Anonymous",
+    "date": "2026-09-16T10:00:00.000Z",
+    "ai": {
+      "sentiment": "negative",
+      "score": -0.75,
+      "topics": [
+        "Lectures",
+        "Materials",
+        "Labs"
+      ],
+      "summary": "The student finds the lectures boring and the labs disorganized.",
+      "suggestion": "Add live demos to lectures and publish a clear lab schedule."
+    }
+  },
+  {
+    "id": 15,
+    "course": "Web Engineering",
+    "rating": 4,
+    "comment": "Practical and well organized. I would like more feedback on our assignments.",
+    "name": "Besnik L.",
+    "date": "2026-09-15T10:00:00.000Z",
+    "ai": {
+      "sentiment": "positive",
+      "score": 0.55,
+      "topics": [
+        "Assignments"
+      ],
+      "summary": "The course is well organized, but students want more assignment feedback.",
+      "suggestion": "Return short written feedback on each assignment."
+    }
+  },
+  {
+    "id": 16,
+    "course": "Databases II",
+    "rating": 2,
+    "comment": "Assignments take too much time and the deadlines overlap with other courses. Materials are unclear.",
+    "name": "Anonymous",
+    "date": "2026-09-14T10:00:00.000Z",
+    "ai": {
+      "sentiment": "negative",
+      "score": -0.7,
+      "topics": [
+        "Assignments",
+        "Pace",
+        "Materials"
+      ],
+      "summary": "Assignments are too long and deadlines clash with other courses.",
+      "suggestion": "Coordinate deadlines with other courses and shorten the assignments."
     }
   }
 ]

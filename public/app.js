@@ -1,17 +1,22 @@
-const MOOD = {
-  positive: { label: "Praise", bar: "bg-praise", ink: "text-praise-ink", hl: "hl-praise" },
-  neutral: { label: "Mixed", bar: "bg-mixed", ink: "text-mixed-ink", hl: "hl-mixed" },
-  negative: { label: "Concern", bar: "bg-concern", ink: "text-concern-ink", hl: "hl-concern" },
+const SENT = {
+  positive: { label: "Positive", color: "#16a34a", pill: "bg-green-100 text-green-700", icon: "fa-face-smile" },
+  neutral: { label: "Neutral", color: "#d97706", pill: "bg-amber-100 text-amber-700", icon: "fa-face-meh" },
+  negative: { label: "Negative", color: "#dc2626", pill: "bg-red-100 text-red-700", icon: "fa-face-frown" },
 };
+const TABS = {
+  professor: [["dashboard", "fa-chart-pie", "Dashboard"], ["list", "fa-comments", "Feedback"], ["about", "fa-cloud", "How it works"]],
+  student: [["submit", "fa-pen-to-square", "Give Feedback"], ["about", "fa-cloud", "How it works"]],
+};
+const RATING_LABELS = ["Click to rate", "Very poor", "Poor", "Okay", "Good", "Excellent"];
+const COLORS = ["#0d9488", "#7c3aed", "#2563eb", "#db2777", "#ea580c", "#0891b2", "#65a30d", "#4f46e5"];
 const EXAMPLES = [
   { course: "Grid & Cloud Computing", rating: 4, comment: "The labs with Docker were really practical and the professor explains clearly. But the slides are outdated and the last deadline was too short." },
   { course: "Machine Learning", rating: 2, comment: "Lectures are too fast and confusing. We need more examples before the exam, and the materials are hard to follow." },
   { course: "Web Engineering", rating: 5, comment: "Excellent course! Interesting topics, a helpful professor and a very useful final project." },
 ];
-const CIRCLE = (cls = "") => `<svg class="pen-circle ${cls}" viewBox="0 0 100 80" aria-hidden="true"><path d="M60 7 C30 3 5 18 8 42 C11 67 48 77 73 68 C95 60 98 33 81 18 C68 7 46 5 28 13"/></svg>`;
 
 const $ = (id) => document.getElementById(id);
-const state = { course: "", mood: "", q: "" };
+const state = { role: "professor", page: "dashboard", course: "", q: "", listCourse: "", listSentiment: "" };
 let feedback = [];
 let rating = 0;
 let exampleIndex = 0;
@@ -22,29 +27,18 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-function highlight(text, highlights = []) {
-  const lower = text.toLowerCase();
-  const ranges = [];
-  for (const h of highlights) {
-    const start = h.text ? lower.indexOf(h.text.toLowerCase()) : -1;
-    if (start < 0) continue;
-    const end = start + h.text.length;
-    if (ranges.some((r) => start < r.end && end > r.start)) continue;
-    ranges.push({ start, end, cls: h.type === "praise" ? "hl-praise" : "hl-concern" });
-  }
-  ranges.sort((a, b) => a.start - b.start);
-  let html = "";
-  let pos = 0;
-  for (const r of ranges) {
-    html += escapeHtml(text.slice(pos, r.start)) + `<mark class="hl ${r.cls}">${escapeHtml(text.slice(r.start, r.end))}</mark>`;
-    pos = r.end;
-  }
-  return html + escapeHtml(text.slice(pos));
-}
+const stars = (n) => `<span class="stars">${"★".repeat(n)}<span class="off">${"★".repeat(5 - n)}</span></span>`;
+const pill = (s) => `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${SENT[s].pill}"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>${SENT[s].label}</span>`;
+const average = (list) => (list.length ? list.reduce((a, f) => a + f.rating, 0) / list.length : 0);
+const shortDate = (d) => new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+const initials = (n) => n.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+const colorFor = (n) => COLORS[[...n].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];
+const courses = () => [...new Set(feedback.map((f) => f.course))].sort();
 
-const mood = (f) => MOOD[f.ai.sentiment] || MOOD.neutral;
-const average = (list) => (list.length ? list.reduce((sum, f) => sum + f.rating, 0) / list.length : 0);
-const shortDate = (d) => new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+function avatar(f, size = "w-7 h-7") {
+  const anon = f.name === "Anonymous";
+  return `<span class="${size} shrink-0 rounded-full grid place-items-center text-white text-[10px] font-bold" style="background:${anon ? "#94a3b8" : colorFor(f.name)}">${anon ? "?" : escapeHtml(initials(f.name))}</span>`;
+}
 
 function toast(message) {
   const el = $("toast");
@@ -55,77 +49,249 @@ function toast(message) {
 }
 
 async function api(path, body) {
-  const res = await fetch(path, body ? {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  } : undefined);
+  const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : undefined);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || "The server did not answer. Try again in a moment.");
   return data;
 }
 
-function showPage() {
-  const page = ["feedback", "dashboard", "about"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "feedback";
-  document.querySelectorAll("[data-page]").forEach((el) => el.classList.toggle("hidden", el.dataset.page !== page));
-  document.querySelectorAll("[data-nav]").forEach((a) =>
-    a.dataset.nav === page ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
-  window.scrollTo(0, 0);
-  if (page === "dashboard") loadDashboard();
+async function loadFeedback() {
+  try {
+    feedback = await api("/api/feedback");
+  } catch (err) {
+    toast(err.message);
+  }
 }
 
-function setRating(value, animate = true) {
-  rating = value;
-  document.querySelectorAll("#grades .grade").forEach((btn) => {
-    const on = Number(btn.dataset.value) === rating;
-    btn.setAttribute("aria-checked", on);
-    btn.querySelector(".pen-circle")?.remove();
-    btn.classList.toggle("text-pen", on);
-    if (on) btn.insertAdjacentHTML("beforeend", CIRCLE(animate ? "draw" : ""));
+function render() {
+  document.querySelectorAll("#roleSwitch button").forEach((b) => {
+    const on = b.dataset.role === state.role;
+    b.classList.toggle("bg-teal-600", on);
+    b.classList.toggle("text-white", on);
   });
+  $("avatar").textContent = state.role === "professor" ? "AB" : "ST";
+  $("appName").textContent = state.role === "professor" ? "Professor Console" : "Student Portal";
+
+  const tabs = TABS[state.role];
+  if (!tabs.some(([id]) => id === state.page)) state.page = tabs[0][0];
+  $("tabs").innerHTML = tabs.map(([id, icon, label]) => `
+    <button data-tab="${id}" class="flex items-center gap-1.5 px-3 whitespace-nowrap border-b-2 ${state.page === id ? "border-teal-600 text-teal-700 font-semibold" : "border-transparent text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900"}">
+      <i class="fa-solid ${icon}"></i> ${label}${id === "list" ? ` <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-1.5 rounded-full">${feedback.length}</span>` : ""}
+    </button>`).join("");
+  document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => go(b.dataset.tab)));
+
+  document.querySelectorAll("[data-page]").forEach((el) => el.classList.toggle("hidden", el.dataset.page !== state.page));
+  if (state.page === "dashboard") renderDashboard();
+  if (state.page === "list") renderList();
 }
 
-function showEmptyResult() {
-  $("result").innerHTML = `
-    <div class="rounded-md border-2 border-dashed border-rule p-7 text-ink-soft text-lg leading-relaxed">
-      <p class="font-pen text-3xl text-ink mb-2">Your note will appear here</p>
-      AI marks what you <mark class="hl hl-praise">praised</mark> and what
-      <mark class="hl hl-concern">worried you</mark>, then writes one suggestion for the professor.
-    </div>`;
+function go(page) {
+  state.page = page;
+  document.querySelector("main").scrollTop = 0;
+  render();
 }
 
-function showLoading() {
-  $("result").innerHTML = `
-    <div class="note tilt rounded-sm p-7 text-lg">
-      <i class="fa-solid fa-highlighter text-pen fa-bounce mr-2"></i> Reading your feedback…
-    </div>`;
+function renderDashboard() {
+  const list = feedback.filter((f) => !state.course || f.course === state.course);
+  const count = (s) => list.filter((f) => f.ai.sentiment === s).length;
+  const avg = average(list);
+
+  $("courseFilter").innerHTML = `<option value="">All courses</option>` +
+    courses().map((c) => `<option ${c === state.course ? "selected" : ""}>${escapeHtml(c)}</option>`).join("");
+  $("courseCount").textContent = state.course || `${courses().length} courses`;
+
+  $("kpiTotal").textContent = list.length;
+  $("kpiWeek").textContent = `+${list.filter((f) => Date.now() - new Date(f.date) < 7 * 864e5).length} in the last 7 days`;
+  $("kpiAvg").textContent = avg.toFixed(1);
+  $("kpiStars").innerHTML = stars(Math.round(avg));
+  $("kpiPositive").textContent = `${list.length ? Math.round((count("positive") / list.length) * 100) : 0}%`;
+  $("kpiNegative").textContent = count("negative");
+
+  if (!$("report").dataset.filled) {
+    $("report").innerHTML = `<p class="font-bold text-violet-600 text-[10px] uppercase tracking-wide mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>AI summary · ${escapeHtml(state.course || "all courses")}</p>
+      Click <b>Generate AI report</b> and AI will read ${list.length} comments and write what students like, what they complain about and what to improve.`;
+  }
+
+  const ranked = courses().map((c) => {
+    const items = feedback.filter((f) => f.course === c);
+    return { c, items, avg: average(items) };
+  }).sort((a, b) => b.avg - a.avg);
+  $("byCourse").innerHTML = ranked.map(({ c, items, avg: a }) => `
+    <button data-course="${escapeHtml(c)}" class="w-full grid grid-cols-[150px_1fr_70px] items-center gap-2.5 py-1.5 px-1 rounded text-left hover:bg-slate-50 ${state.course === c ? "bg-teal-50" : ""}">
+      <span class="font-semibold truncate">${escapeHtml(c)}</span>
+      <span class="flex h-2 rounded bg-slate-100 overflow-hidden">${Object.keys(SENT).map((s) => `<span style="width:${(items.filter((f) => f.ai.sentiment === s).length / items.length) * 100}%;background:${SENT[s].color}"></span>`).join("")}</span>
+      <span class="text-right text-[11px]">${stars(Math.round(a))}</span>
+    </button>`).join("");
+  document.querySelectorAll("[data-course]").forEach((b) => (b.onclick = () => setCourse(state.course === b.dataset.course ? "" : b.dataset.course)));
+
+  $("donut").innerHTML = donut(Object.keys(SENT).map((s) => ({ v: count(s), c: SENT[s].color })), list.length) +
+    `<div class="flex-1 text-[11.5px]">${Object.keys(SENT).map((s) => `
+      <div class="flex items-center gap-2 py-1 text-slate-600"><span class="w-2.5 h-2.5 rounded-sm" style="background:${SENT[s].color}"></span><i class="fa-regular ${SENT[s].icon}"></i>${SENT[s].label}<b class="ml-auto text-slate-800">${count(s)}</b></div>`).join("")}</div>`;
+
+  const topics = {};
+  list.forEach((f) => f.ai.topics.forEach((t) => {
+    topics[t] ??= { n: 0, pos: 0, neg: 0 };
+    topics[t].n++;
+    if (f.ai.sentiment === "positive") topics[t].pos++;
+    if (f.ai.sentiment === "negative") topics[t].neg++;
+  }));
+  const top = Object.entries(topics).sort((a, b) => b[1].n - a[1].n).slice(0, 7);
+  $("topics").innerHTML = top.map(([t, v]) => `
+    <div class="grid grid-cols-[100px_1fr_28px] items-center gap-2 py-1 text-[11.5px]">
+      <span class="truncate">${escapeHtml(t)}</span>
+      <span class="h-[7px] rounded bg-slate-100 overflow-hidden"><span class="block h-full rounded ${v.neg > v.pos ? "bg-red-500" : "bg-teal-500"}" style="width:${(v.n / top[0][1].n) * 100}%"></span></span>
+      <b class="text-right">${v.n}</b>
+    </div>`).join("") || `<p class="text-slate-400">No topics yet.</p>`;
+
+  $("latest").innerHTML = list.slice(0, 5).map(feedItem).join("") || `<p class="text-slate-400 py-6 text-center">No feedback yet.</p>`;
+  bindOpen();
 }
 
-function showResult(item) {
-  const m = mood(item);
-  $("result").innerHTML = `
-    <div class="note tilt rounded-sm p-6 sm:p-7 sweep">
-      <div class="flex items-start justify-between gap-4">
-        <p class="font-pen text-3xl leading-none">Note for the professor</p>
-        <span class="stamp ${m.ink} text-lg">${m.label}</span>
+function donut(segments, total, size = 120) {
+  const r = size / 2 - 12, C = 2 * Math.PI * r, sum = segments.reduce((a, s) => a + s.v, 0) || 1;
+  let offset = 0;
+  const arcs = segments.map((s) => {
+    const len = (s.v / sum) * C;
+    const arc = `<circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="${s.c}" stroke-width="16" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${size / 2} ${size / 2})"/>`;
+    offset += len;
+    return arc;
+  }).join("");
+  return `<svg width="${size}" height="${size}" class="shrink-0" role="img" aria-label="${total} responses"><circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="#f1f5f9" stroke-width="16"/>${arcs}
+    <text x="50%" y="48%" text-anchor="middle" font-size="20" font-weight="800" fill="#0f172a">${total}</text>
+    <text x="50%" y="63%" text-anchor="middle" font-size="9.5" fill="#64748b">responses</text></svg>`;
+}
+
+function ring(score, color, label, size = 72) {
+  const r = size / 2 - 6, C = 2 * Math.PI * r, pct = Math.round(((score + 1) / 2) * 100);
+  return `<div class="relative shrink-0" style="width:${size}px;height:${size}px">
+    <svg width="${size}" height="${size}"><circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="#f1f5f9" stroke-width="7"/>
+    <circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="${color}" stroke-width="7" stroke-linecap="round" stroke-dasharray="${(C * pct) / 100} ${C}" transform="rotate(-90 ${size / 2} ${size / 2})"/></svg>
+    <span class="absolute inset-0 grid place-items-center text-xl" style="color:${color}"><i class="fa-regular ${label}"></i></span></div>`;
+}
+
+function feedItem(f) {
+  return `<div data-open="${f.id}" class="flex gap-2.5 py-2.5 border-b border-slate-100 last:border-0 cursor-pointer group">
+    ${avatar(f)}
+    <div class="min-w-0"><p class="text-[12.5px] leading-snug text-slate-700 group-hover:text-teal-700">${escapeHtml(f.comment)}</p>
+    <p class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-1.5">${stars(f.rating)} ${pill(f.ai.sentiment)} <span>${escapeHtml(f.course)} · ${escapeHtml(f.name)} · ${shortDate(f.date)}</span></p></div>
+  </div>`;
+}
+
+function setCourse(course) {
+  state.course = course;
+  delete $("report").dataset.filled;
+  renderDashboard();
+}
+
+async function generateReport() {
+  const btn = $("reportBtn");
+  btn.disabled = true;
+  $("report").dataset.filled = "1";
+  $("report").innerHTML = `<div class="flex items-center gap-2.5 text-violet-600 font-semibold py-2"><span class="dots"><span></span><span></span><span></span></span> AI is reading the feedback…</div>`;
+  try {
+    const s = await api("/api/summary", { course: state.course });
+    $("report").innerHTML = `
+      <p class="font-bold text-violet-600 text-[10px] uppercase tracking-wide mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>AI summary · ${escapeHtml(state.course || "all courses")}</p>
+      <p>${escapeHtml(s.summary)}</p>
+      <div class="grid sm:grid-cols-2 gap-3 mt-2.5">
+        <div><p class="font-bold text-green-700 mb-1"><i class="fa-solid fa-thumbs-up mr-1"></i>Strengths</p><ul class="list-disc ml-4.5 space-y-0.5">${s.strengths.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>
+        <div><p class="font-bold text-red-700 mb-1"><i class="fa-solid fa-screwdriver-wrench mr-1"></i>To improve</p><ul class="list-disc ml-4.5 space-y-0.5">${s.improvements.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>
+      </div>`;
+    toast("AI report generated");
+  } catch (err) {
+    $("report").innerHTML = `<p class="text-red-600 font-semibold">${escapeHtml(err.message)}</p>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderList() {
+  const q = state.q.trim().toLowerCase();
+  const list = feedback.filter((f) =>
+    (!state.listCourse || f.course === state.listCourse) &&
+    (!state.listSentiment || f.ai.sentiment === state.listSentiment) &&
+    (!q || `${f.comment} ${f.course} ${f.ai.topics.join(" ")}`.toLowerCase().includes(q)));
+
+  $("search").value = state.q;
+  $("listCourse").innerHTML = `<option value="">All courses</option>` +
+    courses().map((c) => `<option ${c === state.listCourse ? "selected" : ""}>${escapeHtml(c)}</option>`).join("");
+  $("listSentiment").value = state.listSentiment;
+  $("listMeta").textContent = `${list.length} of ${feedback.length} comments · sentiment & topics detected by AI`;
+
+  $("rows").innerHTML = list.map((f) => `
+    <tr data-open="${f.id}" class="border-t border-slate-100 cursor-pointer hover:bg-teal-50">
+      <td class="px-3 py-2"><span class="flex items-center gap-2 font-semibold">${avatar(f, "w-6 h-6")}${escapeHtml(f.name)}</span></td>
+      <td class="px-3 py-2 whitespace-nowrap">${escapeHtml(f.course)}</td>
+      <td class="px-3 py-2">${stars(f.rating)}</td>
+      <td class="px-3 py-2 max-w-[340px] truncate text-slate-600">${escapeHtml(f.comment)}</td>
+      <td class="px-3 py-2">${pill(f.ai.sentiment)}</td>
+      <td class="px-3 py-2">${f.ai.topics.slice(0, 2).map((t) => `<span class="inline-block px-2 py-0.5 mr-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">${escapeHtml(t)}</span>`).join("")}</td>
+      <td class="px-3 py-2 whitespace-nowrap text-slate-500">${shortDate(f.date)}</td>
+    </tr>`).join("") || `<tr><td colspan="7" class="text-center text-slate-500 py-10">No feedback matches your filters.</td></tr>`;
+  bindOpen();
+}
+
+function bindOpen() {
+  document.querySelectorAll("[data-open]").forEach((el) => (el.onclick = () => openDrawer(Number(el.dataset.open))));
+}
+
+function analysisHtml(ai) {
+  const s = SENT[ai.sentiment] || SENT.neutral;
+  const score = Number(ai.score) || 0;
+  return `
+    <div class="flex items-center gap-4 mb-3.5">
+      ${ring(score, s.color, s.icon)}
+      <div class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 items-center text-xs">
+        <span class="text-slate-500">Sentiment</span><span>${pill(ai.sentiment)}</span>
+        <span class="text-slate-500">Score</span><span class="font-mono">${score > 0 ? "+" : ""}${score.toFixed(2)} <span class="text-slate-400">(-1 … +1)</span></span>
+        <span class="text-slate-500">Tone check</span><span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700"><i class="fa-solid fa-check"></i> Respectful</span></span>
       </div>
-      <blockquote class="mt-5 text-lg leading-relaxed">“${highlight(item.comment, item.ai.highlights)}”</blockquote>
-      <p class="mt-5 leading-relaxed">${escapeHtml(item.ai.summary)}</p>
-      <p class="mt-4 flex gap-3 leading-relaxed"><i class="fa-solid fa-lightbulb text-pen mt-1"></i><span><b>Suggestion:</b> ${escapeHtml(item.ai.suggestion)}</span></p>
-      <p class="mt-5 flex flex-wrap gap-2">${item.ai.topics.map((t) => `<span class="border border-ink/25 rounded-full px-3 py-0.5 text-sm">${escapeHtml(t)}</span>`).join("")}</p>
     </div>
-    <p class="mt-5 flex items-center gap-2 text-ink-soft">
-      <i class="fa-solid fa-circle-check text-praise-ink"></i> Handed in.
-      <a href="#dashboard" class="text-ink font-bold underline underline-offset-4">See the report cards</a>
-    </p>`;
+    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3 mb-1.5">Detected topics</h4>
+    <div class="flex flex-wrap gap-1.5">${ai.topics.map((t) => `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-700">${escapeHtml(t)}</span>`).join("")}</div>
+    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3.5 mb-1.5">Summary for the professor</h4>
+    <div class="rounded-lg border border-slate-200 bg-gradient-to-br from-violet-50 to-teal-50 p-3 text-[12.5px] leading-relaxed text-slate-700">${escapeHtml(ai.summary)}</div>
+    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3.5 mb-1.5">Suggested improvement</h4>
+    <div class="rounded-lg border border-slate-200 bg-violet-50 p-3 text-[12.5px] leading-relaxed text-slate-700"><i class="fa-solid fa-lightbulb text-amber-500 mr-1.5"></i>${escapeHtml(ai.suggestion)}</div>`;
 }
 
-function showReturned(message) {
-  $("result").innerHTML = `
-    <div class="sheet rounded-md border border-rule p-7">
-      <span class="stamp text-pen text-2xl">Returned</span>
-      <p class="mt-5 text-lg leading-relaxed">${escapeHtml(message)}</p>
-      <p class="mt-2 text-ink-soft">Your text is still in the form, so you can edit it and hand it in again.</p>
+function openDrawer(id) {
+  const f = feedback.find((x) => x.id === id);
+  if (!f) return;
+  $("drawer").innerHTML = `
+    <div class="px-4 py-3.5 border-b border-slate-200 flex items-center gap-2.5">
+      ${avatar(f)}
+      <div class="flex-1"><p class="font-bold text-sm">${escapeHtml(f.name)}</p><p class="text-[11px] text-slate-500">${escapeHtml(f.course)} · ${shortDate(f.date)}</p></div>
+      <button id="closeDrawer" aria-label="Close" class="w-7 h-7 rounded-md border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="p-4 overflow-auto flex-1">
+      ${stars(f.rating)}
+      <blockquote class="my-3 text-[13.5px] leading-relaxed bg-slate-50 border-l-3 border-teal-500 px-3.5 py-3 rounded-r-md">“${escapeHtml(f.comment)}”</blockquote>
+      <h3 class="font-extrabold text-[15px] mt-4 mb-3"><i class="fa-solid fa-wand-magic-sparkles text-violet-600 mr-1"></i> AI analysis</h3>
+      ${analysisHtml(f.ai)}
+    </div>`;
+  $("drawer").classList.remove("translate-x-full");
+  $("scrim").classList.remove("hidden");
+  $("closeDrawer").onclick = closeDrawer;
+}
+
+function closeDrawer() {
+  $("drawer").classList.add("translate-x-full");
+  $("scrim").classList.add("hidden");
+}
+
+function setRating(value) {
+  rating = value;
+  document.querySelectorAll("#stars button").forEach((b) => b.classList.toggle("text-amber-400", Number(b.dataset.value) <= rating));
+  $("ratingLabel").textContent = RATING_LABELS[rating];
+}
+
+function showAnalysisPlaceholder() {
+  $("analysis").innerHTML = `
+    <div class="border-[1.5px] border-dashed border-slate-300 rounded-lg px-4 py-8 text-center text-slate-500 leading-relaxed">
+      <i class="fa-solid fa-robot text-3xl text-slate-400 mb-2"></i><br>
+      Rate the course, write a comment and click <b>Submit & analyse with AI</b>.<br>
+      <span class="text-[11.5px]">The AI detects the sentiment, finds the topics, checks the tone and writes a summary for the professor.</span>
     </div>`;
 }
 
@@ -136,26 +302,33 @@ function formError(message) {
 
 async function submitFeedback(e) {
   e.preventDefault();
-  if (!rating) return formError("Pick a grade from 1 to 5.");
+  if (!rating) return formError("Choose a rating from 1 to 5 stars.");
   if ($("comment").value.trim().length < 5) return formError("Write a few words about the course.");
   formError("");
 
-  const btn = $("submit");
+  const btn = $("submitBtn");
   btn.disabled = true;
-  btn.textContent = "Handing in…";
-  showLoading();
+  $("analysis").innerHTML = `<div class="flex items-center justify-center gap-2.5 text-violet-600 font-semibold py-10"><span class="dots"><span></span><span></span><span></span></span> AI is reading your feedback…</div>`;
   try {
     const item = await api("/api/feedback", { ...Object.fromEntries(new FormData($("form"))), rating });
-    showResult(item);
+    feedback.unshift(item);
+    $("analysis").innerHTML = analysisHtml(item.ai) + `
+      <div class="mt-3.5 rounded-lg bg-green-50 border border-green-200 p-3.5 text-[12.5px]">
+        <b class="text-green-700"><i class="fa-solid fa-circle-check mr-1"></i>Feedback submitted!</b>
+        Thank you. Your feedback for ${escapeHtml(item.course)} was saved and will be shown to the professor.
+      </div>`;
     $("form").reset();
     setRating(0);
     $("counter").textContent = "0/1000";
-    toast("Feedback handed in");
+    toast("Feedback submitted · analysed by AI");
   } catch (err) {
-    showReturned(err.message);
+    $("analysis").innerHTML = `
+      <div class="rounded-lg bg-red-50 border border-red-200 p-3.5 text-[12.5px]">
+        <b class="text-red-700"><i class="fa-solid fa-ban mr-1"></i>Feedback not saved</b>
+        <p class="mt-1">${escapeHtml(err.message)}</p>
+      </div>`;
   } finally {
     btn.disabled = false;
-    btn.textContent = "Hand in feedback";
   }
 }
 
@@ -168,198 +341,48 @@ function fillExample() {
   formError("");
 }
 
-async function loadDashboard() {
+async function loadStatus() {
   try {
-    feedback = await api("/api/feedback");
-  } catch (err) {
-    return toast(err.message);
-  }
-  renderDashboard();
-}
-
-function renderDashboard() {
-  const list = feedback.filter((f) => !state.course || f.course === state.course);
-  renderHeadline(list);
-  renderStats(list);
-  renderCards();
-  renderTopics(list);
-  renderList();
-}
-
-function courseStats() {
-  return [...new Set(feedback.map((f) => f.course))].map((course) => {
-    const items = feedback.filter((f) => f.course === course);
-    return { course, items, avg: average(items) };
-  }).sort((a, b) => b.avg - a.avg);
-}
-
-function renderHeadline(list) {
-  let text;
-  if (!feedback.length) {
-    text = "No feedback yet. Share the link with your students to get the first comments.";
-  } else if (state.course) {
-    const top = topTopics(list, "negative")[0];
-    text = `${state.course} has ${list.length} ${list.length === 1 ? "comment" : "comments"} with an average grade of ${average(list).toFixed(1)}.` +
-      (top ? ` Students worry most about ${top.toLowerCase()}.` : " No major concerns so far.");
-  } else {
-    const courses = courseStats();
-    const best = courses[0], worst = courses[courses.length - 1];
-    text = `${feedback.length} students handed in feedback. ${best.course} leads with ${best.avg.toFixed(1)}` +
-      (courses.length > 1 ? `, while ${worst.course} needs attention at ${worst.avg.toFixed(1)}.` : ".");
-  }
-  $("headline").textContent = text;
-}
-
-function renderStats(list) {
-  const count = (s) => list.filter((f) => f.ai.sentiment === s).length;
-  const stats = [
-    [list.length, "comments"],
-    [average(list).toFixed(1), "average grade"],
-    [`${list.length ? Math.round((count("positive") / list.length) * 100) : 0}%`, "mostly praise"],
-    [count("negative"), "raise concerns"],
-  ];
-  $("stats").innerHTML = stats.map(([value, label], i) => `
-    <div class="flex flex-col-reverse pr-8 mr-8 ${i < stats.length - 1 ? "sm:border-r-2 border-rule" : ""}">
-      <dt class="text-ink-soft">${label}</dt>
-      <dd class="font-display text-4xl font-extrabold tabular-nums">${value}</dd>
-    </div>`).join("");
-
-  $("moodBar").innerHTML = Object.entries(MOOD).map(([key, m]) =>
-    `<div class="${m.bar}" style="width:${list.length ? (count(key) / list.length) * 100 : 0}%"></div>`).join("");
-  $("moodLegend").innerHTML = Object.entries(MOOD).map(([key, m]) =>
-    `<span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full ${m.bar}"></span>${m.label} <b class="text-ink">${count(key)}</b></span>`).join("");
-}
-
-function renderCards() {
-  $("cards").innerHTML = courseStats().map(({ course, items, avg }) => {
-    const selected = course === state.course;
-    const count = (s) => items.filter((f) => f.ai.sentiment === s).length;
-    const topics = topTopics(items).slice(0, 3).join(", ");
-    return `
-    <li class="border-b border-rule">
-      <button data-course="${escapeHtml(course)}" aria-pressed="${selected}"
-        class="w-full text-left grid grid-cols-[4rem_1fr] sm:grid-cols-[4rem_1fr_8rem] items-center gap-4 py-4 px-2 sm:px-3 hover:bg-white ${selected ? "bg-white shadow-[inset_4px_0_0_var(--color-pen)]" : ""}">
-        <span class="relative grid place-items-center h-14 font-pen text-[2rem] font-bold text-pen">${avg.toFixed(1)}${CIRCLE("small")}</span>
-        <span>
-          <span class="block font-display font-bold text-lg leading-tight">${escapeHtml(course)}</span>
-          <span class="block text-sm text-ink-soft mt-0.5">${items.length} ${items.length === 1 ? "comment" : "comments"}${topics ? `, mostly about ${escapeHtml(topics.toLowerCase())}` : ""}</span>
-        </span>
-        <span class="hidden sm:flex h-2.5 rounded-full overflow-hidden bg-rule">
-          ${Object.keys(MOOD).map((k) => `<span class="${MOOD[k].bar}" style="width:${(count(k) / items.length) * 100}%"></span>`).join("")}
-        </span>
-      </button>
-    </li>`;
-  }).join("");
-  document.querySelectorAll("[data-course]").forEach((btn) => (btn.onclick = () => selectCourse(btn.dataset.course)));
-}
-
-function topTopics(list, sentiment) {
-  const counts = {};
-  list.filter((f) => !sentiment || f.ai.sentiment === sentiment)
-    .forEach((f) => f.ai.topics.forEach((t) => (counts[t] = (counts[t] || 0) + 1)));
-  return Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
-}
-
-function renderTopics(list) {
-  const topics = {};
-  list.forEach((f) => f.ai.topics.forEach((t) => {
-    topics[t] ??= { total: 0, positive: 0, negative: 0 };
-    topics[t].total++;
-    if (f.ai.sentiment in topics[t]) topics[t][f.ai.sentiment]++;
-  }));
-  const entries = Object.entries(topics).sort((a, b) => b[1].total - a[1].total).slice(0, 12);
-  const max = entries[0]?.[1].total || 1;
-  $("topics").innerHTML = entries.map(([name, t]) => {
-    const cls = t.negative > t.positive ? "hl-concern" : t.positive > t.negative ? "hl-praise" : "hl-mixed";
-    const size = 1 + (t.total / max) * 0.6;
-    return `<mark class="hl ${cls} mr-3 whitespace-nowrap" style="font-size:${size}em">${escapeHtml(name)}<sup class="text-ink-soft text-xs ml-0.5">${t.total}</sup></mark>`;
-  }).join(" ") + (entries.length ? `<span class="block text-sm text-ink-soft leading-normal mt-2">Green is mostly praised, pink mostly criticised, yellow is mixed.</span>` : '<span class="text-ink-soft">Topics appear after the first comments.</span>');
-}
-
-function renderList() {
-  const base = feedback.filter((f) => !state.course || f.course === state.course);
-  const q = state.q.trim().toLowerCase();
-  const list = base.filter((f) =>
-    (!state.mood || f.ai.sentiment === state.mood) &&
-    (!q || `${f.comment} ${f.course} ${f.ai.topics.join(" ")}`.toLowerCase().includes(q)));
-
-  $("courseChip").innerHTML = state.course
-    ? `<button id="clearCourse" class="inline-flex items-center gap-2 bg-ink text-white rounded-full pl-3 pr-2 py-1 text-sm font-bold">${escapeHtml(state.course)} <i class="fa-solid fa-xmark" aria-label="Show all courses"></i></button>`
-    : "";
-  $("clearCourse")?.addEventListener("click", () => selectCourse(""));
-
-  const tabs = [["", "All", base.length], ...Object.entries(MOOD).map(([k, m]) => [k, m.label, base.filter((f) => f.ai.sentiment === k).length])];
-  $("moodTabs").innerHTML = tabs.map(([key, label, n]) => `
-    <button data-mood="${key}" aria-pressed="${state.mood === key}"
-      class="rounded-full px-3.5 py-1.5 text-sm font-bold ${state.mood === key ? "bg-ink text-white" : "text-ink-soft hover:text-ink"}">${label} <span class="opacity-60">${n}</span></button>`).join("");
-  document.querySelectorAll("[data-mood]").forEach((b) => (b.onclick = () => { state.mood = b.dataset.mood; renderList(); }));
-
-  $("list").innerHTML = list.map((f) => {
-    const m = mood(f);
-    return `
-    <article class="bg-white border border-rule rounded-md p-5 sm:p-6 grid grid-cols-[3.5rem_1fr] md:grid-cols-[3.5rem_1fr_16rem] gap-x-5 gap-y-4">
-      <span class="relative grid place-items-center h-12 font-pen text-4xl font-bold text-pen" title="Grade ${f.rating} of 5">${f.rating}${CIRCLE("small")}</span>
-      <div>
-        <p class="text-lg leading-relaxed">${highlight(f.comment, f.ai.highlights)}</p>
-        <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink-soft">
-          <span class="font-bold ${m.ink}">${m.label}</span>
-          <span class="font-bold text-ink">${escapeHtml(f.course)}</span>
-          <span>${escapeHtml(f.name)}</span>
-          <span>${shortDate(f.date)}</span>
-        </p>
-      </div>
-      <p class="col-span-2 md:col-span-1 note rounded-sm p-4 text-sm leading-relaxed self-start"><i class="fa-solid fa-lightbulb text-pen mr-1.5"></i>${escapeHtml(f.ai.suggestion)}</p>
-    </article>`;
-  }).join("") || `<p class="text-center text-ink-soft py-12 text-lg">No comments match. Clear the search or pick another tone.</p>`;
-}
-
-function selectCourse(course) {
-  state.course = state.course === course ? "" : course;
-  state.mood = "";
-  $("brief").innerHTML = briefHint();
-  renderDashboard();
-}
-
-function briefHint() {
-  return `<p class="text-ink-soft">AI reads every comment${state.course ? ` for ${escapeHtml(state.course)}` : ""} and writes what is going well and what to change.</p>`;
-}
-
-async function writeBriefing() {
-  const btn = $("briefBtn");
-  btn.disabled = true;
-  btn.textContent = "Writing…";
-  $("brief").innerHTML = '<p><i class="fa-solid fa-pen-nib fa-bounce text-pen mr-2"></i>Reading all comments…</p>';
-  try {
-    const s = await api("/api/summary", { course: state.course });
-    $("brief").innerHTML = `
-      <p>${escapeHtml(s.summary)}</p>
-      <p class="font-pen text-2xl mt-4">Keep doing</p>
-      <ul class="space-y-1">${s.strengths.map((x) => `<li class="flex gap-2"><i class="fa-solid fa-check text-praise-ink mt-1"></i>${escapeHtml(x)}</li>`).join("")}</ul>
-      <p class="font-pen text-2xl mt-4">Change</p>
-      <ul class="space-y-1">${s.improvements.map((x) => `<li class="flex gap-2"><i class="fa-solid fa-arrow-right text-pen mt-1"></i>${escapeHtml(x)}</li>`).join("")}</ul>`;
-  } catch (err) {
-    $("brief").innerHTML = `<p class="text-pen font-bold">${escapeHtml(err.message)}</p>`;
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Write briefing";
+    const s = await api("/api/status");
+    $("footerModel").textContent = `(${s.model})`;
+    $("modelName").textContent = s.model;
+    $("footerStatus").innerHTML = s.aiReady
+      ? `<i class="fa-solid fa-circle text-green-600 text-[8px] mr-1"></i>Online · AI ready`
+      : `<i class="fa-solid fa-circle text-amber-500 text-[8px] mr-1"></i>Online · OpenAI key missing on the server`;
+  } catch {
+    $("footerStatus").innerHTML = `<i class="fa-solid fa-circle text-red-600 text-[8px] mr-1"></i>Server offline`;
   }
 }
 
-document.querySelectorAll("#grades .grade").forEach((b) => (b.onclick = () => { setRating(Number(b.dataset.value)); formError(""); }));
-$("grades").onkeydown = (e) => {
-  const step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key];
-  if (!step) return;
-  e.preventDefault();
-  setRating(Math.min(5, Math.max(1, (rating || 0) + step)));
-  document.querySelector(`#grades [data-value="${rating}"]`).focus();
+$("roleSwitch").onclick = (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  state.role = b.dataset.role;
+  state.page = TABS[state.role][0][0];
+  closeDrawer();
+  render();
+  toast(state.role === "professor" ? "Switched to the professor view" : "Switched to the student view");
 };
+$("globalSearch").onkeydown = (e) => {
+  if (e.key !== "Enter") return;
+  state.role = "professor";
+  state.q = e.target.value;
+  e.target.value = "";
+  e.target.blur();
+  go("list");
+};
+$("courseFilter").onchange = (e) => setCourse(e.target.value);
+$("reportBtn").onclick = generateReport;
+$("search").oninput = (e) => { state.q = e.target.value; renderList(); $("search").focus(); };
+$("listCourse").onchange = (e) => { state.listCourse = e.target.value; renderList(); };
+$("listSentiment").onchange = (e) => { state.listSentiment = e.target.value; renderList(); };
+document.querySelectorAll("#stars button").forEach((b) => (b.onclick = () => { setRating(Number(b.dataset.value)); formError(""); }));
 $("comment").oninput = (e) => ($("counter").textContent = `${e.target.value.length}/1000`);
 $("form").onsubmit = submitFeedback;
 $("exampleBtn").onclick = fillExample;
-$("search").oninput = (e) => { state.q = e.target.value; renderList(); };
-$("briefBtn").onclick = writeBriefing;
-window.addEventListener("hashchange", showPage);
+$("scrim").onclick = closeDrawer;
+document.addEventListener("keydown", (e) => e.key === "Escape" && closeDrawer());
 
-$("brief").innerHTML = briefHint();
-showEmptyResult();
-showPage();
+showAnalysisPlaceholder();
+loadStatus();
+loadFeedback().then(render);
