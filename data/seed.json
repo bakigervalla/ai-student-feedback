@@ -149,7 +149,7 @@
     "id": 1,
     "course": "Grid & Cloud Computing",
     "rating": 5,
-    "comment": "The labs with Docker and AWS were really practical and fun. The professor explains cloud concepts very clearly.",
+    "comment": "Ushtrimet me Docker dhe AWS ishin vërtet praktike dhe argëtuese. Profesori i shpjegon shumë qartë konceptet e cloud-it.",
     "tags": [
       "Practical labs",
       "Clear explanations"
@@ -196,7 +196,7 @@
     "id": 2,
     "course": "Grid & Cloud Computing",
     "rating": 2,
-    "comment": "Lectures are too fast and the grid computing part was confusing. We need more time for the assignments.",
+    "comment": "Ligjëratat janë shumë të shpejta dhe pjesa për grid computing ishte konfuze. Na duhet më shumë kohë për detyrat.",
     "tags": [
       "Too fast",
       "Unclear assignments"
@@ -242,7 +242,7 @@
     "id": 3,
     "course": "Machine Learning",
     "rating": 5,
-    "comment": "Amazing course! The professor is patient and the Python notebooks are excellent learning resources.",
+    "comment": "Lëndë e mrekullueshme! Profesori është i durueshëm dhe notebook-ët në Python janë materiale të shkëlqyera për të mësuar.",
     "tags": [
       "Helpful professor",
       "Great examples"
@@ -264,7 +264,7 @@
     "id": 4,
     "course": "Machine Learning",
     "rating": 2,
-    "comment": "Too much math in the lectures and not enough practical examples. The homework deadlines were stressful.",
+    "comment": "Shumë matematikë në ligjërata dhe pak shembuj praktikë. Afatet e detyrave të shtëpisë ishin stresuese.",
     "tags": [
       "Too much workload",
       "Too fast"
@@ -334,7 +334,7 @@
     "id": 5,
     "course": "Distributed Systems",
     "rating": 3,
-    "comment": "Useful topics like consensus and replication, but the assignments are very difficult without more examples.",
+    "comment": "Tema të dobishme si konsensusi dhe replikimi, por detyrat janë shumë të vështira pa më shumë shembuj.",
     "tags": [
       "Unclear assignments"
     ],
@@ -378,7 +378,7 @@
     "id": 6,
     "course": "Distributed Systems",
     "rating": 1,
-    "comment": "Exam questions were unfair and nothing like the exercises. Very poor communication about grading.",
+    "comment": "Pyetjet e provimit ishin të padrejta dhe aspak si ushtrimet. Komunikim shumë i dobët për mënyrën e vlerësimit.",
     "tags": [
       "Hard exams"
     ],
@@ -399,7 +399,7 @@
     "id": 7,
     "course": "Web Engineering",
     "rating": 5,
-    "comment": "Best course this semester! Modern frameworks, clear lectures and a really useful final project.",
+    "comment": "Lënda më e mirë këtë semestër! Framework-e moderne, ligjërata të qarta dhe një projekt final vërtet i dobishëm.",
     "tags": [
       "Useful project",
       "Clear explanations"
@@ -443,7 +443,7 @@
     "id": 8,
     "course": "Databases II",
     "rating": 3,
-    "comment": "Okay course. SQL labs are useful but the theory lectures are a bit slow.",
+    "comment": "Lëndë mesatare. Ushtrimet me SQL janë të dobishme, por ligjëratat teorike janë pak të ngadalta.",
     "tags": [
       "Practical labs",
       "Boring lectures"
@@ -489,12 +489,12 @@
     "id": 9,
     "course": "Grid & Cloud Computing",
     "rating": 4,
-    "comment": "Interesting topics and a helpful professor who always responds to emails. The exam was fair.",
+    "comment": "Tema interesante dhe një profesor i gatshëm që u përgjigjet gjithmonë email-ave. Provimi ishte i drejtë.",
     "tags": [
       "Helpful professor",
       "Fair grading"
     ],
-    "name": "Blerta M.",
+    "name": "Albana V.",
     "date": "2026-09-21T10:00:00.000Z",
     "ai": {
       "sentiment": "positive",
@@ -511,7 +511,7 @@
     "id": 10,
     "course": "Grid & Cloud Computing",
     "rating": 3,
-    "comment": "Content is good but the materials are a bit outdated, some AWS screenshots no longer match the console.",
+    "comment": "Përmbajtja është e mirë, por materialet janë pak të vjetruara; disa pamje nga AWS nuk përputhen më me konzolën.",
     "tags": [
       "Outdated materials"
     ],
@@ -556,7 +556,7 @@
     "id": 11,
     "course": "Machine Learning",
     "rating": 4,
-    "comment": "Very interesting, I enjoyed the project on image classification. Grading was clear and fair.",
+    "comment": "Shumë interesante, më pëlqeu projekti për klasifikimin e imazheve. Vlerësimi ishte i qartë dhe i drejtë.",
     "tags": [
       "Useful project",
       "Fair grading"
@@ -578,11 +578,11 @@
     "id": 12,
     "course": "Machine Learning",
     "rating": 3,
-    "comment": "Good content, but the pace is uneven. Some weeks are slow, others very rushed before the exam.",
+    "comment": "Përmbajtje e mirë, por ritmi është i pabarabartë. Disa javë janë të ngadalta, të tjerat shumë të ngutura para provimit.",
     "tags": [
       "Too fast"
     ],
-    "name": "Gent B.",
+    "name": "Leutrim S.",
     "date": "2026-09-18T10:00:00.000Z",
     "ai": {
       "sentiment": "neutral",
@@ -623,7 +623,7 @@
     "id": 13,
     "course": "Distributed Systems",
     "rating": 4,
-    "comment": "The professor is helpful in office hours. The Raft lab was hard but I learned a lot.",
+    "comment": "Profesori ndihmon shumë në orët e konsultimeve. Ushtrimi me Raft ishte i vështirë, por mësova shumë.",
     "tags": [
       "Helpful professor",
       "Practical labs"
@@ -668,7 +668,7 @@
     "id": 14,
     "course": "Distributed Systems",
     "rating": 2,
-    "comment": "The lectures are boring and the slides are hard to follow. Labs were not well organized.",
+    "comment": "Ligjëratat janë të mërzitshme dhe sllajdet vështirë të ndiqen. Ushtrimet nuk ishin të organizuara mirë.",
     "tags": [
       "Boring lectures",
       "Outdated materials"
@@ -691,7 +691,7 @@
     "id": 15,
     "course": "Web Engineering",
     "rating": 4,
-    "comment": "Practical and well organized. I would like more feedback on our assignments.",
+    "comment": "Praktike dhe e organizuar mirë. Do të doja më shumë komente për detyrat tona.",
     "tags": [
       "Practical labs"
     ],
@@ -735,7 +735,7 @@
     "id": 16,
     "course": "Databases II",
     "rating": 2,
-    "comment": "Assignments take too much time and the deadlines overlap with other courses. Materials are unclear.",
+    "comment": "Detyrat marrin shumë kohë dhe afatet përputhen me ato të lëndëve të tjera. Materialet janë të paqarta.",
     "tags": [
       "Too much workload",
       "Unclear assignments"
