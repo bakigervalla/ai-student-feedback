@@ -132,6 +132,8 @@ const TERMS_SQ = {
   "Hard exams": "Provime të vështira", "Unclear assignments": "Detyra të paqarta", "Boring lectures": "Ligjërata të mërzitshme",
   Labs: "Ushtrimet", Professor: "Profesori", Cloud: "Cloud", Pace: "Ritmi", Lectures: "Ligjëratat", Assignments: "Detyrat",
   Materials: "Materialet", Exams: "Provimet", Grading: "Vlerësimi", Project: "Projekti", General: "Të përgjithshme",
+  Projects: "Projektet", Explanations: "Shpjegimet", Examples: "Shembujt", Workload: "Ngarkesa", Theory: "Teoria",
+  Technologies: "Teknologjitë", Consultations: "Konsultimet",
 };
 
 const SENT = {
