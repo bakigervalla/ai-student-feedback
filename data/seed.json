@@ -21,6 +21,8 @@
       ],
       "summary": "Students found the course very practical and engaging.",
       "suggestion": "Consider adding more real-world examples in lectures.",
+      "summary_sq": "Studentët e gjetën lëndën shumë praktike dhe tërheqëse.",
+      "suggestion_sq": "Shtoni më shumë shembuj nga praktika reale në ligjërata.",
       "toxic": false
     }
   },
@@ -46,6 +48,8 @@
       ],
       "summary": "Students found the practical labs highly beneficial for understanding cloud application deployment.",
       "suggestion": "Continue providing hands-on labs with relevant technologies.",
+      "summary_sq": "Studentët i gjetën ushtrimet praktike shumë të dobishme për të kuptuar vendosjen e aplikacioneve në cloud.",
+      "suggestion_sq": "Vazhdoni me ushtrime praktike me teknologji aktuale.",
       "toxic": false
     }
   },
@@ -70,6 +74,8 @@
       ],
       "summary": "Great job making complex topics easier to understand.",
       "suggestion": "Continue providing practical examples and engaging lectures.",
+      "summary_sq": "Temat e ndërlikuara u bënë më të lehta për t'u kuptuar.",
+      "suggestion_sq": "Vazhdoni me shembuj praktikë dhe ligjërata tërheqëse.",
       "toxic": false
     }
   },
@@ -94,6 +100,8 @@
       ],
       "summary": "Students found the practical labs on query optimization very helpful.",
       "suggestion": "Consider including more examples on indexing in future sessions.",
+      "summary_sq": "Studentët i gjetën shumë të dobishme ushtrimet për optimizimin e query-ve.",
+      "suggestion_sq": "Shtoni më shumë shembuj për indekset në orët e ardhshme.",
       "toxic": false
     }
   },
@@ -118,6 +126,8 @@
       ],
       "summary": "The lectures are perceived as monotonous despite the importance of the topics covered.",
       "suggestion": "Incorporate more interactive elements into the lectures to engage students.",
+      "summary_sq": "Ligjëratat perceptohen si monotone, pavarësisht rëndësisë së temave.",
+      "suggestion_sq": "Shtoni më shumë elemente interaktive në ligjërata për t'i angazhuar studentët.",
       "toxic": false
     }
   },
@@ -142,6 +152,8 @@
       ],
       "summary": "The professor is clear and responsive to questions.",
       "suggestion": "Update the AWS slides to match the new console.",
+      "summary_sq": "Profesori është i qartë dhe u përgjigjet pyetjeve.",
+      "suggestion_sq": "Përditësoni sllajdet për AWS që të përputhen me konzolën e re.",
       "toxic": false
     }
   },
@@ -165,7 +177,9 @@
         "Cloud"
       ],
       "summary": "The student enjoyed the practical Docker and AWS labs and found the explanations clear.",
-      "suggestion": "Keep the hands-on labs and add one more real deployment exercise."
+      "suggestion": "Keep the hands-on labs and add one more real deployment exercise.",
+      "summary_sq": "Studentit i pëlqyen ushtrimet praktike me Docker dhe AWS dhe i gjeti shpjegimet të qarta.",
+      "suggestion_sq": "Mbani ushtrimet praktike dhe shtoni edhe një ushtrim me vendosje reale."
     }
   },
   {
@@ -189,6 +203,8 @@
       ],
       "summary": "The examples provided in the course were effective.",
       "suggestion": "Consider spending more time on authentication topics.",
+      "summary_sq": "Shembujt e dhënë në lëndë ishin efektivë.",
+      "suggestion_sq": "Kushtojini më shumë kohë temës së autentifikimit.",
       "toxic": false
     }
   },
@@ -212,7 +228,9 @@
         "Assignments"
       ],
       "summary": "The student finds the lectures too fast and the grid computing topic confusing.",
-      "suggestion": "Slow down on grid computing and give more time for assignments."
+      "suggestion": "Slow down on grid computing and give more time for assignments.",
+      "summary_sq": "Studenti i sheh ligjëratat shumë të shpejta dhe temën e grid computing konfuze.",
+      "suggestion_sq": "Ngadalësoni ritmin te grid computing dhe jepni më shumë kohë për detyrat."
     }
   },
   {
@@ -235,6 +253,8 @@
       ],
       "summary": "Students feel overwhelmed by the heavy workload and difficult exams.",
       "suggestion": "Consider reducing the number of weekly assignments.",
+      "summary_sq": "Studentët ndihen të mbingarkuar nga ngarkesa e madhe dhe provimet e vështira.",
+      "suggestion_sq": "Merrni parasysh uljen e numrit të detyrave javore.",
       "toxic": false
     }
   },
@@ -257,7 +277,9 @@
         "Materials"
       ],
       "summary": "The student praises the patient professor and the Python notebooks.",
-      "suggestion": "Share the notebooks as a template for future cohorts."
+      "suggestion": "Share the notebooks as a template for future cohorts.",
+      "summary_sq": "Studenti e lavdëron profesorin e durueshëm dhe notebook-ët në Python.",
+      "suggestion_sq": "Ndani notebook-ët si model për gjeneratat e ardhshme."
     }
   },
   {
@@ -280,7 +302,9 @@
         "Pace"
       ],
       "summary": "The student wants fewer math-heavy lectures and more practical examples.",
-      "suggestion": "Pair each theory section with a short coding example."
+      "suggestion": "Pair each theory section with a short coding example.",
+      "summary_sq": "Studenti dëshiron më pak matematikë në ligjërata dhe më shumë shembuj praktikë.",
+      "suggestion_sq": "Shoqëroni çdo pjesë teorike me një shembull të shkurtër në kod."
     }
   },
   {
@@ -304,6 +328,8 @@
       ],
       "summary": "The lectures are too theoretical and the exams focus on memorization.",
       "suggestion": "Incorporate more problem-solving exercises in lectures.",
+      "summary_sq": "Ligjëratat janë shumë teorike dhe provimet fokusohen te mësimi përmendësh.",
+      "suggestion_sq": "Shtoni më shumë ushtrime për zgjidhjen e problemeve në ligjërata.",
       "toxic": false
     }
   },
@@ -327,6 +353,8 @@
       ],
       "summary": "The assignments were unclear and materials need updating.",
       "suggestion": "Provide clearer project guidelines and update course materials.",
+      "summary_sq": "Detyrat ishin të paqarta dhe materialet duhet të përditësohen.",
+      "suggestion_sq": "Jepni udhëzime më të qarta për projektin dhe përditësoni materialet e lëndës.",
       "toxic": false
     }
   },
@@ -348,7 +376,9 @@
         "Materials"
       ],
       "summary": "The topics are useful, but the assignments are hard without examples.",
-      "suggestion": "Add a worked example before each assignment."
+      "suggestion": "Add a worked example before each assignment.",
+      "summary_sq": "Temat janë të dobishme, por detyrat janë të vështira pa shembuj.",
+      "suggestion_sq": "Shtoni një shembull të zgjidhur para çdo detyre."
     }
   },
   {
@@ -371,6 +401,8 @@
       ],
       "summary": "Students found the pace too fast and assignments unclear.",
       "suggestion": "Consider slowing down the lectures and providing clearer instructions for assignments.",
+      "summary_sq": "Studentët e gjetën ritmin shumë të shpejtë dhe detyrat të paqarta.",
+      "suggestion_sq": "Ngadalësoni ligjëratat dhe jepni udhëzime më të qarta për detyrat.",
       "toxic": false
     }
   },
@@ -392,7 +424,9 @@
         "Grading"
       ],
       "summary": "The student felt the exam did not match the exercises and grading was unclear.",
-      "suggestion": "Publish a sample exam and a clear grading rubric."
+      "suggestion": "Publish a sample exam and a clear grading rubric.",
+      "summary_sq": "Studenti mendon se provimi nuk përputhej me ushtrimet dhe se vlerësimi ishte i paqartë.",
+      "suggestion_sq": "Publikoni një provim shembull dhe kritere të qarta vlerësimi."
     }
   },
   {
@@ -414,7 +448,9 @@
         "Project"
       ],
       "summary": "The student loved the modern content, clear lectures and final project.",
-      "suggestion": "Keep the final project format and invite an industry guest."
+      "suggestion": "Keep the final project format and invite an industry guest.",
+      "summary_sq": "Studentit i pëlqeu shumë përmbajtja moderne, ligjëratat e qarta dhe projekti final.",
+      "suggestion_sq": "Mbani formatin e projektit final dhe ftoni një mysafir nga industria."
     }
   },
   {
@@ -436,6 +472,8 @@
       ],
       "summary": "Some materials are outdated and need updating.",
       "suggestion": "Consider updating course materials to include modern practices.",
+      "summary_sq": "Disa materiale janë të vjetruara dhe duhet të përditësohen.",
+      "suggestion_sq": "Përditësoni materialet e lëndës me praktikat moderne.",
       "toxic": false
     }
   },
@@ -459,7 +497,9 @@
         "Pace"
       ],
       "summary": "The SQL labs are useful, but the theory lectures feel slow.",
-      "suggestion": "Shorten the theory parts and add more live SQL demos."
+      "suggestion": "Shorten the theory parts and add more live SQL demos.",
+      "summary_sq": "Ushtrimet me SQL janë të dobishme, por ligjëratat teorike duken të ngadalta.",
+      "suggestion_sq": "Shkurtoni pjesët teorike dhe shtoni më shumë demonstrime live me SQL."
     }
   },
   {
@@ -482,6 +522,8 @@
       ],
       "summary": "The course is interesting but could benefit from more practice exercises.",
       "suggestion": "Include more practice exercises before exams to reinforce understanding.",
+      "summary_sq": "Lënda është interesante, por do të përfitonte nga më shumë ushtrime.",
+      "suggestion_sq": "Shtoni më shumë ushtrime para provimeve për ta përforcuar kuptimin.",
       "toxic": false
     }
   },
@@ -504,7 +546,9 @@
         "Exams"
       ],
       "summary": "The student values the responsive professor and the fair exam.",
-      "suggestion": "Keep the same exam format and response time."
+      "suggestion": "Keep the same exam format and response time.",
+      "summary_sq": "Studenti e vlerëson profesorin që përgjigjet shpejt dhe provimin e drejtë.",
+      "suggestion_sq": "Mbani të njëjtin format provimi dhe të njëjtën shpejtësi përgjigjeje."
     }
   },
   {
@@ -525,7 +569,9 @@
         "Cloud"
       ],
       "summary": "The content is good, but some AWS materials are outdated.",
-      "suggestion": "Update the AWS screenshots to match the current console."
+      "suggestion": "Update the AWS screenshots to match the current console.",
+      "summary_sq": "Përmbajtja është e mirë, por disa materiale për AWS janë të vjetruara.",
+      "suggestion_sq": "Përditësoni pamjet nga AWS që të përputhen me konzolën aktuale."
     }
   },
   {
@@ -549,6 +595,8 @@
       ],
       "summary": "The professor is helpful, but assignments could be clearer.",
       "suggestion": "Provide more detailed explanations for transaction assignments.",
+      "summary_sq": "Profesori ndihmon, por detyrat mund të ishin më të qarta.",
+      "suggestion_sq": "Jepni shpjegime më të detajuara për detyrat me transaksione.",
       "toxic": false
     }
   },
@@ -571,7 +619,9 @@
         "Grading"
       ],
       "summary": "The student enjoyed the image classification project and found grading fair.",
-      "suggestion": "Offer a second project option for students who finish early."
+      "suggestion": "Offer a second project option for students who finish early.",
+      "summary_sq": "Studentit i pëlqeu projekti për klasifikimin e imazheve dhe e gjeti vlerësimin të drejtë.",
+      "suggestion_sq": "Ofroni një projekt të dytë për studentët që përfundojnë më herët."
     }
   },
   {
@@ -592,7 +642,9 @@
         "Exams"
       ],
       "summary": "The content is good, but the pace is uneven before the exam.",
-      "suggestion": "Spread the difficult topics more evenly across the semester."
+      "suggestion": "Spread the difficult topics more evenly across the semester.",
+      "summary_sq": "Përmbajtja është e mirë, por ritmi është i pabarabartë para provimit.",
+      "suggestion_sq": "Shpërndani temat e vështira më njëtrajtshëm gjatë semestrit."
     }
   },
   {
@@ -616,6 +668,8 @@
       ],
       "summary": "The professor explains concepts clearly and grades fairly.",
       "suggestion": "Continue providing clear explanations and examples in lectures.",
+      "summary_sq": "Profesori i shpjegon qartë konceptet dhe vlerëson drejt.",
+      "suggestion_sq": "Vazhdoni me shpjegime dhe shembuj të qartë në ligjërata.",
       "toxic": false
     }
   },
@@ -638,7 +692,9 @@
         "Labs"
       ],
       "summary": "The student found office hours helpful and learned a lot in the Raft lab.",
-      "suggestion": "Add a short guide before the Raft lab to lower the entry barrier."
+      "suggestion": "Add a short guide before the Raft lab to lower the entry barrier.",
+      "summary_sq": "Studenti i gjeti të dobishme konsultimet dhe mësoi shumë në ushtrimin me Raft.",
+      "suggestion_sq": "Shtoni një udhëzues të shkurtër para ushtrimit me Raft për ta lehtësuar fillimin."
     }
   },
   {
@@ -661,6 +717,8 @@
       ],
       "summary": "The project on Render was very beneficial for real work applications.",
       "suggestion": "Consider incorporating more real-world examples in lectures.",
+      "summary_sq": "Projekti me Render ishte shumë i dobishëm për punën reale.",
+      "suggestion_sq": "Përfshini më shumë shembuj nga praktika reale në ligjërata.",
       "toxic": false
     }
   },
@@ -684,7 +742,9 @@
         "Labs"
       ],
       "summary": "The student finds the lectures boring and the labs disorganized.",
-      "suggestion": "Add live demos to lectures and publish a clear lab schedule."
+      "suggestion": "Add live demos to lectures and publish a clear lab schedule.",
+      "summary_sq": "Studenti i sheh ligjëratat të mërzitshme dhe ushtrimet të paorganizuara.",
+      "suggestion_sq": "Shtoni demonstrime live në ligjërata dhe publikoni një orar të qartë të ushtrimeve."
     }
   },
   {
@@ -704,7 +764,9 @@
         "Assignments"
       ],
       "summary": "The course is well organized, but students want more assignment feedback.",
-      "suggestion": "Return short written feedback on each assignment."
+      "suggestion": "Return short written feedback on each assignment.",
+      "summary_sq": "Lënda është e organizuar mirë, por studentët duan më shumë komente për detyrat.",
+      "suggestion_sq": "Jepni komente të shkurtra me shkrim për çdo detyrë."
     }
   },
   {
@@ -728,6 +790,8 @@
       ],
       "summary": "The course was well-organized with clear expectations.",
       "suggestion": "Continue maintaining clear deadlines and transparent grading.",
+      "summary_sq": "Lënda ishte e organizuar mirë, me pritshmëri të qarta.",
+      "suggestion_sq": "Vazhdoni me afate të qarta dhe vlerësim transparent.",
       "toxic": false
     }
   },
@@ -751,7 +815,9 @@
         "Materials"
       ],
       "summary": "Assignments are too long and deadlines clash with other courses.",
-      "suggestion": "Coordinate deadlines with other courses and shorten the assignments."
+      "suggestion": "Coordinate deadlines with other courses and shorten the assignments.",
+      "summary_sq": "Detyrat janë shumë të gjata dhe afatet përplasen me lëndët e tjera.",
+      "suggestion_sq": "Koordinoni afatet me lëndët e tjera dhe shkurtoni detyrat."
     }
   },
   {
@@ -775,6 +841,8 @@
       ],
       "summary": "Students appreciated the practical labs and helpful assistant.",
       "suggestion": "Continue providing engaging lab activities.",
+      "summary_sq": "Studentët i vlerësuan ushtrimet praktike dhe asistentin e gatshëm.",
+      "suggestion_sq": "Vazhdoni me aktivitete tërheqëse në laborator.",
       "toxic": false
     }
   },
@@ -798,6 +866,8 @@
       ],
       "summary": "Students found the course very helpful and engaging.",
       "suggestion": "Continue using great examples and projects.",
+      "summary_sq": "Studentët e gjetën lëndën shumë të dobishme dhe tërheqëse.",
+      "suggestion_sq": "Vazhdoni me shembuj dhe projekte të shkëlqyera.",
       "toxic": false
     }
   },
@@ -823,6 +893,8 @@
       ],
       "summary": "The course pace and workload are overwhelming for students.",
       "suggestion": "Consider reducing the amount of material covered or extending deadlines.",
+      "summary_sq": "Ritmi dhe ngarkesa e lëndës janë dërrmuese për studentët.",
+      "suggestion_sq": "Merrni parasysh zvogëlimin e materialit ose zgjatjen e afateve.",
       "toxic": false
     }
   }

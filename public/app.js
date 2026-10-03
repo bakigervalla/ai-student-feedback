@@ -166,11 +166,13 @@ let feedback = [];
 let rating = 0;
 let resultsCourse = "";
 let status = null;
+let drawerId = null;
 let lang = "en";
 try { lang = localStorage.getItem("lang") === "sq" ? "sq" : "en"; } catch {}
 
 const t = (key, vars = {}) => (I18N[lang][key] ?? I18N.en[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => vars[k]);
 const term = (text) => (lang === "sq" && TERMS_SQ[text]) || text;
+const aiText = (ai, field) => (lang === "sq" && ai[`${field}_sq`]) || ai[field];
 
 function escapeHtml(text) {
   const div = document.createElement("div");
@@ -257,6 +259,7 @@ function applyLang() {
   renderStatus();
   renderResults();
   render();
+  if (drawerId) openDrawer(drawerId);
 }
 
 function render() {
@@ -439,14 +442,15 @@ function analysisHtml(ai, tags = []) {
     ${heading("ai.topics")}
     <div class="flex flex-wrap gap-1.5">${ai.topics.map((x) => `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700">${escapeHtml(term(x))}</span>`).join("")}</div>
     ${heading("ai.summary")}
-    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[12.5px] leading-relaxed text-slate-700">${escapeHtml(ai.summary)}</div>
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[12.5px] leading-relaxed text-slate-700">${escapeHtml(aiText(ai, "summary"))}</div>
     ${heading("ai.suggestion")}
-    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[12.5px] leading-relaxed text-slate-700"><i class="fa-solid fa-lightbulb text-slate-400 mr-1.5"></i>${escapeHtml(ai.suggestion)}</div>`;
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[12.5px] leading-relaxed text-slate-700"><i class="fa-solid fa-lightbulb text-slate-400 mr-1.5"></i>${escapeHtml(aiText(ai, "suggestion"))}</div>`;
 }
 
 function openDrawer(id) {
   const f = feedback.find((x) => x.id === id);
   if (!f) return;
+  drawerId = id;
   $("drawer").innerHTML = `
     <div class="px-4 py-3.5 border-b border-slate-200 flex items-center gap-2.5">
       ${avatar(f)}
@@ -465,6 +469,7 @@ function openDrawer(id) {
 }
 
 function closeDrawer() {
+  drawerId = null;
   $("drawer").classList.add("translate-x-full");
   $("scrim").classList.add("hidden");
 }

@@ -38,6 +38,8 @@ Reply with JSON only, in this shape:
  "topics": [up to 3 short topics, e.g. "Lectures", "Exams", "Labs", "Materials", "Pace", "Professor"],
  "summary": "one short sentence for the professor",
  "suggestion": "one short, practical improvement for the professor",
+ "summary_sq": "the same summary in Albanian",
+ "suggestion_sq": "the same suggestion in Albanian",
  "toxic": true if the comment contains insults or offensive language, otherwise false}`;
 
 
