@@ -1,14 +1,150 @@
+const I18N = {
+  en: {
+    "search.ph": "Search feedback, courses, topics…",
+    "role.student": "Student", "role.professor": "Professor",
+    "app.professor": "Professor Console", "app.student": "Student Portal",
+    "tab.dashboard": "Dashboard", "tab.list": "Feedback", "tab.submit": "Give Feedback", "tab.about": "How it works",
+    "dash.title": "Feedback Dashboard", "dash.semester": "Winter semester 2026/27", "dash.courses": "{n} courses",
+    "all.courses": "All courses", "all": "All",
+    "kpi.total": "Total feedback", "kpi.week": "+{n} in the last 7 days", "kpi.avg": "Average rating",
+    "kpi.positive": "Positive sentiment", "kpi.positiveNote": "classified by AI",
+    "kpi.attention": "Needs attention", "kpi.attentionNote": "negative comments to review",
+    "byCourse.title": "Sentiment by course", "byCourse.note": "Share of positive / neutral / negative comments per course · click a course to filter",
+    "latest.title": "Latest feedback", "latest.note": "Click a comment to see the full AI analysis", "latest.empty": "No feedback yet.",
+    "donut.title": "Sentiment overview", "donut.note": "AI classification of every comment", "donut.responses": "responses",
+    "topics.title": "Top topics", "topics.note": "What students talk about (AI topic detection)",
+    "topics.praised": "mostly praised", "topics.criticised": "mostly criticised", "topics.empty": "No topics yet.",
+    "tags.title": "Most picked badges", "tags.note": "Quick feedback chosen by students", "tags.empty": "No badges picked yet.",
+    "sent.positive": "Positive", "sent.neutral": "Neutral", "sent.negative": "Negative",
+    "list.title": "All Feedback", "list.search": "Search text, topic or badge…",
+    "list.meta": "{n} of {total} comments · sentiment & topics detected by AI",
+    "list.badgesOnly": "Badges only", "list.empty": "No feedback matches your filters.",
+    "th.student": "Student", "th.course": "Course", "th.rating": "Rating", "th.comment": "Comment",
+    "th.badges": "Badges", "th.sentiment": "AI sentiment", "th.date": "Date",
+    "submit.title": "Give Course Feedback", "submit.subtitle": "Your feedback helps professors improve the course",
+    "form.title": "Your feedback", "form.note": "It takes less than a minute. You can stay anonymous.",
+    "form.course": "Course", "form.rating": "Overall rating",
+    "form.quick": "Quick feedback", "form.pick": "Pick all that apply", "form.selected": "{n} selected",
+    "form.good": "What went well", "form.bad": "What could be better",
+    "form.comment": "Anything else?", "form.commentOpt": "(optional if you picked badges)",
+    "form.commentPh": "e.g. The labs were very practical, but the lectures are too fast…",
+    "form.tip": "Tip: mention lectures, labs, exams, materials or pace.",
+    "form.name": "Name", "form.optional": "(optional)", "form.namePh": "Leave empty to stay anonymous",
+    "form.submit": "Submit feedback", "form.sending": "Sending…",
+    "rating.0": "Click to rate", "rating.1": "Very poor", "rating.2": "Poor", "rating.3": "Okay", "rating.4": "Good", "rating.5": "Excellent",
+    "err.rating": "Choose a rating from 1 to 5 stars.", "err.content": "Pick at least one badge or write a few words.",
+    "err.toxic": "Your comment contains offensive language. Please rephrase it respectfully.",
+    "err.notSaved": "Feedback not saved", "err.server": "The server did not answer. Try again in a moment.",
+    "results.title": "Class results", "results.note": "How all students rated the course",
+    "results.placeholder": "Submit your feedback to see how all students rated this course.",
+    "results.thanks": "Thank you! Your feedback was saved.", "results.responses": "{n} responses",
+    "results.avg": "average rating", "results.distribution": "Rating distribution", "results.none": "No badges yet.",
+    "toast.sent": "Feedback submitted", "toast.professor": "Switched to the professor view", "toast.student": "Switched to the student view",
+    "ai.analysis": "AI analysis", "ai.sentiment": "Sentiment", "ai.score": "Score", "ai.tone": "Tone check", "ai.respectful": "Respectful",
+    "ai.badges": "Badges picked by the student", "ai.topics": "Topics detected by AI",
+    "ai.summary": "Summary for the professor", "ai.suggestion": "Suggested improvement",
+    "anonymous": "Anonymous", "close": "Close",
+    "footer.hosted": "Hosted on Render", "status.ready": "Online · AI ready",
+    "status.noKey": "Online · OpenAI key missing on the server", "status.offline": "Server offline",
+    "about.title": "How it works", "about.subtitle": "Architecture, tech stack and cloud deployment",
+    "arch.title": "System architecture", "arch.browser": "Browser", "arch.browserNote": "Student form & professor dashboard",
+    "arch.readWrite": "read / write", "arch.storage": "Storage", "arch.storageNote": "feedback + AI results",
+    "arch.apiKey": "API key / prompt", "arch.llm": "Large language model", "arch.llmNote": "sentiment, topics, summaries",
+    "arch.aaas": "AI as a Service",
+    "flow.title": "Request flow", "flow.note": "What happens when a student clicks “Submit”",
+    "flow.1": "The browser sends the rating, badges and comment to the Node.js server.",
+    "flow.2": "The server asks OpenAI for the sentiment, topics, a tone check and a summary as JSON.",
+    "flow.3": "Offensive comments are rejected; the others are saved with the AI result.",
+    "flow.4": "The student sees the class results; the professor sees the AI analysis on the dashboard.",
+    "stack.title": "Tech stack", "stack.note": "Chosen to be simple, cheap and easy to explain",
+    "stack.storage": "JSON file on the server", "stack.cloud": "Render web service, deployed from GitHub",
+    "stack.secretsLabel": "Secrets", "stack.secrets": "OpenAI key stored as an environment variable on Render",
+  },
+  sq: {
+    "search.ph": "Kërko komente, lëndë, tema…",
+    "role.student": "Student", "role.professor": "Profesor",
+    "app.professor": "Paneli i profesorit", "app.student": "Portali i studentit",
+    "tab.dashboard": "Paneli", "tab.list": "Komentet", "tab.submit": "Jep vlerësim", "tab.about": "Si funksionon",
+    "dash.title": "Paneli i vlerësimeve", "dash.semester": "Semestri dimëror 2026/27", "dash.courses": "{n} lëndë",
+    "all.courses": "Të gjitha lëndët", "all": "Të gjitha",
+    "kpi.total": "Vlerësime gjithsej", "kpi.week": "+{n} në 7 ditët e fundit", "kpi.avg": "Nota mesatare",
+    "kpi.positive": "Qëndrim pozitiv", "kpi.positiveNote": "klasifikuar nga AI",
+    "kpi.attention": "Kërkon vëmendje", "kpi.attentionNote": "komente negative për t'u shqyrtuar",
+    "byCourse.title": "Qëndrimi sipas lëndës", "byCourse.note": "Pjesa e komenteve pozitive / neutrale / negative për çdo lëndë · kliko një lëndë për ta filtruar",
+    "latest.title": "Vlerësimet e fundit", "latest.note": "Kliko një koment për të parë analizën e plotë nga AI", "latest.empty": "Ende nuk ka vlerësime.",
+    "donut.title": "Pasqyra e qëndrimit", "donut.note": "Klasifikimi i çdo komenti nga AI", "donut.responses": "përgjigje",
+    "topics.title": "Temat kryesore", "topics.note": "Për çfarë flasin studentët (tema të gjetura nga AI)",
+    "topics.praised": "kryesisht të lavdëruara", "topics.criticised": "kryesisht të kritikuara", "topics.empty": "Ende nuk ka tema.",
+    "tags.title": "Etiketat më të zgjedhura", "tags.note": "Vlerësime të shpejta të zgjedhura nga studentët", "tags.empty": "Ende nuk është zgjedhur asnjë etiketë.",
+    "sent.positive": "Pozitiv", "sent.neutral": "Neutral", "sent.negative": "Negativ",
+    "list.title": "Të gjitha vlerësimet", "list.search": "Kërko tekst, temë ose etiketë…",
+    "list.meta": "{n} nga {total} komente · qëndrimi dhe temat nga AI",
+    "list.badgesOnly": "Vetëm etiketa", "list.empty": "Asnjë vlerësim nuk përputhet me filtrat.",
+    "th.student": "Studenti", "th.course": "Lënda", "th.rating": "Nota", "th.comment": "Komenti",
+    "th.badges": "Etiketat", "th.sentiment": "Qëndrimi (AI)", "th.date": "Data",
+    "submit.title": "Vlerëso lëndën", "submit.subtitle": "Vlerësimi yt i ndihmon profesorët ta përmirësojnë lëndën",
+    "form.title": "Vlerësimi yt", "form.note": "Zgjat më pak se një minutë. Mund të mbetesh anonim.",
+    "form.course": "Lënda", "form.rating": "Vlerësimi i përgjithshëm",
+    "form.quick": "Vlerësim i shpejtë", "form.pick": "Zgjidh sa të duash", "form.selected": "{n} të zgjedhura",
+    "form.good": "Çfarë shkoi mirë", "form.bad": "Çfarë mund të ishte më mirë",
+    "form.comment": "Diçka tjetër?", "form.commentOpt": "(opsionale nëse zgjodhe etiketa)",
+    "form.commentPh": "p.sh. Ushtrimet ishin shumë praktike, por ligjëratat janë shumë të shpejta…",
+    "form.tip": "Këshillë: përmend ligjëratat, ushtrimet, provimet, materialet ose ritmin.",
+    "form.name": "Emri", "form.optional": "(opsionale)", "form.namePh": "Lëre bosh për të mbetur anonim",
+    "form.submit": "Dërgo vlerësimin", "form.sending": "Duke dërguar…",
+    "rating.0": "Kliko për të vlerësuar", "rating.1": "Shumë dobët", "rating.2": "Dobët", "rating.3": "Mesatar", "rating.4": "Mirë", "rating.5": "Shkëlqyeshëm",
+    "err.rating": "Zgjidh një notë nga 1 deri në 5 yje.", "err.content": "Zgjidh të paktën një etiketë ose shkruaj disa fjalë.",
+    "err.toxic": "Komenti yt përmban fjalë fyese. Të lutem riformuloje me respekt.",
+    "err.notSaved": "Vlerësimi nuk u ruajt", "err.server": "Serveri nuk u përgjigj. Provo përsëri pas pak.",
+    "results.title": "Rezultatet e klasës", "results.note": "Si e vlerësuan lëndën të gjithë studentët",
+    "results.placeholder": "Dërgo vlerësimin tënd për të parë si e vlerësuan këtë lëndë të gjithë studentët.",
+    "results.thanks": "Faleminderit! Vlerësimi yt u ruajt.", "results.responses": "{n} përgjigje",
+    "results.avg": "nota mesatare", "results.distribution": "Shpërndarja e notave", "results.none": "Ende nuk ka etiketa.",
+    "toast.sent": "Vlerësimi u dërgua", "toast.professor": "Kalove te pamja e profesorit", "toast.student": "Kalove te pamja e studentit",
+    "ai.analysis": "Analiza nga AI", "ai.sentiment": "Qëndrimi", "ai.score": "Pikët", "ai.tone": "Kontrolli i tonit", "ai.respectful": "I respektueshëm",
+    "ai.badges": "Etiketat e zgjedhura nga studenti", "ai.topics": "Temat e gjetura nga AI",
+    "ai.summary": "Përmbledhje për profesorin", "ai.suggestion": "Përmirësim i sugjeruar",
+    "anonymous": "Anonim", "close": "Mbyll",
+    "footer.hosted": "I vendosur në Render", "status.ready": "Në linjë · AI gati",
+    "status.noKey": "Në linjë · mungon çelësi i OpenAI në server", "status.offline": "Serveri jashtë linje",
+    "about.title": "Si funksionon", "about.subtitle": "Arkitektura, teknologjitë dhe vendosja në cloud",
+    "arch.title": "Arkitektura e sistemit", "arch.browser": "Shfletuesi", "arch.browserNote": "Formulari i studentit dhe paneli i profesorit",
+    "arch.readWrite": "lexim / shkrim", "arch.storage": "Ruajtja", "arch.storageNote": "vlerësimet + rezultatet e AI",
+    "arch.apiKey": "çelës API / prompt", "arch.llm": "Model i madh gjuhësor", "arch.llmNote": "qëndrimi, temat, përmbledhjet",
+    "arch.aaas": "AI si shërbim",
+    "flow.title": "Rrjedha e kërkesës", "flow.note": "Çfarë ndodh kur studenti klikon “Dërgo”",
+    "flow.1": "Shfletuesi dërgon notën, etiketat dhe komentin te serveri Node.js.",
+    "flow.2": "Serveri i kërkon OpenAI-t qëndrimin, temat, kontrollin e tonit dhe një përmbledhje në JSON.",
+    "flow.3": "Komentet fyese refuzohen; të tjerat ruhen bashkë me rezultatin e AI.",
+    "flow.4": "Studenti sheh rezultatet e klasës; profesori sheh analizën e AI në panel.",
+    "stack.title": "Teknologjitë", "stack.note": "Të zgjedhura që të jenë të thjeshta, të lira dhe të lehta për t'u shpjeguar",
+    "stack.storage": "Skedar JSON në server", "stack.cloud": "Shërbim web në Render, i vendosur nga GitHub",
+    "stack.secretsLabel": "Sekretet", "stack.secrets": "Çelësi i OpenAI ruhet si variabël mjedisi në Render",
+  },
+};
+// Courses, badges and AI topics are stored in English; only their display is translated.
+const TERMS_SQ = {
+  "Grid & Cloud Computing": "Kompjutimi Grid dhe Cloud", "Machine Learning": "Mësimi i makinës",
+  "Distributed Systems": "Sistemet e shpërndara", "Web Engineering": "Inxhinieria e uebit", "Databases II": "Bazat e të dhënave II",
+  "Clear explanations": "Shpjegime të qarta", "Practical labs": "Ushtrime praktike", "Helpful professor": "Profesor i gatshëm",
+  "Great examples": "Shembuj të shkëlqyer", "Fair grading": "Vlerësim i drejtë", "Useful project": "Projekt i dobishëm",
+  "Too fast": "Ritëm shumë i shpejtë", "Outdated materials": "Materiale të vjetruara", "Too much workload": "Ngarkesë e madhe",
+  "Hard exams": "Provime të vështira", "Unclear assignments": "Detyra të paqarta", "Boring lectures": "Ligjërata të mërzitshme",
+  Labs: "Ushtrimet", Professor: "Profesori", Cloud: "Cloud", Pace: "Ritmi", Lectures: "Ligjëratat", Assignments: "Detyrat",
+  Materials: "Materialet", Exams: "Provimet", Grading: "Vlerësimi", Project: "Projekti", General: "Të përgjithshme",
+};
+
 const SENT = {
-  positive: { label: "Positive", color: "#16a34a", pill: "bg-green-100 text-green-700", on: "bg-green-600 border-green-600 text-white", icon: "fa-face-smile" },
-  neutral: { label: "Neutral", color: "#d97706", pill: "bg-amber-100 text-amber-700", on: "bg-amber-500 border-amber-500 text-white", icon: "fa-face-meh" },
-  negative: { label: "Negative", color: "#dc2626", pill: "bg-red-100 text-red-700", on: "bg-red-600 border-red-600 text-white", icon: "fa-face-frown" },
+  positive: { color: "#16a34a", pill: "bg-green-50 text-green-700", icon: "fa-face-smile" },
+  neutral: { color: "#d97706", pill: "bg-amber-50 text-amber-700", icon: "fa-face-meh" },
+  negative: { color: "#dc2626", pill: "bg-red-50 text-red-700", icon: "fa-face-frown" },
 };
 const COURSES = [
-  { name: "Grid & Cloud Computing", icon: "fa-cloud", on: "bg-teal-600 border-teal-600 text-white", off: "bg-teal-50 border-teal-200 text-teal-700 hover:bg-teal-100", dot: "#0d9488" },
-  { name: "Machine Learning", icon: "fa-brain", on: "bg-violet-600 border-violet-600 text-white", off: "bg-violet-50 border-violet-200 text-violet-700 hover:bg-violet-100", dot: "#7c3aed" },
-  { name: "Distributed Systems", icon: "fa-network-wired", on: "bg-blue-600 border-blue-600 text-white", off: "bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100", dot: "#2563eb" },
-  { name: "Web Engineering", icon: "fa-code", on: "bg-pink-600 border-pink-600 text-white", off: "bg-pink-50 border-pink-200 text-pink-700 hover:bg-pink-100", dot: "#db2777" },
-  { name: "Databases II", icon: "fa-database", on: "bg-orange-600 border-orange-600 text-white", off: "bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100", dot: "#ea580c" },
+  { name: "Grid & Cloud Computing", icon: "fa-cloud" },
+  { name: "Machine Learning", icon: "fa-brain" },
+  { name: "Distributed Systems", icon: "fa-network-wired" },
+  { name: "Web Engineering", icon: "fa-code" },
+  { name: "Databases II", icon: "fa-database" },
 ];
 const TAGS = {
   good: [["Clear explanations", "fa-lightbulb"], ["Practical labs", "fa-flask"], ["Helpful professor", "fa-hand-holding-heart"],
@@ -17,23 +153,22 @@ const TAGS = {
     ["Hard exams", "fa-file-circle-exclamation"], ["Unclear assignments", "fa-circle-question"], ["Boring lectures", "fa-face-meh-blank"]],
 };
 const TABS = {
-  professor: [["dashboard", "fa-chart-pie", "Dashboard"], ["list", "fa-comments", "Feedback"], ["about", "fa-cloud", "How it works"]],
-  student: [["submit", "fa-pen-to-square", "Give Feedback"], ["about", "fa-cloud", "How it works"]],
+  professor: [["dashboard", "fa-chart-pie"], ["list", "fa-comments"], ["about", "fa-cloud"]],
+  student: [["submit", "fa-pen-to-square"], ["about", "fa-cloud"]],
 };
-const RATING_LABELS = ["Click to rate", "Very poor", "Poor", "Okay", "Good", "Excellent"];
-const COLORS = ["#0d9488", "#7c3aed", "#2563eb", "#db2777", "#ea580c", "#0891b2", "#65a30d", "#4f46e5"];
-const EXAMPLES = [
-  { course: "Grid & Cloud Computing", rating: 4, tags: ["Practical labs", "Clear explanations", "Outdated materials"], comment: "The Docker labs were great, but some slides still show the old AWS console." },
-  { course: "Machine Learning", rating: 2, tags: ["Too fast", "Too much workload", "Hard exams"], comment: "We need more examples before the exam." },
-  { course: "Web Engineering", rating: 5, tags: ["Useful project", "Helpful professor", "Great examples"], comment: "" },
-];
 
 const $ = (id) => document.getElementById(id);
 const state = { role: "professor", page: "dashboard", course: "", q: "", listCourse: "", listSentiment: "" };
 const form = { course: COURSES[0].name, tags: new Set() };
 let feedback = [];
 let rating = 0;
-let exampleIndex = 0;
+let resultsCourse = "";
+let status = null;
+let lang = "en";
+try { lang = localStorage.getItem("lang") === "sq" ? "sq" : "en"; } catch {}
+
+const t = (key, vars = {}) => (I18N[lang][key] ?? I18N.en[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => vars[k]);
+const term = (text) => (lang === "sq" && TERMS_SQ[text]) || text;
 
 function escapeHtml(text) {
   const div = document.createElement("div");
@@ -41,45 +176,48 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-const stars = (n) => `<span class="stars">${"★".repeat(n)}<span class="off">${"★".repeat(5 - n)}</span></span>`;
-const pill = (s) => `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${SENT[s].pill}"><span class="w-1.5 h-1.5 rounded-full bg-current"></span>${SENT[s].label}</span>`;
+function stars(value) {
+  return `<span class="stars">${[1, 2, 3, 4, 5].map((i) =>
+    `<i class="fa-solid ${value >= i - 0.25 ? "fa-star" : value >= i - 0.75 ? "fa-star-half-stroke" : "fa-star off"}"></i>`).join("")}</span>`;
+}
+const pill = (s) => `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${SENT[s].pill}"><i class="fa-regular ${SENT[s].icon}"></i>${t(`sent.${s}`)}</span>`;
 const average = (list) => (list.length ? list.reduce((a, f) => a + f.rating, 0) / list.length : 0);
-const shortDate = (d) => new Date(d).toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+// Chrome ships no Albanian month names, so "sq" dates are built by hand.
+const MONTHS_SQ = ["jan", "shk", "mar", "pri", "maj", "qer", "korr", "gush", "sht", "tet", "nën", "dhj"];
+const shortDate = (d) => {
+  const date = new Date(d);
+  return lang === "sq" ? `${String(date.getDate()).padStart(2, "0")} ${MONTHS_SQ[date.getMonth()]}`
+    : date.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+};
 const initials = (n) => n.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-const colorFor = (n) => COLORS[[...n].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];
-const courseInfo = (name) => COURSES.find((c) => c.name === name) || { name, icon: "fa-book", on: "bg-slate-700 border-slate-700 text-white", off: "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100", dot: "#64748b" };
+const displayName = (f) => (f.name === "Anonymous" ? t("anonymous") : f.name);
+const courseIcon = (name) => (COURSES.find((c) => c.name === name) || { icon: "fa-book" }).icon;
 const courses = () => COURSES.map((c) => c.name).filter((n) => feedback.some((f) => f.course === n))
   .concat([...new Set(feedback.map((f) => f.course))].filter((n) => !COURSES.some((c) => c.name === n)));
 const tagInfo = (tag) => {
-  const good = TAGS.good.find(([t]) => t === tag);
-  const bad = TAGS.bad.find(([t]) => t === tag);
+  const good = TAGS.good.find(([x]) => x === tag);
+  const bad = TAGS.bad.find(([x]) => x === tag);
   return { icon: (good || bad || [, "fa-tag"])[1], good: Boolean(good) };
 };
+const count = (n) => `<span class="opacity-60 font-bold">${n}</span>`;
 
 function avatar(f, size = "w-7 h-7") {
   const anon = f.name === "Anonymous";
-  return `<span class="${size} shrink-0 rounded-full grid place-items-center text-white text-[10px] font-bold" style="background:${anon ? "#94a3b8" : colorFor(f.name)}">${anon ? "?" : escapeHtml(initials(f.name))}</span>`;
+  return `<span class="${size} shrink-0 rounded-full grid place-items-center text-white text-[10px] font-bold ${anon ? "bg-slate-300" : "bg-slate-500"}">${anon ? '<i class="fa-solid fa-user"></i>' : escapeHtml(initials(f.name))}</span>`;
 }
 
-function courseBadge(name, selected, attrs, extra = "") {
-  const c = courseInfo(name);
+function chip(label, icon, selected, attrs, extra = "") {
   return `<button type="button" ${attrs} aria-pressed="${selected}"
-    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? `${c.on} shadow-sm` : c.off}">
-    <i class="fa-solid ${selected ? "fa-check" : c.icon}"></i>${escapeHtml(name)}${extra}</button>`;
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? "bg-slate-800 border-slate-800 text-white" : "bg-white border-slate-300 text-slate-700 hover:bg-slate-50"}">
+    <i class="${icon}"></i>${label}${extra}</button>`;
 }
-
-function allBadge(selected, attrs, label = "All courses", extra = "") {
-  return `<button type="button" ${attrs} aria-pressed="${selected}"
-    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? "bg-slate-800 border-slate-800 text-white" : "bg-white border-slate-300 text-slate-600 hover:bg-slate-50"}">
-    <i class="fa-solid fa-layer-group"></i>${label}${extra}</button>`;
-}
+const courseChip = (name, selected, attrs, extra) => chip(escapeHtml(term(name)), `fa-solid ${selected ? "fa-check" : courseIcon(name)}`, selected, attrs, extra);
+const allChip = (selected, attrs, extra) => chip(t("all.courses"), "fa-solid fa-layer-group", selected, attrs, extra);
 
 function tagChip(tag, extra = "") {
-  const t = tagInfo(tag);
-  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold ${t.good ? "bg-green-50 text-green-700 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}"><i class="fa-solid ${t.icon} text-[10px]"></i>${escapeHtml(tag)}${extra}</span>`;
+  const info = tagInfo(tag);
+  return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700"><i class="fa-solid ${info.icon} text-[10px] ${info.good ? "text-green-600" : "text-red-600"}"></i>${escapeHtml(term(tag))}${extra}</span>`;
 }
-
-const count = (n) => `<span class="opacity-70 font-bold">${n}</span>`;
 
 function toast(message) {
   const el = $("toast");
@@ -92,7 +230,7 @@ function toast(message) {
 async function api(path, body) {
   const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : undefined);
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "The server did not answer. Try again in a moment.");
+  if (!res.ok) throw Object.assign(new Error(data.error || t("err.server")), { status: res.status });
   return data;
 }
 
@@ -104,20 +242,35 @@ async function loadFeedback() {
   }
 }
 
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach((el) => (el.textContent = t(el.dataset.i18n)));
+  document.querySelectorAll("[data-i18n-ph]").forEach((el) => (el.placeholder = t(el.dataset.i18nPh)));
+  document.querySelectorAll("#langSwitch button").forEach((b) => {
+    const on = b.dataset.lang === lang;
+    b.classList.toggle("bg-white", on);
+    b.classList.toggle("text-slate-900", on);
+  });
+  setRating(rating);
+  renderStatus();
+  renderResults();
+  render();
+}
+
 function render() {
   document.querySelectorAll("#roleSwitch button").forEach((b) => {
     const on = b.dataset.role === state.role;
-    b.classList.toggle("bg-teal-600", on);
-    b.classList.toggle("text-white", on);
+    b.classList.toggle("bg-white", on);
+    b.classList.toggle("text-slate-900", on);
   });
   $("avatar").textContent = state.role === "professor" ? "AB" : "ST";
-  $("appName").textContent = state.role === "professor" ? "Professor Console" : "Student Portal";
+  $("appName").textContent = t(`app.${state.role}`);
 
   const tabs = TABS[state.role];
   if (!tabs.some(([id]) => id === state.page)) state.page = tabs[0][0];
-  $("tabs").innerHTML = tabs.map(([id, icon, label]) => `
-    <button data-tab="${id}" class="flex items-center gap-1.5 px-3 whitespace-nowrap border-b-2 ${state.page === id ? "border-teal-600 text-teal-700 font-semibold" : "border-transparent text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900"}">
-      <i class="fa-solid ${icon}"></i> ${label}${id === "list" ? ` <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-1.5 rounded-full">${feedback.length}</span>` : ""}
+  $("tabs").innerHTML = tabs.map(([id, icon]) => `
+    <button data-tab="${id}" class="flex items-center gap-1.5 px-3 whitespace-nowrap border-b-2 ${state.page === id ? "border-teal-600 text-slate-900 font-semibold" : "border-transparent text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900"}">
+      <i class="fa-solid ${icon}"></i> ${t(`tab.${id}`)}${id === "list" ? ` <span class="bg-slate-100 text-slate-600 text-[10px] font-bold px-1.5 rounded-full">${feedback.length}</span>` : ""}
     </button>`).join("");
   document.querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => go(b.dataset.tab)));
 
@@ -138,61 +291,61 @@ function renderDashboard() {
   const n = (s) => list.filter((f) => f.ai.sentiment === s).length;
   const avg = average(list);
 
-  $("courseFilter").innerHTML = allBadge(!state.course, `data-filter=""`, "All courses", count(feedback.length)) +
-    courses().map((c) => courseBadge(c, state.course === c, `data-filter="${escapeHtml(c)}"`, count(feedback.filter((f) => f.course === c).length))).join("");
+  $("courseFilter").innerHTML = allChip(!state.course, `data-filter=""`, count(feedback.length)) +
+    courses().map((c) => courseChip(c, state.course === c, `data-filter="${escapeHtml(c)}"`, count(feedback.filter((f) => f.course === c).length))).join("");
   document.querySelectorAll("[data-filter]").forEach((b) => (b.onclick = () => setCourse(b.dataset.filter)));
-  $("courseCount").textContent = state.course || `${courses().length} courses`;
+  $("courseCount").textContent = state.course ? term(state.course) : t("dash.courses", { n: courses().length });
 
   $("kpiTotal").textContent = list.length;
-  $("kpiWeek").textContent = `+${list.filter((f) => Date.now() - new Date(f.date) < 7 * 864e5).length} in the last 7 days`;
+  $("kpiWeek").textContent = t("kpi.week", { n: list.filter((f) => Date.now() - new Date(f.date) < 7 * 864e5).length });
   $("kpiAvg").textContent = avg.toFixed(1);
-  $("kpiStars").innerHTML = stars(Math.round(avg));
+  $("kpiStars").innerHTML = stars(avg);
   $("kpiPositive").textContent = `${list.length ? Math.round((n("positive") / list.length) * 100) : 0}%`;
   $("kpiNegative").textContent = n("negative");
-
-  if (!$("report").dataset.filled) {
-    $("report").innerHTML = `<p class="font-bold text-violet-600 text-[10px] uppercase tracking-wide mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>AI summary · ${escapeHtml(state.course || "all courses")}</p>
-      Click <b>Generate AI report</b> and AI will read ${list.length} comments and write what students like, what they complain about and what to improve.`;
-  }
 
   const ranked = courses().map((c) => {
     const items = feedback.filter((f) => f.course === c);
     return { c, items, avg: average(items) };
   }).sort((a, b) => b.avg - a.avg);
   $("byCourse").innerHTML = ranked.map(({ c, items, avg: a }) => `
-    <button data-course="${escapeHtml(c)}" class="w-full grid grid-cols-[190px_1fr_70px] items-center gap-2.5 py-1.5 px-1 rounded text-left hover:bg-slate-50 ${state.course === c ? "bg-teal-50" : ""}">
-      <span class="font-semibold truncate flex items-center gap-2"><span class="w-2 h-2 rounded-full shrink-0" style="background:${courseInfo(c).dot}"></span>${escapeHtml(c)}</span>
+    <button data-course="${escapeHtml(c)}" class="w-full grid grid-cols-[200px_1fr_70px] items-center gap-2.5 py-1.5 px-1 rounded text-left hover:bg-slate-50 ${state.course === c ? "bg-slate-100" : ""}">
+      <span class="font-semibold truncate flex items-center gap-2"><i class="fa-solid ${courseIcon(c)} text-slate-400 w-4 text-center"></i>${escapeHtml(term(c))}</span>
       <span class="flex h-2 rounded bg-slate-100 overflow-hidden">${Object.keys(SENT).map((s) => `<span style="width:${(items.filter((f) => f.ai.sentiment === s).length / items.length) * 100}%;background:${SENT[s].color}"></span>`).join("")}</span>
-      <span class="text-right text-[11px]">${stars(Math.round(a))}</span>
+      <span class="text-right">${stars(a)}</span>
     </button>`).join("");
   document.querySelectorAll("[data-course]").forEach((b) => (b.onclick = () => setCourse(state.course === b.dataset.course ? "" : b.dataset.course)));
 
   $("donut").innerHTML = donut(Object.keys(SENT).map((s) => ({ v: n(s), c: SENT[s].color })), list.length) +
     `<div class="flex-1 text-[11.5px]">${Object.keys(SENT).map((s) => `
-      <div class="flex items-center gap-2 py-1 text-slate-600"><span class="w-2.5 h-2.5 rounded-sm" style="background:${SENT[s].color}"></span><i class="fa-regular ${SENT[s].icon}"></i>${SENT[s].label}<b class="ml-auto text-slate-800">${n(s)}</b></div>`).join("")}</div>`;
+      <div class="flex items-center gap-2 py-1 text-slate-600"><span class="w-2.5 h-2.5 rounded-sm" style="background:${SENT[s].color}"></span><i class="fa-regular ${SENT[s].icon}"></i>${t(`sent.${s}`)}<b class="ml-auto text-slate-800">${n(s)}</b></div>`).join("")}</div>`;
 
   const topics = {};
-  list.forEach((f) => f.ai.topics.forEach((t) => {
-    topics[t] ??= { n: 0, pos: 0, neg: 0 };
-    topics[t].n++;
-    if (f.ai.sentiment === "positive") topics[t].pos++;
-    if (f.ai.sentiment === "negative") topics[t].neg++;
+  list.forEach((f) => f.ai.topics.forEach((x) => {
+    topics[x] ??= { n: 0, pos: 0, neg: 0 };
+    topics[x].n++;
+    if (f.ai.sentiment === "positive") topics[x].pos++;
+    if (f.ai.sentiment === "negative") topics[x].neg++;
   }));
   const top = Object.entries(topics).sort((a, b) => b[1].n - a[1].n).slice(0, 7);
-  $("topics").innerHTML = top.map(([t, v]) => `
+  $("topics").innerHTML = top.map(([x, v]) => `
     <div class="grid grid-cols-[100px_1fr_28px] items-center gap-2 py-1 text-[11.5px]">
-      <span class="truncate">${escapeHtml(t)}</span>
-      <span class="h-[7px] rounded bg-slate-100 overflow-hidden"><span class="block h-full rounded ${v.neg > v.pos ? "bg-red-500" : "bg-teal-500"}" style="width:${(v.n / top[0][1].n) * 100}%"></span></span>
+      <span class="truncate">${escapeHtml(term(x))}</span>
+      <span class="h-[7px] rounded bg-slate-100 overflow-hidden"><span class="block h-full rounded ${v.neg > v.pos ? "bg-red-500" : "bg-slate-500"}" style="width:${(v.n / top[0][1].n) * 100}%"></span></span>
       <b class="text-right">${v.n}</b>
-    </div>`).join("") || `<p class="text-slate-400">No topics yet.</p>`;
+    </div>`).join("") || `<p class="text-slate-400">${t("topics.empty")}</p>`;
 
-  const tagCounts = {};
-  list.forEach((f) => (f.tags || []).forEach((t) => (tagCounts[t] = (tagCounts[t] || 0) + 1)));
+  const tagCounts = countTags(list);
   $("tagStats").innerHTML = Object.entries(tagCounts).sort((a, b) => b[1] - a[1])
-    .map(([t, c]) => tagChip(t, ` <b class="ml-0.5">${c}</b>`)).join("") || `<p class="text-slate-400">No badges picked yet.</p>`;
+    .map(([x, c]) => tagChip(x, ` <b class="ml-0.5">${c}</b>`)).join("") || `<p class="text-slate-400">${t("tags.empty")}</p>`;
 
-  $("latest").innerHTML = list.slice(0, 5).map(feedItem).join("") || `<p class="text-slate-400 py-6 text-center">No feedback yet.</p>`;
+  $("latest").innerHTML = list.slice(0, 5).map(feedItem).join("") || `<p class="text-slate-400 py-6 text-center">${t("latest.empty")}</p>`;
   bindOpen();
+}
+
+function countTags(list) {
+  const counts = {};
+  list.forEach((f) => (f.tags || []).forEach((x) => (counts[x] = (counts[x] || 0) + 1)));
+  return counts;
 }
 
 function donut(segments, total, size = 120) {
@@ -204,9 +357,9 @@ function donut(segments, total, size = 120) {
     offset += len;
     return arc;
   }).join("");
-  return `<svg width="${size}" height="${size}" class="shrink-0" role="img" aria-label="${total} responses"><circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="#f1f5f9" stroke-width="16"/>${arcs}
+  return `<svg width="${size}" height="${size}" class="shrink-0" role="img" aria-label="${total} ${t("donut.responses")}"><circle r="${r}" cx="${size / 2}" cy="${size / 2}" fill="none" stroke="#f1f5f9" stroke-width="16"/>${arcs}
     <text x="50%" y="48%" text-anchor="middle" font-size="20" font-weight="800" fill="#0f172a">${total}</text>
-    <text x="50%" y="63%" text-anchor="middle" font-size="9.5" fill="#64748b">responses</text></svg>`;
+    <text x="50%" y="63%" text-anchor="middle" font-size="9.5" fill="#64748b">${t("donut.responses")}</text></svg>`;
 }
 
 function ring(score, color, icon, size = 72) {
@@ -221,39 +374,16 @@ function feedItem(f) {
   return `<div data-open="${f.id}" class="flex gap-2.5 py-2.5 border-b border-slate-100 last:border-0 cursor-pointer group">
     ${avatar(f)}
     <div class="min-w-0">
-      ${f.comment ? `<p class="text-[12.5px] leading-snug text-slate-700 group-hover:text-teal-700">${escapeHtml(f.comment)}</p>` : ""}
-      ${f.tags?.length ? `<p class="flex flex-wrap gap-1 mt-1">${f.tags.map((t) => tagChip(t)).join("")}</p>` : ""}
-      <p class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-1.5">${stars(f.rating)} ${pill(f.ai.sentiment)} <span>${escapeHtml(f.course)} · ${escapeHtml(f.name)} · ${shortDate(f.date)}</span></p>
+      ${f.comment ? `<p class="text-[12.5px] leading-snug text-slate-700 group-hover:text-slate-950 group-hover:underline">${escapeHtml(f.comment)}</p>` : ""}
+      ${f.tags?.length ? `<p class="flex flex-wrap gap-1 mt-1">${f.tags.map((x) => tagChip(x)).join("")}</p>` : ""}
+      <p class="text-[11px] text-slate-500 mt-1 flex flex-wrap items-center gap-1.5">${stars(f.rating)} ${pill(f.ai.sentiment)} <span>${escapeHtml(term(f.course))} · ${escapeHtml(displayName(f))} · ${shortDate(f.date)}</span></p>
     </div>
   </div>`;
 }
 
 function setCourse(course) {
   state.course = course;
-  delete $("report").dataset.filled;
   renderDashboard();
-}
-
-async function generateReport() {
-  const btn = $("reportBtn");
-  btn.disabled = true;
-  $("report").dataset.filled = "1";
-  $("report").innerHTML = `<div class="flex items-center gap-2.5 text-violet-600 font-semibold py-2"><span class="dots"><span></span><span></span><span></span></span> AI is reading the feedback…</div>`;
-  try {
-    const s = await api("/api/summary", { course: state.course });
-    $("report").innerHTML = `
-      <p class="font-bold text-violet-600 text-[10px] uppercase tracking-wide mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>AI summary · ${escapeHtml(state.course || "all courses")}</p>
-      <p>${escapeHtml(s.summary)}</p>
-      <div class="grid sm:grid-cols-2 gap-3 mt-2.5">
-        <div><p class="font-bold text-green-700 mb-1"><i class="fa-solid fa-thumbs-up mr-1"></i>Strengths</p><ul class="list-disc ml-4.5 space-y-0.5">${s.strengths.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>
-        <div><p class="font-bold text-red-700 mb-1"><i class="fa-solid fa-screwdriver-wrench mr-1"></i>To improve</p><ul class="list-disc ml-4.5 space-y-0.5">${s.improvements.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul></div>
-      </div>`;
-    toast("AI report generated");
-  } catch (err) {
-    $("report").innerHTML = `<p class="text-red-600 font-semibold">${escapeHtml(err.message)}</p>`;
-  } finally {
-    btn.disabled = false;
-  }
 }
 
 function renderList() {
@@ -261,32 +391,28 @@ function renderList() {
   const base = feedback.filter((f) => !state.listCourse || f.course === state.listCourse);
   const list = base.filter((f) =>
     (!state.listSentiment || f.ai.sentiment === state.listSentiment) &&
-    (!q || `${f.comment} ${f.course} ${f.ai.topics.join(" ")} ${(f.tags || []).join(" ")}`.toLowerCase().includes(q)));
+    (!q || [f.comment, f.course, term(f.course), ...f.ai.topics.map(term), ...(f.tags || []).map(term), ...f.ai.topics, ...(f.tags || [])]
+      .join(" ").toLowerCase().includes(q)));
 
   $("search").value = state.q;
-  $("listCourse").innerHTML = allBadge(!state.listCourse, `data-list-course=""`) +
-    courses().map((c) => courseBadge(c, state.listCourse === c, `data-list-course="${escapeHtml(c)}"`)).join("");
-  $("listSentiment").innerHTML = [["", "All", "bg-slate-800 border-slate-800 text-white", "fa-layer-group"],
-    ...Object.entries(SENT).map(([k, s]) => [k, s.label, s.on, s.icon])].map(([k, label, on, icon]) => {
-    const selected = state.listSentiment === k;
-    return `<button type="button" data-list-sentiment="${k}" aria-pressed="${selected}"
-      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition ${selected ? on : "bg-white border-slate-300 text-slate-600 hover:bg-slate-50"}">
-      <i class="${k ? "fa-regular" : "fa-solid"} ${icon}"></i>${label} ${count(base.filter((f) => !k || f.ai.sentiment === k).length)}</button>`;
-  }).join("");
+  $("listCourse").innerHTML = allChip(!state.listCourse, `data-list-course=""`) +
+    courses().map((c) => courseChip(c, state.listCourse === c, `data-list-course="${escapeHtml(c)}"`)).join("");
+  $("listSentiment").innerHTML = [["", t("all"), "fa-solid fa-layer-group"], ...Object.entries(SENT).map(([k, s]) => [k, t(`sent.${k}`), `fa-regular ${s.icon}`])]
+    .map(([k, label, icon]) => chip(label, icon, state.listSentiment === k, `data-list-sentiment="${k}"`, ` ${count(base.filter((f) => !k || f.ai.sentiment === k).length)}`)).join("");
   document.querySelectorAll("[data-list-course]").forEach((b) => (b.onclick = () => { state.listCourse = b.dataset.listCourse; renderList(); }));
   document.querySelectorAll("[data-list-sentiment]").forEach((b) => (b.onclick = () => { state.listSentiment = b.dataset.listSentiment; renderList(); }));
-  $("listMeta").textContent = `${list.length} of ${feedback.length} comments · sentiment & topics detected by AI`;
+  $("listMeta").textContent = t("list.meta", { n: list.length, total: feedback.length });
 
   $("rows").innerHTML = list.map((f) => `
-    <tr data-open="${f.id}" class="border-t border-slate-100 cursor-pointer hover:bg-teal-50">
-      <td class="px-3 py-2"><span class="flex items-center gap-2 font-semibold">${avatar(f, "w-6 h-6")}${escapeHtml(f.name)}</span></td>
-      <td class="px-3 py-2 whitespace-nowrap"><span class="inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background:${courseInfo(f.course).dot}"></span>${escapeHtml(f.course)}</span></td>
+    <tr data-open="${f.id}" class="border-t border-slate-100 cursor-pointer hover:bg-slate-50">
+      <td class="px-3 py-2"><span class="flex items-center gap-2 font-semibold">${avatar(f, "w-6 h-6")}${escapeHtml(displayName(f))}</span></td>
+      <td class="px-3 py-2 whitespace-nowrap"><span class="inline-flex items-center gap-1.5"><i class="fa-solid ${courseIcon(f.course)} text-slate-400"></i>${escapeHtml(term(f.course))}</span></td>
       <td class="px-3 py-2">${stars(f.rating)}</td>
-      <td class="px-3 py-2 max-w-[320px]"><p class="truncate text-slate-600">${escapeHtml(f.comment) || '<span class="text-slate-400 italic">Badges only</span>'}</p></td>
-      <td class="px-3 py-2"><span class="flex flex-wrap gap-1">${(f.tags || []).slice(0, 2).map((t) => tagChip(t)).join("")}</span></td>
+      <td class="px-3 py-2 max-w-[320px]"><p class="truncate text-slate-600">${escapeHtml(f.comment) || `<span class="text-slate-400 italic">${t("list.badgesOnly")}</span>`}</p></td>
+      <td class="px-3 py-2"><span class="flex flex-wrap gap-1">${(f.tags || []).slice(0, 2).map((x) => tagChip(x)).join("")}</span></td>
       <td class="px-3 py-2">${pill(f.ai.sentiment)}</td>
       <td class="px-3 py-2 whitespace-nowrap text-slate-500">${shortDate(f.date)}</td>
-    </tr>`).join("") || `<tr><td colspan="7" class="text-center text-slate-500 py-10">No feedback matches your filters.</td></tr>`;
+    </tr>`).join("") || `<tr><td colspan="7" class="text-center text-slate-500 py-10">${t("list.empty")}</td></tr>`;
   bindOpen();
 }
 
@@ -295,25 +421,25 @@ function bindOpen() {
 }
 
 function analysisHtml(ai, tags = []) {
-  const s = SENT[ai.sentiment] || SENT.neutral;
+  const s = SENT[ai.sentiment] ? ai.sentiment : "neutral";
   const score = Number(ai.score) || 0;
+  const heading = (key) => `<h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3.5 mb-1.5">${t(key)}</h4>`;
   return `
     <div class="flex items-center gap-4 mb-3.5">
-      ${ring(score, s.color, s.icon)}
+      ${ring(score, SENT[s].color, SENT[s].icon)}
       <div class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 items-center text-xs">
-        <span class="text-slate-500">Sentiment</span><span>${pill(ai.sentiment)}</span>
-        <span class="text-slate-500">Score</span><span class="font-mono">${score > 0 ? "+" : ""}${score.toFixed(2)} <span class="text-slate-400">(-1 … +1)</span></span>
-        <span class="text-slate-500">Tone check</span><span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700"><i class="fa-solid fa-check"></i> Respectful</span></span>
+        <span class="text-slate-500">${t("ai.sentiment")}</span><span>${pill(s)}</span>
+        <span class="text-slate-500">${t("ai.score")}</span><span class="font-mono">${score > 0 ? "+" : ""}${score.toFixed(2)} <span class="text-slate-400">(-1 … +1)</span></span>
+        <span class="text-slate-500">${t("ai.tone")}</span><span class="text-slate-700"><i class="fa-solid fa-check text-green-600 mr-1"></i>${t("ai.respectful")}</span>
       </div>
     </div>
-    ${tags.length ? `<h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3 mb-1.5">Badges picked by the student</h4>
-    <div class="flex flex-wrap gap-1.5">${tags.map((t) => tagChip(t)).join("")}</div>` : ""}
-    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3 mb-1.5">Topics detected by AI</h4>
-    <div class="flex flex-wrap gap-1.5">${ai.topics.map((t) => `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-teal-100 text-teal-700">${escapeHtml(t)}</span>`).join("")}</div>
-    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3.5 mb-1.5">Summary for the professor</h4>
-    <div class="rounded-lg border border-slate-200 bg-gradient-to-br from-violet-50 to-teal-50 p-3 text-[12.5px] leading-relaxed text-slate-700">${escapeHtml(ai.summary)}</div>
-    <h4 class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mt-3.5 mb-1.5">Suggested improvement</h4>
-    <div class="rounded-lg border border-slate-200 bg-violet-50 p-3 text-[12.5px] leading-relaxed text-slate-700"><i class="fa-solid fa-lightbulb text-amber-500 mr-1.5"></i>${escapeHtml(ai.suggestion)}</div>`;
+    ${tags.length ? `${heading("ai.badges")}<div class="flex flex-wrap gap-1.5">${tags.map((x) => tagChip(x)).join("")}</div>` : ""}
+    ${heading("ai.topics")}
+    <div class="flex flex-wrap gap-1.5">${ai.topics.map((x) => `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700">${escapeHtml(term(x))}</span>`).join("")}</div>
+    ${heading("ai.summary")}
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[12.5px] leading-relaxed text-slate-700">${escapeHtml(ai.summary)}</div>
+    ${heading("ai.suggestion")}
+    <div class="rounded-lg border border-slate-200 bg-slate-50 p-3 text-[12.5px] leading-relaxed text-slate-700"><i class="fa-solid fa-lightbulb text-slate-400 mr-1.5"></i>${escapeHtml(ai.suggestion)}</div>`;
 }
 
 function openDrawer(id) {
@@ -322,13 +448,13 @@ function openDrawer(id) {
   $("drawer").innerHTML = `
     <div class="px-4 py-3.5 border-b border-slate-200 flex items-center gap-2.5">
       ${avatar(f)}
-      <div class="flex-1"><p class="font-bold text-sm">${escapeHtml(f.name)}</p><p class="text-[11px] text-slate-500">${escapeHtml(f.course)} · ${shortDate(f.date)}</p></div>
-      <button id="closeDrawer" aria-label="Close" class="w-7 h-7 rounded-md border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-xmark"></i></button>
+      <div class="flex-1"><p class="font-bold text-sm">${escapeHtml(displayName(f))}</p><p class="text-[11px] text-slate-500">${escapeHtml(term(f.course))} · ${shortDate(f.date)}</p></div>
+      <button id="closeDrawer" aria-label="${t("close")}" class="w-7 h-7 rounded-md border border-slate-300 hover:bg-slate-50"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="p-4 overflow-auto flex-1">
       ${stars(f.rating)}
-      ${f.comment ? `<blockquote class="my-3 text-[13.5px] leading-relaxed bg-slate-50 border-l-3 border-teal-500 px-3.5 py-3 rounded-r-md">“${escapeHtml(f.comment)}”</blockquote>` : ""}
-      <h3 class="font-extrabold text-[15px] mt-4 mb-3"><i class="fa-solid fa-wand-magic-sparkles text-violet-600 mr-1"></i> AI analysis</h3>
+      ${f.comment ? `<blockquote class="my-3 text-[13.5px] leading-relaxed bg-slate-50 border-l-3 border-slate-400 px-3.5 py-3 rounded-r-md">“${escapeHtml(f.comment)}”</blockquote>` : ""}
+      <h3 class="font-extrabold text-[15px] mt-4 mb-3"><i class="fa-solid fa-wand-magic-sparkles text-slate-400 mr-1"></i> ${t("ai.analysis")}</h3>
       ${analysisHtml(f.ai, f.tags || [])}
     </div>`;
   $("drawer").classList.remove("translate-x-full");
@@ -343,40 +469,89 @@ function closeDrawer() {
 
 function renderFormBadges() {
   $("courseBadges").innerHTML = COURSES.map((c) =>
-    courseBadge(c.name, form.course === c.name, `role="radio" aria-checked="${form.course === c.name}" data-pick-course="${escapeHtml(c.name)}"`)).join("");
+    courseChip(c.name, form.course === c.name, `role="radio" aria-checked="${form.course === c.name}" data-pick-course="${escapeHtml(c.name)}"`)).join("");
   document.querySelectorAll("[data-pick-course]").forEach((b) => (b.onclick = () => { form.course = b.dataset.pickCourse; renderFormBadges(); }));
 
   const tagButton = ([tag, icon], good) => {
     const on = form.tags.has(tag);
-    const style = on
-      ? (good ? "bg-green-600 border-green-600 text-white shadow-sm" : "bg-red-600 border-red-600 text-white shadow-sm")
-      : (good ? "bg-white border-green-200 text-green-700 hover:bg-green-50" : "bg-white border-red-200 text-red-700 hover:bg-red-50");
     return `<button type="button" data-tag="${escapeHtml(tag)}" aria-pressed="${on}"
-      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition active:scale-95 ${style}">
-      <i class="fa-solid ${on ? "fa-check" : icon}"></i>${escapeHtml(tag)}</button>`;
+      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition active:scale-95 ${on ? "bg-slate-800 border-slate-800 text-white" : "bg-white border-slate-300 text-slate-700 hover:bg-slate-50"}">
+      <i class="fa-solid ${on ? "fa-check" : `${icon} ${good ? "text-green-600" : "text-red-600"}`}"></i>${escapeHtml(term(tag))}</button>`;
   };
-  $("goodTags").innerHTML = TAGS.good.map((t) => tagButton(t, true)).join("");
-  $("badTags").innerHTML = TAGS.bad.map((t) => tagButton(t, false)).join("");
+  $("goodTags").innerHTML = TAGS.good.map((x) => tagButton(x, true)).join("");
+  $("badTags").innerHTML = TAGS.bad.map((x) => tagButton(x, false)).join("");
   document.querySelectorAll("[data-tag]").forEach((b) => (b.onclick = () => {
     form.tags.has(b.dataset.tag) ? form.tags.delete(b.dataset.tag) : form.tags.add(b.dataset.tag);
     formError("");
     renderFormBadges();
   }));
-  $("tagCount").textContent = form.tags.size ? `${form.tags.size} selected` : "Pick all that apply";
+  $("tagCount").textContent = form.tags.size ? t("form.selected", { n: form.tags.size }) : t("form.pick");
 }
 
 function setRating(value) {
   rating = value;
   document.querySelectorAll("#stars button").forEach((b) => b.classList.toggle("text-amber-400", Number(b.dataset.value) <= rating));
-  $("ratingLabel").textContent = RATING_LABELS[rating];
+  $("ratingLabel").textContent = t(`rating.${rating}`);
 }
 
-function showAnalysisPlaceholder() {
-  $("analysis").innerHTML = `
-    <div class="border-[1.5px] border-dashed border-slate-300 rounded-lg px-4 py-8 text-center text-slate-500 leading-relaxed">
-      <i class="fa-solid fa-robot text-3xl text-slate-400 mb-2"></i><br>
-      Pick a course, rate it, choose a few badges and click <b>Submit & analyse with AI</b>.<br>
-      <span class="text-[11.5px]">The AI detects the sentiment, finds the topics, checks the tone and writes a summary for the professor.</span>
+function renderResults(error) {
+  if (error) {
+    $("results").innerHTML = `
+      <div class="rounded-lg bg-red-50 border border-red-200 p-3.5 text-[12.5px]">
+        <b class="text-red-700"><i class="fa-solid fa-ban mr-1"></i>${t("err.notSaved")}</b>
+        <p class="mt-1">${escapeHtml(error)}</p>
+      </div>`;
+    return;
+  }
+  if (!resultsCourse) {
+    $("results").innerHTML = `
+      <div class="border-[1.5px] border-dashed border-slate-300 rounded-lg px-4 py-10 text-center text-slate-500 leading-relaxed">
+        <i class="fa-solid fa-chart-simple text-3xl text-slate-300 mb-2"></i><br>${t("results.placeholder")}
+      </div>`;
+    return;
+  }
+
+  const items = feedback.filter((f) => f.course === resultsCourse);
+  const avg = average(items);
+  const dist = [5, 4, 3, 2, 1].map((r) => [r, items.filter((f) => f.rating === r).length]);
+  const max = Math.max(1, ...dist.map(([, c]) => c));
+  const tagCounts = countTags(items);
+  const topTags = (group) => TAGS[group].map(([x]) => x).filter((x) => tagCounts[x])
+    .sort((a, b) => tagCounts[b] - tagCounts[a]).slice(0, 4)
+    .map((x) => tagChip(x, ` <b class="ml-0.5">${tagCounts[x]}</b>`)).join("") || `<span class="text-slate-400 text-[11.5px]">${t("results.none")}</span>`;
+
+  $("results").innerHTML = `
+    <p class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 mb-4 font-semibold text-slate-700"><i class="fa-solid fa-circle-check text-green-600 mr-1.5"></i>${t("results.thanks")}</p>
+    <div class="flex items-center gap-2 mb-3">
+      <i class="fa-solid ${courseIcon(resultsCourse)} text-slate-400"></i>
+      <span class="font-bold text-[14px]">${escapeHtml(term(resultsCourse))}</span>
+      <span class="ml-auto text-[11px] text-slate-500">${t("results.responses", { n: items.length })}</span>
+    </div>
+    <div class="grid sm:grid-cols-[130px_1fr] gap-4 items-center pb-4 border-b border-slate-100">
+      <div class="text-center">
+        <p class="text-[38px] leading-none font-extrabold tracking-tight">${avg.toFixed(1)}</p>
+        <p class="mt-1.5 text-[13px]">${stars(avg)}</p>
+        <p class="text-[11px] text-slate-500 mt-1">${t("results.avg")}</p>
+      </div>
+      <div>
+        <p class="text-[11px] uppercase tracking-wide text-slate-500 font-semibold mb-1.5">${t("results.distribution")}</p>
+        ${dist.map(([r, c]) => `
+          <div class="grid grid-cols-[28px_1fr_24px] items-center gap-2 py-0.5 text-[11.5px]">
+            <span class="text-slate-600">${r} <i class="fa-solid fa-star text-amber-400 text-[9px]"></i></span>
+            <span class="h-2 rounded bg-slate-100 overflow-hidden"><span class="block h-full rounded bg-slate-600" style="width:${(c / max) * 100}%"></span></span>
+            <b class="text-right">${c}</b>
+          </div>`).join("")}
+      </div>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-4 pt-4">
+      <div>
+        <p class="text-[11px] font-semibold text-slate-600 mb-1.5"><i class="fa-solid fa-thumbs-up text-green-600 mr-1"></i>${t("form.good")}</p>
+        <div class="flex flex-wrap gap-1.5">${topTags("good")}</div>
+      </div>
+      <div>
+        <p class="text-[11px] font-semibold text-slate-600 mb-1.5"><i class="fa-solid fa-thumbs-down text-red-600 mr-1"></i>${t("form.bad")}</p>
+        <div class="flex flex-wrap gap-1.5">${topTags("bad")}</div>
+      </div>
     </div>`;
 }
 
@@ -388,60 +563,58 @@ function formError(message) {
 async function submitFeedback(e) {
   e.preventDefault();
   const comment = $("comment").value.trim();
-  if (!rating) return formError("Choose a rating from 1 to 5 stars.");
-  if (!form.tags.size && comment.length < 5) return formError("Pick at least one badge or write a few words.");
+  if (!rating) return formError(t("err.rating"));
+  if (!form.tags.size && comment.length < 5) return formError(t("err.content"));
   formError("");
 
   const btn = $("submitBtn");
+  const label = btn.innerHTML;
   btn.disabled = true;
-  $("analysis").innerHTML = `<div class="flex items-center justify-center gap-2.5 text-violet-600 font-semibold py-10"><span class="dots"><span></span><span></span><span></span></span> AI is reading your feedback…</div>`;
+  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> ${t("form.sending")}`;
   try {
     const item = await api("/api/feedback", { course: form.course, rating, tags: [...form.tags], comment, name: $("form").name.value });
     feedback.unshift(item);
-    $("analysis").innerHTML = analysisHtml(item.ai, item.tags) + `
-      <div class="mt-3.5 rounded-lg bg-green-50 border border-green-200 p-3.5 text-[12.5px]">
-        <b class="text-green-700"><i class="fa-solid fa-circle-check mr-1"></i>Feedback submitted!</b>
-        Thank you. Your feedback for ${escapeHtml(item.course)} was saved and will be shown to the professor.
-      </div>`;
+    resultsCourse = item.course;
+    renderResults();
     $("form").reset();
     form.tags.clear();
     setRating(0);
     renderFormBadges();
     $("counter").textContent = "0/1000";
-    toast("Feedback submitted · analysed by AI");
+    toast(t("toast.sent"));
   } catch (err) {
-    $("analysis").innerHTML = `
-      <div class="rounded-lg bg-red-50 border border-red-200 p-3.5 text-[12.5px]">
-        <b class="text-red-700"><i class="fa-solid fa-ban mr-1"></i>Feedback not saved</b>
-        <p class="mt-1">${escapeHtml(err.message)}</p>
-      </div>`;
+    renderResults(err.status === 422 ? t("err.toxic") : err.message);
   } finally {
     btn.disabled = false;
+    btn.innerHTML = label;
+    applyLangTo(btn);
   }
 }
 
-function fillExample() {
-  const ex = EXAMPLES[exampleIndex++ % EXAMPLES.length];
-  form.course = ex.course;
-  form.tags = new Set(ex.tags);
-  $("comment").value = ex.comment;
-  $("counter").textContent = `${ex.comment.length}/1000`;
-  setRating(ex.rating);
-  renderFormBadges();
-  formError("");
+function applyLangTo(root) {
+  root.querySelectorAll("[data-i18n]").forEach((el) => (el.textContent = t(el.dataset.i18n)));
 }
 
 async function loadStatus() {
   try {
-    const s = await api("/api/status");
-    $("footerModel").textContent = `(${s.model})`;
-    $("modelName").textContent = s.model;
-    $("footerStatus").innerHTML = s.aiReady
-      ? `<i class="fa-solid fa-circle text-green-600 text-[8px] mr-1"></i>Online · AI ready`
-      : `<i class="fa-solid fa-circle text-amber-500 text-[8px] mr-1"></i>Online · OpenAI key missing on the server`;
+    status = await api("/api/status");
   } catch {
-    $("footerStatus").innerHTML = `<i class="fa-solid fa-circle text-red-600 text-[8px] mr-1"></i>Server offline`;
+    status = { offline: true };
   }
+  renderStatus();
+}
+
+function renderStatus() {
+  if (!status) return;
+  if (status.offline) {
+    $("footerStatus").innerHTML = `<i class="fa-solid fa-circle text-red-600 text-[8px] mr-1"></i>${t("status.offline")}`;
+    return;
+  }
+  $("footerModel").textContent = `(${status.model})`;
+  $("modelName").textContent = status.model;
+  $("footerStatus").innerHTML = status.aiReady
+    ? `<i class="fa-solid fa-circle text-green-600 text-[8px] mr-1"></i>${t("status.ready")}`
+    : `<i class="fa-solid fa-circle text-amber-500 text-[8px] mr-1"></i>${t("status.noKey")}`;
 }
 
 $("roleSwitch").onclick = (e) => {
@@ -451,7 +624,14 @@ $("roleSwitch").onclick = (e) => {
   state.page = TABS[state.role][0][0];
   closeDrawer();
   render();
-  toast(state.role === "professor" ? "Switched to the professor view" : "Switched to the student view");
+  toast(t(`toast.${state.role}`));
+};
+$("langSwitch").onclick = (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  lang = b.dataset.lang;
+  try { localStorage.setItem("lang", lang); } catch {}
+  applyLang();
 };
 $("globalSearch").onkeydown = (e) => {
   if (e.key !== "Enter") return;
@@ -461,15 +641,13 @@ $("globalSearch").onkeydown = (e) => {
   e.target.blur();
   go("list");
 };
-$("reportBtn").onclick = generateReport;
 $("search").oninput = (e) => { state.q = e.target.value; renderList(); $("search").focus(); };
 document.querySelectorAll("#stars button").forEach((b) => (b.onclick = () => { setRating(Number(b.dataset.value)); formError(""); }));
 $("comment").oninput = (e) => ($("counter").textContent = `${e.target.value.length}/1000`);
 $("form").onsubmit = submitFeedback;
-$("exampleBtn").onclick = fillExample;
 $("scrim").onclick = closeDrawer;
 document.addEventListener("keydown", (e) => e.key === "Escape" && closeDrawer());
 
-showAnalysisPlaceholder();
+applyLang();
 loadStatus();
 loadFeedback().then(render);

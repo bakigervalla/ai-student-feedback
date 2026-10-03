@@ -40,11 +40,6 @@ Reply with JSON only, in this shape:
  "suggestion": "one short, practical improvement for the professor",
  "toxic": true if the comment contains insults or offensive language, otherwise false}`;
 
-const SUMMARY_PROMPT = `You receive a list of student feedback comments about university courses.
-Reply with JSON only, in this shape:
-{"summary": "3-4 sentences describing the overall student opinion",
- "strengths": [up to 3 short points],
- "improvements": [up to 3 short, practical points]}`;
 
 const app = express();
 app.use(express.json());
@@ -86,20 +81,6 @@ app.post("/api/feedback", async (req, res) => {
     list.unshift(item);
     saveFeedback(list);
     res.json(item);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.post("/api/summary", async (req, res) => {
-  const course = req.body?.course;
-  const list = loadFeedback().filter((f) => !course || f.course === course);
-  if (!list.length) return res.status(400).json({ error: "There is no feedback to summarise yet." });
-
-  try {
-    const lines = list.map((f) => `- [${f.course}, ${f.rating}/5] ${(f.tags || []).join(", ")} ${f.comment}`).join("\n");
-    res.json(await askOpenAI(SUMMARY_PROMPT, lines));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
